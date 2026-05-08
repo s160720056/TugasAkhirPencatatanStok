@@ -1,0 +1,63 @@
+# =============================================
+# LARAVEL .HTACCESS - HARDENED SECURITY
+# Deny semua file berpotensi kena hack
+# =============================================
+
+<IfModule mod_headers.c>
+    # Security Headers (wajib)
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set X-Robots-Tag "noindex, nofollow, noarchive, nosnippet, noimageindex"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # =============================================
+    # DENY SEMUA FILE BERPOTENSI HACK (INI YANG BARU)
+    # =============================================
+
+    # Blokir semua file & folder yang dimulai dengan titik (dotfiles)
+    RewriteCond %{REQUEST_URI} ^/\. [NC]
+    RewriteRule ^ - [F,L]
+
+    # Blokir file & folder sensitif Laravel
+    RewriteRule ^(\.env|\.env\..*|composer\.json|composer\.lock|package\.json|package-lock\.json|yarn\.lock|artisan|phpunit\.xml|web\.config)$ - [F,L]
+
+    # Blokir folder berbahaya
+RewriteCond %{REQUEST_URI} !^/storage/
+RewriteRule ^storage/ - [F,L]
+
+    # Blokir file backup, log, temporary, dan source control
+    RewriteRule \.(bak|old|backup|tmp|temp|log|sql|sqlite|db|swp|gitattributes|gitignore|htpasswd)$ - [F,L]
+
+    # Blokir file PHP di folder sensitif (extra protection)
+    RewriteRule ^(storage|bootstrap/cache|vendor|config|database)/.*\.php$ - [F,L]
+
+    # =============================================
+    # LARAVEL FRONT CONTROLLER (jangan diubah)
+    # =============================================
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send Requests To Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# Extra: Nonaktifkan directory listing secara global
+Options -Indexes

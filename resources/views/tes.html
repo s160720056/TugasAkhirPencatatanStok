@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laravel Camera</title>
+</head>
+<body>
+    <div>
+        <video id="video" autoplay playsinline style="width:100%;"></video>
+        <button id="switchCamera">Switch Camera</button>
+    </div>
+    
+    <script>
+        let currentStream = null;
+        let useFrontCamera = true;
+
+        const videoElement = document.getElementById('video');
+        const switchCameraButton = document.getElementById('switchCamera');
+
+        // Function to stop all video streams
+        function stopMediaTracks(stream) {
+            stream.getTracks().forEach(track => {
+                track.stop();
+            });
+        }
+
+        // Function to initialize the camera
+        async function initCamera() {
+            if (currentStream) {
+                stopMediaTracks(currentStream);
+            }
+
+            const constraints = {
+                video: {
+                    facingMode: useFrontCamera ? 'user' : 'environment' // 'user' is front, 'environment' is back
+                }
+            };
+
+            try {
+                currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+                videoElement.srcObject = currentStream;
+            } catch (error) {
+                console.error("Error accessing the camera: ", error);
+            }
+        }
+
+        // Initialize the camera on page load
+        initCamera();
+
+        // Switch camera when the button is clicked
+        switchCameraButton.addEventListener('click', () => {
+            useFrontCamera = !useFrontCamera;
+            initCamera();
+        });
+    </script>
+</body>
+</html>
