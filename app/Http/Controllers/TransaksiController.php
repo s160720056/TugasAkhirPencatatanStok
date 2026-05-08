@@ -222,23 +222,6 @@ class TransaksiController extends Controller
 
                 $barangLama->stok_akhir += $transaksi->jumlah_barang;
             }
-Host github-wilis
-    HostName github.com
-    User git
-    IdentityFile ~/.ssh/githubWilis
-    IdentitiesOnly yes
-
-Host github-timbangan
-    HostName github.com
-    User git
-    IdentityFile ~/.ssh/githubTimbangan
-    IdentitiesOnly yes
-
-Host github-pencatatanstok
-    HostName github.com
-    User git
-    IdentityFile ~/.ssh/githubPencatatanStok
-    IdentitiesOnly yes
 
             $barangLama->save();
 
