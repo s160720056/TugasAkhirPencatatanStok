@@ -11,10 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //drop table barang
-        ApplyDatabase::applyToMainAndDynamicDatabases(function ($db) {
-            Schema::connection($db)->dropIfExists('barang');
-        });
+   
     
         ApplyDatabase::applyToMainAndDynamicDatabases(function ($db) {
             Schema::connection($db)->create('barang', function (Blueprint $table) {
