@@ -7,6 +7,8 @@ return new class extends Migration
 {
     public function up(): void
     {
+        //drop table toko
+        Schema::dropIfExists('toko');
         Schema::create('toko', function (Blueprint $table) {
             $table->bigIncrements('id_toko');
 
