@@ -37,7 +37,7 @@ Route::get('/', function () {
     if (Auth::guard('user')->check()) {
         return redirect('/home');
     }
-    return view('home');
+    return redirect('/login');
 });
 
 Route::group([], function () {

@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-    <meta charset="utf-8">
+<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
 
-    <title>ScalePro | Login Sistem Weighbridge</title>
+    <title>GudangPro | Login Sistem Pencatatan Stok</title>
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
@@ -21,21 +20,18 @@
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
-        rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1e40af;
-            --secondary: #0ea5e9;
-            --accent: #f59e0b;
+:root {
+            --primary: #15803d;
+            --primary-dark: #166534;
+            --secondary: #4ade80;
+            --accent: #eab308;
             --dark: #0f172a;
             --gray-50: #f8fafc;
             --gray-100: #f1f5f9;
             --gray-900: #0f172a;
-            --success: #10b981;
+            --success: #15803d;
             --danger: #ef4444;
         }
 
@@ -45,12 +41,12 @@
             box-sizing: border-box;
         }
 
-        body {
+body {
             font-family: "Inter", system-ui, -apple-system, sans-serif;
             color: #334155;
             overflow-x: hidden;
             line-height: 1.6;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background: linear-gradient(135deg, #166534 0%, #4ade80 50%, #86efac 100%);
             min-height: 100vh;
         }
 
@@ -168,7 +164,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.95), rgba(14, 165, 233, 0.9));
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             z-index: 2;
         }
 
@@ -681,31 +677,22 @@
     </div>
 
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-modern fixed-top" id="navbar">
+    <nav class="navbar navbar-expand-lg navbar-modern fixed-top">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home.index') }}">
-                <i class="bi bi-speedometer2 me-2"></i>ScalePro
+                <i class="bi bi-box-seam me-2"></i>GudangPro
             </a>
             <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarMain">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarMain">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/#solusi">Solusi</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/#fitur">Fitur</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/#paket">Paket</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/#kontak">Kontak</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#">Fitur</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Laporan</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Bantuan</a></li>
                     <li class="nav-item ms-3">
-                        <a href="/" class="btn-back-home">
-                            <i class="bi bi-arrow-left"></i>Beranda
+                        <a href="/" class="btn btn-outline-success rounded-3">
+                            <i class="bi bi-arrow-left"></i> Beranda
                         </a>
                     </li>
                 </ul>
@@ -718,35 +705,24 @@
         <div class="login-container">
             <div class="login-card" data-aos="fade-up" data-aos-duration="1000">
 
-                <!-- LEFT SIDE - LOGIN FORM -->
+                <!-- LEFT SIDE - FORM -->
                 <div class="login-form-section">
                     <div class="login-header">
-                        <h1 class="login-title">Selamat Datang!</h1>
-                        <p class="login-subtitle">Masuk ke ScalePro Dashboard</p>
+                        <h1 class="login-title">Selamat Datang Kembali!</h1>
+                        <p class="login-subtitle">Masuk ke sistem pencatatan stok gudang</p>
                     </div>
 
-                    <!-- Alerts -->
                     @if (session('success'))
-                        <div class="alert-modern alert-success">
-                            <i class="bi bi-check-circle-fill"></i>
-                            <span>{{ session('success') }}</span>
-                        </div>
-                    @endif
-
-                    @if (request('success'))
-                        <div class="alert-modern alert-success">
-                            <i class="bi bi-check-circle-fill"></i>
-                            <span>{{ request('success') }}</span>
+                        <div class="alert alert-success alert-modern">
+                            <i class="bi bi-check-circle-fill"></i> {{ session('success') }}
                         </div>
                     @endif
 
                     @if ($errors->any())
-                        <div class="alert-modern alert-danger">
-                            <i class="bi bi-exclamation-triangle-fill"></i>
-                            <span>Username atau password salah!</span>
+                        <div class="alert alert-danger alert-modern">
+                            <i class="bi bi-exclamation-triangle-fill"></i> Username atau password salah!
                         </div>
                     @endif
-
                     @error('captcha')
                         <div class="alert-modern alert-danger mt-2">
                             <i class="bi bi-shield-exclamation"></i>
@@ -754,147 +730,85 @@
                         </div>
                     @enderror
 
-                    <!-- Login Form -->
                     <form method="POST" action="{{ route('login') }}" id="loginForm">
                         @csrf
 
-                        <!-- Username Input -->
-                        <div class="form-floating-modern">
-                            <input id="username" type="text" name="username"
+                        <div class="form-floating-modern mb-3">
+                            <input id="username" type="text" name="username" 
                                 class="form-control-modern @error('username') is-invalid @enderror"
-                                value="{{ old('username') }}" required autocomplete="username" autofocus
-                                placeholder=" ">
-                            <label for="username" class="form-label-modern">Username</label>
-                            @error('username')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                                value="{{ old('username') }}" required autofocus placeholder=" ">
+                            <label for="username" class="form-label-modern">Username / Email</label>
                         </div>
+                        
 
-                        <!-- Password Input -->
-                        <div class="form-floating-modern">
+                        <div class="form-floating-modern mb-3">
                             <input id="password" type="password" name="password"
-                                class="form-control-modern @error('password') is-invalid @enderror" required
-                                autocomplete="current-password" placeholder=" ">
+                                class="form-control-modern @error('password') is-invalid @enderror" required placeholder=" ">
                             <button type="button" class="password-toggle" id="togglePassword">
                                 <i class="bi bi-eye" id="toggleIcon"></i>
                             </button>
                             <label for="password" class="form-label-modern">Password</label>
-                            @error('password')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
                         </div>
+
                         <div class="mb-3">
                             <div class="cf-turnstile" data-sitekey="{{ env('TURNSTILE_SITE_KEY') }}" data-theme="auto">
                             </div>
                         </div>
 
-                        <!-- Remember Me -->
-                        <div class="form-check-modern">
+                        <div class="form-check-modern mb-4">
                             <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                            <label for="remember">Ingat saya di perangkat ini</label>
+                            <label for="remember">Ingat saya</label>
                         </div>
 
-                        <!-- Submit Button -->
                         <button type="submit" class="btn-login">
                             <i class="bi bi-box-arrow-in-right me-2"></i>
-                            Masuk ke Dashboard
+                            Masuk ke GudangPro
                         </button>
 
-                        <!-- Links -->
-                        <div class="login-links">
+                        <div class="login-links mt-4">
                             <a href="{{ route('password.request') }}" class="login-link">
-                                <i class="bi bi-key me-1"></i>Lupa Password?
+                                <i class="bi bi-key"></i> Lupa Password?
                             </a>
-                            {{-- <a href="/register" class="login-link">
-                                <i class="bi bi-person-plus me-1"></i>Daftar Akun
-                            </a> --}}
                         </div>
-
-                        {{-- <!-- Divider -->
-                        <div class="divider-modern">
-                            <span>atau masuk dengan</span>
-                        </div>
-
-                        <!-- Social Login -->
-                        <div class="social-login">
-                            <a href="#" class="btn-social">
-                                <i class="bi bi-google"></i>
-                                Google
-                            </a>
-                            <a href="#" class="btn-social">
-                                <i class="bi bi-microsoft"></i>
-                                Microsoft
-                            </a>
-                        </div> --}}
                     </form>
                 </div>
 
                 <!-- RIGHT SIDE - BRANDING -->
                 <div class="login-branding-section">
                     <div class="branding-content">
-                        <div class="branding-logo float-element">
-                            <i class="bi bi-speedometer2"></i>
-                            <span>ScalePro</span>
+                        <div class="branding-logo">
+                            <i class="bi bi-box-seam"></i>
+                            <span>GudangPro</span>
                         </div>
 
-                        <h2 class="branding-title">
-                            Sistem Weighbridge Modern
+                        <h2 class="branding-title text-white">
+                            Kelola Stok Gudang<br>dengan Mudah & Akurat
                         </h2>
 
-                        <p class="branding-description">
-                            Platform monitoring real-time untuk timbangan truk elektronik
-                            dengan teknologi terkini
+                        <p class="branding-description text-white-50">
+                            Sistem pencatatan stok barang modern untuk gudang Anda
                         </p>
 
-                        <ul class="feature-list float-element-delayed">
-                            <li>
-                                <i class="bi bi-check-circle-fill"></i>
-                                Real-time Dashboard
-                            </li>
-                            <li>
-                                <i class="bi bi-check-circle-fill"></i>
-                                Auto Report Generator
-                            </li>
-                            <li>
-                                <i class="bi bi-check-circle-fill"></i>
-                                Multi-User Access
-                            </li>
-                            <li>
-                                <i class="bi bi-check-circle-fill"></i>
-                                Cloud Data Backup
-                            </li>
-                            <li>
-                                <i class="bi bi-check-circle-fill"></i>
-                                24/7 Support System
-                            </li>
+                        <ul class="feature-list text-white">
+                            <li><i class="bi bi-check-circle-fill"></i> Real-time Stok Monitoring</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Barcode & QR Code Support</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Barang Masuk & Keluar</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Stock Opname Digital</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Laporan Stok & Mutasi</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Multi Gudang & User</li>
                         </ul>
 
-                        <div class="mt-4">
-                            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500"
-                                alt="Weighbridge Truck" class="img-fluid rounded-3 shadow-lg"
-                                style="max-width: 300px; opacity: 0.9;">
+                        <div class="mt-5">
+                            <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600" 
+                                 alt="Gudang" class="img-fluid rounded-3 shadow" 
+                                 style="max-width: 320px; opacity: 0.95;">
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
-
-    <!-- FOOTER -->
-    <div class="login-footer">
-        <div class="container">
-            <p class="mb-0">
-                © 2026 ScalePro Indonesia • All Rights Reserved
-                <span class="mx-2">|</span>
-                <a href="#">Privacy Policy</a>
-                <span class="mx-2">•</span>
-                <a href="#">Terms of Service</a>
-                <span class="mx-2">•</span>
-                <a href="#">Support Center</a>
-            </p>
-        </div>
-    </div>
-
     <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
