@@ -15,13 +15,14 @@ public function index()
     $transaksis = Transaksi::leftJoin('barang', 'barang.id_barang', '=', 'transaksi.id_barang')
         ->select('transaksi.*', 'barang.kode_barang', 'barang.nama_barang', 'barang.seri')
         ->orderBy('tanggal_transaksi', 'desc')
+        // ->where('transaksi.STATUS_TRANSAKSI', '!=', '2')
         ->get();
 
     $grouped = $transaksis->groupBy(function ($item) {
         return Carbon::parse($item->tanggal_transaksi)->format('Y-m');
     });
 
-    $barangList = Barang::orderBy('nama_barang')->get();
+    $barangList = Barang::where('STATUS_BARANG', '!=', '2')->orderBy('nama_barang')->get();
     $months = collect();
     $summaries = collect();
     $barangSummary = [];   // ← Tambahkan ini
