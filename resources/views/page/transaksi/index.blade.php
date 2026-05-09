@@ -1,5 +1,11 @@
 @extends('layouts.app', ['menu' => 'transaksi'])
 @section('content')
+    <style>
+        .readonly-field {
+            background-color: #f5f5f5 !important;
+            cursor: not-allowed;
+        }
+    </style>
     <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
         <h4 class="mb-5">Transaksi</h4>
         <div class="widget-content widget-content-area br-6">
@@ -53,36 +59,39 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editTransaksiLabel">Edit Transaksi</h5>
-                   <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="id_transaksi">
 
                     <div class="form-group mb-4">
                         <label for="tanggal_transaksi_edit">Tanggal Transaksi</label>
-                        <input type="date" class="form-control" id="tanggal_transaksi_edit">
+                        <input type="date" class="form-control readonly-field" id="tanggal_transaksi_edit" readonly>
                     </div>
 
                     <div class="form-group mb-4">
                         <label for="barang_edit">Barang</label>
-                        <select class="form-control select2" id="barang_edit" style="width:100%">
+                        <select class="form-control select2" id="barang_edit" style="width:100%" disabled>
                             @foreach ($barang as $item)
                                 <option value="{{ $item->id_barang }}">{{ $item->nama_barang }}</option>
                             @endforeach
                         </select>
+                        <input type="hidden" id="id_barang_hidden">
                     </div>
 
                     <div class="form-group mb-4">
                         <label for="jumlah_barang_edit">Jumlah Barang</label>
-                        <input type="number" min="1" class="form-control" id="jumlah_barang_edit">
+                        <input type="number" min="1" class="form-control readonly-field" id="jumlah_barang_edit"
+                            readonly>
                     </div>
 
                     <div class="form-group mb-4">
                         <label for="tipe_transaksi_edit">Tipe Transaksi</label>
-                        <select class="form-control select2" id="tipe_transaksi_edit" style="width:100%">
+                        <select class="form-control select2" id="tipe_transaksi_edit" style="width:100%" disabled>
                             <option value="keluar">Keluar</option>
                             <option value="masuk">Masuk</option>
                         </select>
+                        <input type="hidden" id="tipe_transaksi_hidden">
                     </div>
 
                     <div class="form-group mb-4">
@@ -168,70 +177,70 @@
     <script>
         $(document).ready(function() {
             // Select2
-// Modal tambah
-$('#barang_new, #tipe_transaksi_new').select2({
-    dropdownParent: $('#addTransaksi'),
-    width: '100%'
-});
-
-// Modal edit
-$('#barang_edit, #tipe_transaksi_edit').select2({
-    dropdownParent: $('#editTransaksi'),
-    width: '100%'
-});
-
-            // DataTable
-            $('#transaksi-table').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: "{{ route('transaksi.data') }}",
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false,
-                        className: 'text-center'
-                    },
-                    {
-                        data: 'tanggal_transaksi',
-                        name: 'tanggal_transaksi'
-                    },
-                    {
-                        data: 'barang',
-                        name: 'barang'
-                    },
-                    {
-                        data: 'keterangan_transaksi',
-                        name: 'keterangan_transaksi'
-                    },
-                    {
-                        data: 'diberikan_oleh',
-                        name: 'diberikan_oleh'
-                    },
-                    {
-                        data: 'keperluan_transaksi',
-                        name: 'keperluan_transaksi'
-                    },
-                    {
-                        data: 'keluar',
-                        name: 'keluar',
-                        className: 'text-danger'
-                    },
-                    {
-                        data: 'masuk',
-                        name: 'masuk',
-                        className: 'text-success'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false,
-                        className: 'text-center'
-                    }
-                ]
+            // Modal tambah
+            $('#barang_new, #tipe_transaksi_new').select2({
+                dropdownParent: $('#addTransaksi'),
+                width: '100%'
             });
 
+            // Modal edit
+            $('#barang_edit, #tipe_transaksi_edit').select2({
+                dropdownParent: $('#editTransaksi'),
+                width: '100%'
+            });
+
+            // DataTable
+           $('#transaksi-table').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: "{{ route('transaksi.data') }}",
+    columns: [
+        {
+            data: 'DT_RowIndex',
+            name: 'DT_RowIndex',
+            orderable: false,
+            searchable: false,
+            className: 'text-center'
+        },
+        {
+            data: 'tanggal_transaksi',
+            name: 'transaksi.tanggal_transaksi'
+        },
+        {
+            data: 'barang',
+            name: 'barang.nama_barang'
+        },
+        {
+            data: 'keterangan_transaksi',
+            name: 'transaksi.keterangan_transaksi'
+        },
+        {
+            data: 'diberikan_oleh',
+            name: 'transaksi.diberikan_oleh'
+        },
+        {
+            data: 'keperluan_transaksi',
+            name: 'transaksi.keperluan_transaksi'
+        },
+        {
+            data: 'keluar',
+            name: 'transaksi.jumlah_barang',
+            className: 'text-danger'
+        },
+        {
+            data: 'masuk',
+            name: 'transaksi.jumlah_barang',
+            className: 'text-success'
+        },
+        {
+            data: 'action',
+            name: 'action',
+            orderable: false,
+            searchable: false,
+            className: 'text-center'
+        }
+    ]
+});
             // ==================== TAMBAH TRANSAKSI ====================
             $('#addTransaksiDone').click(function() {
                 const data = {
@@ -302,12 +311,14 @@ $('#barang_edit, #tipe_transaksi_edit').select2({
 
                         $('#tipe_transaksi_edit').val(response.data.tipe_transaksi).trigger('change');
                         //select2
-                  
-                        
+
+
                         $('#keterangan_transaksi_edit').val(response.data.keterangan_transaksi);
                         $('#jumlah_barang_edit').val(response.data.jumlah_barang);
                         $('#diberikan_oleh_edit').val(response.data.diberikan_oleh);
                         $('#keperluan_transaksi_edit').val(response.data.keperluan_transaksi);
+                        $('#id_barang_hidden').val(response.data.id_barang);
+                        $('#tipe_transaksi_hidden').val(response.data.tipe_transaksi);
 
                         const editModal = new bootstrap.Modal(document.getElementById('editTransaksi'));
                         editModal.show();
@@ -318,9 +329,9 @@ $('#barang_edit, #tipe_transaksi_edit').select2({
                 const id = $('#id_transaksi').val();
                 const data = {
                     tanggal_transaksi: $('#tanggal_transaksi_edit').val(),
-                    id_barang: $('#barang_edit').val(),
+                    id_barang: $('#id_barang_hidden').val(),
                     jumlah_barang: $('#jumlah_barang_edit').val(),
-                    tipe_transaksi: $('#tipe_transaksi_edit').val(),
+                    tipe_transaksi: $('#tipe_transaksi_hidden').val(),
                     keterangan_transaksi: $('#keterangan_transaksi_edit').val(),
                     diberikan_oleh: $('#diberikan_oleh_edit').val(),
                     keperluan_transaksi: $('#keperluan_transaksi_edit').val(),

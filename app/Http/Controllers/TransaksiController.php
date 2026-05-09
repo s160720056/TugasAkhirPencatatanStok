@@ -24,63 +24,89 @@ class TransaksiController extends Controller
     }
 
     public function getDataTable(Request $request)
-    {
-        $transaksi = Transaksi::leftJoin('barang', 'transaksi.id_barang', '=', 'barang.id_barang')
-            ->select([
-                'transaksi.id_transaksi',
-                'transaksi.id_barang',
-                'transaksi.tanggal_transaksi',
-                'transaksi.tipe_transaksi',
-                'transaksi.jumlah_barang',
-                'transaksi.keterangan_transaksi',
-                'transaksi.diberikan_oleh',
-                'transaksi.keperluan_transaksi',
-                'barang.nama_barang',
-            ]);
+{
+    $transaksi = Transaksi::query()
+        ->leftJoin('barang', 'transaksi.id_barang', '=', 'barang.id_barang')
+        ->select([
+            'transaksi.id_transaksi',
+            'transaksi.id_barang',
+            'transaksi.tanggal_transaksi',
+            'transaksi.tipe_transaksi',
+            'transaksi.jumlah_barang',
+            'transaksi.keterangan_transaksi',
+            'transaksi.diberikan_oleh',
+            'transaksi.keperluan_transaksi',
+            'barang.nama_barang',
+        ]);
 
-        return DataTables::of($transaksi)
+    return DataTables::of($transaksi)
 
-            ->addIndexColumn()
+        ->addIndexColumn()
 
-            ->addColumn('barang', function ($row) {
-                return $row->nama_barang ?? '-';
-            })
+        ->addColumn('barang', function ($row) {
+            return $row->nama_barang ?? '-';
+        })
 
-            ->addColumn('keluar', function ($row) {
-                if ($row->tipe_transaksi == 'keluar') {
-                    return $row->jumlah_barang;
-                }
+        ->addColumn('keluar', function ($row) {
+            return $row->tipe_transaksi == 'keluar'
+                ? $row->jumlah_barang
+                : '-';
+        })
 
-                return '-';
-            })
+        ->addColumn('masuk', function ($row) {
+            return $row->tipe_transaksi == 'masuk'
+                ? $row->jumlah_barang
+                : '-';
+        })
 
-            ->addColumn('masuk', function ($row) {
-                if ($row->tipe_transaksi == 'masuk') {
-                    return $row->jumlah_barang;
-                }
+        /*
+        |--------------------------------------------------------------------------
+        | CUSTOM SEARCH
+        |--------------------------------------------------------------------------
+        */
 
-                return '-';
-            })
+        ->filterColumn('barang', function ($query, $keyword) {
+            $query->where('barang.nama_barang', 'like', "%{$keyword}%");
+        })
 
-            ->addColumn('action', function ($row) {
+        ->filterColumn('keterangan_transaksi', function ($query, $keyword) {
+            $query->where('transaksi.keterangan_transaksi', 'like', "%{$keyword}%");
+        })
 
-                return '
-                    <button class="btn btn-warning btn-sm"
-                        onclick="editTransaksi(' . $row->id_transaksi . ')">
-                        Edit
-                    </button>
+        ->filterColumn('diberikan_oleh', function ($query, $keyword) {
+            $query->where('transaksi.diberikan_oleh', 'like', "%{$keyword}%");
+        })
 
-                    <button class="btn btn-danger btn-sm"
-                        onclick="deleteTransaksi(' . $row->id_transaksi . ')">
-                        Hapus
-                    </button>
-                ';
-            })
+        ->filterColumn('keperluan_transaksi', function ($query, $keyword) {
+            $query->where('transaksi.keperluan_transaksi', 'like', "%{$keyword}%");
+        })
 
-            ->rawColumns(['action'])
-
-            ->make(true);
-    }
+        ->filterColumn('tanggal_transaksi', function ($query, $keyword) {
+            $query->whereDate('transaksi.tanggal_transaksi', $keyword);
+        })
+        ->orderColumn('barang', function ($query, $order) {
+            $query->orderBy('barang.nama_barang', $order);
+        })
+        /*
+        |--------------------------------------------------------------------------
+        | ACTION
+        |--------------------------------------------------------------------------
+        */
+        ->addColumn('action', function ($row) {
+            return '
+                <button class="btn btn-warning btn-sm"
+                    onclick="editTransaksi(' . $row->id_transaksi . ')">
+                    Edit
+                </button>
+                <button class="btn btn-danger btn-sm"
+                    onclick="deleteTransaksi(' . $row->id_transaksi . ')">
+                    Hapus
+                </button>
+            ';
+        })
+        ->rawColumns(['action'])
+        ->make(true);
+}
 
     public function store(Request $request)
     {
@@ -198,10 +224,10 @@ class TransaksiController extends Controller
         try {
 
             $request->validate([
-                'tanggal_transaksi' => 'required|date',
-                'id_barang' => 'required',
-                'tipe_transaksi' => 'required|in:masuk,keluar',
-                'jumlah_barang' => 'required|numeric|min:1',
+                // 'tanggal_transaksi' => 'required|date',
+                // 'id_barang' => 'required',
+                // 'tipe_transaksi' => 'required|in:masuk,keluar',
+                // 'jumlah_barang' => 'required|numeric|min:1',
                 'keterangan_transaksi' => 'nullable',
                 'diberikan_oleh' => 'nullable',
                 'keperluan_transaksi' => 'nullable',
@@ -218,23 +244,14 @@ class TransaksiController extends Controller
                 ]);
             }
 
-            /*
-            |--------------------------------------------------------------------------
-            | ROLLBACK STOK LAMA
-            |--------------------------------------------------------------------------
-            */
-
-            $barangLama = Barang::where('id_barang', $transaksi->id_barang)->first();
-
-            if ($transaksi->tipe_transaksi == 'masuk') {
-
-                $barangLama->stok_awal -= $transaksi->jumlah_barang;
-            } else {
-
-                $barangLama->stok_awal += $transaksi->jumlah_barang;
-            }
-
-            $barangLama->save();
+            // Rollback stok lama
+            // $barangLama = Barang::where('id_barang', $transaksi->id_barang)->first();
+            // if ($transaksi->tipe_transaksi == 'masuk') {
+            //     $barangLama->stok_awal -= $transaksi->jumlah_barang;
+            // } else {
+            //     $barangLama->stok_awal += $transaksi->jumlah_barang;
+            // }
+            // $barangLama->save();
 
             /*
             |--------------------------------------------------------------------------
@@ -242,30 +259,24 @@ class TransaksiController extends Controller
             |--------------------------------------------------------------------------
             */
 
-            $barangBaru = Barang::where('id_barang', $request->id_barang)->first();
+            // $barangBaru = Barang::where('id_barang', $request->id_barang)->first();
 
-            if (
-                $request->tipe_transaksi == 'keluar' &&
-                $barangBaru->stok_awal < $request->jumlah_barang
-            ) {
-
-                DB::rollBack();
-
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Stok tidak mencukupi'
-                ]);
-            }
-
-            if ($request->tipe_transaksi == 'masuk') {
-
-                $barangBaru->stok_awal += $request->jumlah_barang;
-            } else {
-
-                $barangBaru->stok_awal -= $request->jumlah_barang;
-            }
-
-            $barangBaru->save();
+            // if (
+            //     $request->tipe_transaksi == 'keluar' &&
+            //     $barangBaru->stok_awal < $request->jumlah_barang
+            // ) {
+            //  DB::rollBack();
+            //     return response()->json([
+            //         'status' => 'error',
+            //         'message' => 'Stok tidak mencukupi'
+            //     ]);
+            // }
+            // if ($request->tipe_transaksi == 'masuk') {
+            //     $barangBaru->stok_awal += $request->jumlah_barang;
+            // } else {
+            //     $barangBaru->stok_awal -= $request->jumlah_barang;
+            // }
+            // $barangBaru->save();
 
             /*
             |--------------------------------------------------------------------------
@@ -274,10 +285,10 @@ class TransaksiController extends Controller
             */
 
             $transaksi->update([
-                'tanggal_transaksi' => $request->tanggal_transaksi,
-                'id_barang' => $request->id_barang,
-                'tipe_transaksi' => $request->tipe_transaksi,
-                'jumlah_barang' => $request->jumlah_barang,
+                // 'tanggal_transaksi' => $request->tanggal_transaksi,
+                // 'id_barang' => $request->id_barang,
+                // 'tipe_transaksi' => $request->tipe_transaksi,
+                // 'jumlah_barang' => $request->jumlah_barang,
                 'keterangan_transaksi' => $request->keterangan_transaksi,
                 'diberikan_oleh' => $request->diberikan_oleh,
                 'keperluan_transaksi' => $request->keperluan_transaksi,
@@ -285,12 +296,12 @@ class TransaksiController extends Controller
 
             $afterData = $transaksi->fresh()->toArray();
             AuditHelper::log(
-    'update',
-    'transaksi',
-    $transaksi->id_transaksi,
-    $beforeData,
-    $afterData
-);
+                'update',
+                'transaksi',
+                $transaksi->id_transaksi,
+                $beforeData,
+                $afterData
+            );
 
             DB::commit();
 
@@ -346,12 +357,12 @@ class TransaksiController extends Controller
 
             $transaksi->delete();
             AuditHelper::log(
-    'delete',
-    'transaksi',
-    $id,
-    $beforeDelete,
-    null
-);
+                'delete',
+                'transaksi',
+                $id,
+                $beforeDelete,
+                null
+            );
 
             DB::commit();
 
