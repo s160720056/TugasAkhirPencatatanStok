@@ -723,12 +723,12 @@ body {
                             <i class="bi bi-exclamation-triangle-fill"></i> Username atau password salah!
                         </div>
                     @endif
-                    @error('captcha')
+                    {{-- @error('captcha')
                         <div class="alert-modern alert-danger mt-2">
                             <i class="bi bi-shield-exclamation"></i>
                             <span>{{ $message }}</span>
                         </div>
-                    @enderror
+                    @enderror --}}
 
                     <form method="POST" action="{{ route('login') }}" id="loginForm">
                         @csrf
@@ -750,10 +750,10 @@ body {
                             <label for="password" class="form-label-modern">Password</label>
                         </div>
 
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <div class="cf-turnstile" data-sitekey="{{ env('TURNSTILE_SITE_KEY') }}" data-theme="auto">
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="form-check-modern mb-4">
                             <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>

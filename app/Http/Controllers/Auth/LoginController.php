@@ -41,22 +41,22 @@ class LoginController extends Controller
         $key = $this->throttleKey($request);
 
         // ==================== 1. CLOUDFLARE TURNSTILE ====================
-        if ($request->filled('cf-turnstile-response')) {
-            $response = Http::timeout(8)
-                ->asForm()
-                ->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
-                    'secret' => env('TURNSTILE_SECRET_KEY'),
-                    'response' => $request->input('cf-turnstile-response'),
-                    'remoteip' => $request->ip(),
-                ]);
+        // if ($request->filled('cf-turnstile-response')) {
+        //     $response = Http::timeout(8)
+        //         ->asForm()
+        //         ->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
+        //             'secret' => env('TURNSTILE_SECRET_KEY'),
+        //             'response' => $request->input('cf-turnstile-response'),
+        //             'remoteip' => $request->ip(),
+        //         ]);
 
-            if (!$response->successful() || !($response->json()['success'] ?? false)) {
-                RateLimiter::hit($key, 60);
-                throw ValidationException::withMessages(['captcha' => 'Verifikasi Cloudflare gagal. Silakan coba lagi.']);
-            }
-        } else {
-            throw ValidationException::withMessages(['captcha' => 'Verifikasi keamanan diperlukan.']);
-        }
+        //     if (!$response->successful() || !($response->json()['success'] ?? false)) {
+        //         RateLimiter::hit($key, 60);
+        //         throw ValidationException::withMessages(['captcha' => 'Verifikasi Cloudflare gagal. Silakan coba lagi.']);
+        //     }
+        // } else {
+        //     throw ValidationException::withMessages(['captcha' => 'Verifikasi keamanan diperlukan.']);
+        // }
 
         // ==================== 2. RATE LIMITER ====================
         if (RateLimiter::tooManyAttempts($key, 5)) {
