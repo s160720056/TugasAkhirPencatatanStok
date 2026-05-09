@@ -100,7 +100,7 @@ class HakAksesController extends Controller
                                 $icons = ['store'];
                                 foreach ($additionalMenus as $index => $additionalMenu) {
                                     $activeClass = ($menu == $additionalMenu) ? 'active' : '';
-                                    $backgroundColor = ($activeClass == 'active') ? 'background: #2196f7; color: white;' : 'background-color: white;';
+                                    $backgroundColor = ($activeClass == 'active') ? 'background: #166534; color: white;' : 'background-color: white;';
                                     $namaMenuColor = ($activeClass == 'active') ? 'color: white;' : 'color: #3b3f5c;';
                                     $isi .= "<li class=\"menu $activeClass\">
                                     <a href=\"".$urls[$index]."\" id=\"absen\" style=\"$backgroundColor; text-decoration: none;\"
@@ -116,7 +116,7 @@ class HakAksesController extends Controller
                                 }
                             } else {
                                 $activeClass = ($menu == $hakAksesMenus->nama_menu_opsional) ? 'active' : '';
-                                $backgroundColor = ($activeClass == 'active') ? 'background: #2196f7; color: white;' : 'background-color: white; opacity: 0.5;';
+                                $backgroundColor = ($activeClass == 'active') ? 'background: #166534; color: white;' : 'background-color: white; opacity: 0.5;';
                                 $namaMenuColor = ($activeClass == 'active') ? 'color: white;' : 'color: #3b3f5c; opacity: 0.5;';
                                 $isi .= "<li class=\"menu $activeClass\">
                                 <a href=\"#\" id=\"absen\" style=\"$backgroundColor; text-decoration: none;\"
@@ -159,7 +159,7 @@ class HakAksesController extends Controller
                                 $icons = ['store', 'receipt', 'scale'];
                                 foreach ($additionalMenus as $index => $additionalMenu) {
                                     $activeClass = ($menu == $additionalMenu) ? 'active' : '';
-                                    $backgroundColor = ($activeClass == 'active') ? 'background: #2196f7; color: white;' : 'background-color: white;';
+                                    $backgroundColor = ($activeClass == 'active') ? 'background: #166534; color: white;' : 'background-color: white;';
                                     $namaMenuColor = ($activeClass == 'active') ? 'color: white;' : 'color: #3b3f5c;';
                                     $isi .= "<li class=\"menu $activeClass\">
             <a href=\"".$urls[$index]."\" id=\"absen\" style=\"$backgroundColor; text-decoration: none;\"
@@ -176,7 +176,7 @@ class HakAksesController extends Controller
                             } else {
 
                                 $activeClass = ($menu == $hakAksesMenus->nama_menu_opsional) ? 'active' : '';
-                                $backgroundColor = ($activeClass == 'active') ? 'background: #2196f7; color: white;' : 'background-color: white;';
+                                $backgroundColor = ($activeClass == 'active') ? 'background: #166534; color: white;' : 'background-color: white;';
                                 $namaMenuColor = ($activeClass == 'active') ? 'color: white;' : 'color: #3b3f5c;';
                                 $isi .= "<li class=\"menu $activeClass\">
             <a href=\"".$hakAksesMenus->url."\" id=\"absen\" style=\"$backgroundColor; text-decoration: none;\"

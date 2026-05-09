@@ -29,7 +29,7 @@
 
     <style>
     :root {
-        --primary: #2196f7;
+        --primary: #166534;
         --primary-dark: #b71c1c;
         --sidebar-width: 280px;
         --navbar-height: 64px;
@@ -176,7 +176,7 @@
     }
 
     .menu.active a {
-        background: #2196f7;
+        background: #166534;
         color: white;
         font-weight: 600;
         box-shadow: 0 4px 15px -2px rgba(211, 47, 47, 0.35);
@@ -199,7 +199,7 @@
     }
 
     body.dark .menu.active a {
-        background: #2196f7;
+        background: #166534;
     }
 
     /* Overlay for mobile */
@@ -439,7 +439,7 @@
     <!-- LOCK SCREEN -->
     <div id="lock-screen" class="lock-screen d-none flex-column align-items-center justify-content-center position-fixed top-0 start-0 w-100 h-100">
         <div class="lock-content text-center">
-            <span class="material-symbols-outlined" style="font-size: 4.5rem; color: #2196f7;">lock</span>
+            <span class="material-symbols-outlined" style="font-size: 4.5rem; color: #166534;">lock</span>
             <h3 class="mt-3 mb-4 fw-semibold">Layar Terkunci</h3>
             <form id="unlock-form" class="d-flex flex-column gap-3">
                 <div class="form-floating">

@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap" rel="stylesheet">
     <style>
-        :root{--primary:#2196f7;--secondary:#795548;--light:#fff8f0}
+        :root{--primary:#166534;--secondary:#854d0e;--light:#f8fafc}
         body{font-family:"Poppins",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:#333}
         .btn-primary{background:var(--primary);border:none}
         .btn-primary:hover{background:#b71c1c}

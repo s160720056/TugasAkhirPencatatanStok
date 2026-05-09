@@ -23,11 +23,11 @@
     </title>
 
     <style>
-        :root {
-            --primary: #2196f7;
-            --secondary: #795548;
-            --light: #fff8f0;
-        }
+        /* :root {
+            --primary: #166534;
+            --secondary: #854d0e;
+            --light: #f8fafc;
+        } */
 
 
 
@@ -197,9 +197,9 @@
 @endphp
 <style>
     :root {
-        --primary: #2196f7;
-        --secondary: #795548;
-        --light: #fff8f0;
+        --primary: #166534;
+        --secondary: #854d0e;
+        --light: #f8fafc;
     }
 
     body {

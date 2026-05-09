@@ -205,7 +205,7 @@ HTML;
     private function buildSingleMenuItem($menuItem, $currentMenu): string
     {
         $active = ($currentMenu === $menuItem->nama_menu_opsional) ? 'active' : '';
-        $bgColor = $active ? 'background: #2196f7; color: white;' : 'background-color: white;';
+        $bgColor = $active ? 'background: #166534; color: white;' : 'background-color: white;';
         $textColor = $active ? 'color: white;' : 'color: #3b3f5c;';
 
         return <<<HTML
@@ -234,7 +234,7 @@ HTML;
 
         foreach (self::PENGATURAN_EXTRA as $name => $data) {
             $active = ($currentMenu === $name) ? 'active' : '';
-            $bgColor = $active ? 'background: #2196f7; color: white;' : 'background-color: white;';
+            $bgColor = $active ? 'background: #166534; color: white;' : 'background-color: white;';
             $textColor = $active ? 'color: white;' : 'color: #3b3f5c;';
             $menuName = ucfirst($name);
 
