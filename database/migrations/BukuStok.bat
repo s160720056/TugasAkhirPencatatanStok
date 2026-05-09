@@ -9,7 +9,7 @@ if %errorlevel%==0 (
 )
 
 :: Change directory to target location, pull latest changes, and run php artisan serve
-cd /d "c:/xampp/htdocs/TugasAkhir"
+cd /d "c:/xampp/htdocs/TugasAkhirPencatatanStok"
 git pull
 
 start cmd /k "php artisan serve"
