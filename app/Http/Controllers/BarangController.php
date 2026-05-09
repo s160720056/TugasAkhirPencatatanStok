@@ -39,7 +39,7 @@ $barang = Barang::select([
     'stok_akhir', 
     'tanggal_input',
     'STATUS_BARANG'
-])->where('STATUS_BARANG', '!=', 2);
+])->where('STATUS_BARANG', '!=', '2');
 
         return DataTables::of($barang)
             ->addIndexColumn()
