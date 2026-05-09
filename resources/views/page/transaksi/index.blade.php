@@ -148,7 +148,7 @@
                         <label for="barang_new">Barang</label>
                         <select class="form-control select2" id="barang_new" style="width:100%">
                             @foreach ($barang as $item)
-                                <option value="{{ $item->id_barang }}">{{ $item->nama_barang }}</option>
+                                <option value="{{ $item->id_barang }}">{{ $item->kode_barang }} - {{ $item->nama_barang }}</option>
                             @endforeach
                         </select>
                     </div>
