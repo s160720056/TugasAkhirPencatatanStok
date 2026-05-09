@@ -134,12 +134,12 @@ class TransaksiController extends Controller
             ]);
 
             //cek apakah harga_satuan * jumlah == jumlah_satuan
-            if ($request->harga_satuan * $request->jumlah_satuan != $request->jumlah_satuan) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Harga satuan * jumlah != jumlah satuan'
-                ]);
-            }
+            // if ($request->harga_satuan * $request->jumlah_satuan != $request->jumlah_satuan) {
+            //     return response()->json([
+            //         'status' => 'error',
+            //         'message' => 'Harga satuan * jumlah != jumlah satuan'
+            //     ]);
+            // }
 
             $barang = Barang::where('id_barang', $request->id_barang)->first();
 
