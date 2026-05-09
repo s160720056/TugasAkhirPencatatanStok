@@ -7,6 +7,10 @@ use App\Models\Barang;
 use App\Exports\ExportBarang;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\DB;
+use App\Models\Transaksi;
+
+
 
 class BarangController extends Controller
 {
@@ -30,21 +34,20 @@ class BarangController extends Controller
     // DataTable
     public function getDataTable(Request $request)
     {
-$barang = Barang::select([
-    'id_barang', 
-    'kode_barang', 
-    'nama_barang', 
-    'seri', 
-    'stok_awal', 
-    'stok_akhir', 
-    'tanggal_input',
-    'STATUS_BARANG'
-])->where('STATUS_BARANG', '!=', '2');
+        $barang = Barang::select([
+            'id_barang',
+            'kode_barang',
+            'nama_barang',
+            'seri',
+            'stok_awal',
+            'tanggal_input',
+            'STATUS_BARANG',
+            'harga_satuan',
+        ])->where('STATUS_BARANG', '!=', '2');
 
         return DataTables::of($barang)
             ->addIndexColumn()
             ->editColumn('stok_awal', fn($row) => number_format($row->stok_awal ?? 0))
-            ->editColumn('stok_akhir', fn($row) => number_format($row->stok_akhir ?? 0))
             ->editColumn('tanggal_input', fn($row) => $row->tanggal_input ? \Carbon\Carbon::parse($row->tanggal_input)->format('d/m/Y') : '-')
             ->make(true);
     }
@@ -65,41 +68,64 @@ $barang = Barang::select([
 
     public function store(Request $request)
     {
-        $id_toko = session()->get('id_toko');
+        DB::beginTransaction();
 
-        $request->validate([
-            'kode_barang' => 'required|unique:barang,kode_barang,NULL,id_barang|max:255',
-            'nama_barang' => 'required|string|max:255',
-            'seri'        => 'nullable|string',
-            'stok_awal'   => 'nullable|integer|min:0',
-          
-        ]);
+        try {
 
-        //check dupplicate
-        // $existingBarang = Barang::where('kode_barang', $request->kode_barang)
-        //                         ->where('STATUS_BARANG', '!=', '2')
-        //                         ->first();
+            $request->validate([
+                'kode_barang'    => 'required|unique:barang,kode_barang,NULL,id_barang|max:255',
+                'nama_barang'    => 'required|string|max:255',
+                'seri'           => 'nullable|string',
+                'stok_awal'      => 'nullable|integer|min:0',
+                'harga_satuan'   => 'nullable|integer|min:0',
+                // 'jumlah_satuan'  => 'nullable|integer|min:0',
+            ]);
 
-        // if ($existingBarang) {
-        //     return response()->json(['message' => 'Kode barang sudah digunakan'], 400);
-        // }
+            $barang = Barang::create([
+                'kode_barang'    => $request->kode_barang,
+                'nama_barang'    => $request->nama_barang,
+                'seri'           => $request->seri,
+                'stok_awal'      => $request->stok_awal ?? 0,
+                'tanggal_input'  => now()->toDateString(),
+                'STATUS_BARANG'  => $request->STATUS_BARANG ?? '1',
+                'harga_satuan'   => $request->harga_satuan ?? 0,
+                // 'jumlah_satuan'  => $request->jumlah_satuan ?? 0,
+            ]);
 
+            /*
+        |--------------------------------------------------------------------------
+        | AUTO INSERT TRANSAKSI MASUK
+        |--------------------------------------------------------------------------
+        */
 
-        $barang = Barang::create([
-            'kode_barang'   => $request->kode_barang,
-            'nama_barang'   => $request->nama_barang,
-            'seri'          => $request->seri,
-            'stok_awal'     => $request->stok_awal ?? 0,
-            'stok_akhir'    => $request->stok_awal ?? 0,     // awal = akhir saat create
-            'tanggal_input' =>  now()->toDateString(),
-            'STATUS_BARANG' => $request->STATUS_BARANG ?? '1',
-          
-        ]);
+            $transaksi = Transaksi::create([
+                'id_barang'             => $barang->id_barang,
+                'tipe_transaksi'        => 'masuk',
+                'jumlah_barang'         => $barang->stok_awal ?? 0,
+                'harga_satuan'          => $barang->harga_satuan ?? 0,
+                'jumlah_satuan'         => $barang->harga_satuan * $barang->stok_awal ?? 0,
+                'keterangan_transaksi'  => null,
+                'diberikan_oleh'        => null,
+                'keperluan_transaksi'   => null,
+                'tanggal_transaksi'     => now(),
+            ]);
 
-        return response()->json([
-            'message' => 'Barang berhasil ditambahkan',
-            'data'    => $barang
-        ]);
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Barang berhasil ditambahkan',
+                'data'    => $barang,
+                'transaksi' => $transaksi
+            ]);
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Gagal menyimpan barang',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function getBarangDetail($id)
@@ -116,7 +142,7 @@ $barang = Barang::select([
         $id_toko = session()->get('id_toko');
 
         $barang = Barang::where('id_barang', $id)
-                        ->first();
+            ->first();
 
         if (!$barang) {
             return response()->json(['message' => 'Barang tidak ditemukan'], 404);
@@ -127,7 +153,9 @@ $barang = Barang::select([
             'nama_barang' => 'required|string|max:255',
             'seri'        => 'nullable|string',
             'stok_awal'   => 'nullable|integer|min:0',
-          
+            'harga_satuan' => 'nullable|integer|min:0',
+            // 'jumlah_satuan' => 'nullable|integer|min:0',
+
         ]);
 
         $barang->update([
@@ -137,6 +165,8 @@ $barang = Barang::select([
             'stok_awal'     => $request->stok_awal ?? $barang->stok_awal,
             'tanggal_input' =>  now()->toDateString(),
             'STATUS_BARANG' => $request->STATUS_BARANG ?? $barang->STATUS_BARANG,
+            'harga_satuan' => $request->harga_satuan ?? $barang->harga_satuan,
+            // 'jumlah_satuan' => $request->jumlah_satuan ?? $barang->jumlah_satuan,
         ]);
 
         // Optional: update stok_akhir jika diperlukan
@@ -147,13 +177,122 @@ $barang = Barang::select([
 
     public function destroy(string $id)
     {
-        try {
-            $barang = Barang::findOrFail($id);
-            $barang->update(['STATUS_BARANG' => '2']);
+        DB::beginTransaction();
 
-            return response()->json(['message' => 'Barang berhasil dihapus']);
+        try {
+
+            $barang = Barang::findOrFail($id);
+
+            /*
+        |--------------------------------------------------------------------------
+        | VALIDASI STOK HARUS 0
+        |--------------------------------------------------------------------------
+        */
+
+            // if (($barang->stok_awal ?? 0) > 0) {
+
+            //     return response()->json([
+            //         'message' => 'Barang tidak dapat dihapus karena stok masih ada'
+            //     ], 400);
+            //}
+
+            /*
+        |--------------------------------------------------------------------------
+        | CEK TOTAL TRANSAKSI
+        |--------------------------------------------------------------------------
+        */
+
+            $totalTransaksi = Transaksi::where('id_barang', $barang->id_barang)
+                ->count();
+
+            /*
+        |--------------------------------------------------------------------------
+        | JIKA TIDAK ADA TRANSAKSI
+        | HARD DELETE
+        |--------------------------------------------------------------------------
+        */
+
+            if ($totalTransaksi == 0) {
+
+                $barang->delete();
+
+                DB::commit();
+
+                return response()->json([
+                    'message' => 'Barang berhasil dihapus permanen'
+                ]);
+            }
+
+            /*
+        |--------------------------------------------------------------------------
+        | AMBIL TRANSAKSI MASUK PERTAMA
+        |--------------------------------------------------------------------------
+        */
+
+            $transaksiMasukAwal = Transaksi::where('id_barang', $barang->id_barang)
+                ->where('tipe_transaksi', 'masuk')
+                ->orderBy('id_transaksi', 'asc')
+                ->first();
+
+            /*
+        |--------------------------------------------------------------------------
+        | CEK ADA TRANSAKSI LAIN SETELAH TRANSAKSI AWAL
+        |--------------------------------------------------------------------------
+        */
+
+            $adaTransaksiLain = false;
+
+            if ($transaksiMasukAwal) {
+
+                $adaTransaksiLain = Transaksi::where('id_barang', $barang->id_barang)
+                    ->where('id_transaksi', '>', $transaksiMasukAwal->id_transaksi)
+                    ->exists();
+            }
+
+            /*
+        |--------------------------------------------------------------------------
+        | JIKA HANYA ADA TRANSAKSI AWAL
+        | HAPUS TRANSAKSI + HARD DELETE BARANG
+        |--------------------------------------------------------------------------
+        */
+
+            if (!$adaTransaksiLain && $transaksiMasukAwal) {
+
+                $transaksiMasukAwal->delete();
+
+                $barang->delete();
+
+                DB::commit();
+
+                return response()->json([
+                    'message' => 'Barang dan transaksi awal berhasil dihapus permanen'
+                ]);
+            }
+
+            /*
+        |--------------------------------------------------------------------------
+        | MASIH ADA HISTORI
+        | SOFT DELETE
+        |--------------------------------------------------------------------------
+        */
+
+            $barang->update([
+                'STATUS_BARANG' => '2'
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Barang berhasil dinonaktifkan'
+            ]);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Gagal menghapus barang'], 500);
+
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Gagal menghapus barang',
+                'error'   => $e->getMessage()
+            ], 500);
         }
     }
 }

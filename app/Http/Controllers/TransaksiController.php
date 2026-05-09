@@ -26,81 +26,82 @@ class TransaksiController extends Controller
     }
 
     public function getDataTable(Request $request)
-{
-    $transaksi = Transaksi::query()
-        ->leftJoin('barang', 'transaksi.id_barang', '=', 'barang.id_barang')
-        ->select([
-            'transaksi.id_transaksi',
-            'transaksi.id_barang',
-            'transaksi.tanggal_transaksi',
-            'transaksi.tipe_transaksi',
-            'transaksi.jumlah_barang',
-            'transaksi.keterangan_transaksi',
-            'transaksi.harga_satuan',
-            'transaksi.jumlah_satuan',
-            'transaksi.diberikan_oleh',
-            'transaksi.keperluan_transaksi',
-            'barang.nama_barang',
-        ]);
+    {
+       $transaksi = Transaksi::query()
+    ->leftJoin('barang', 'transaksi.id_barang', '=', 'barang.id_barang')
+    ->select([
+        'transaksi.id_transaksi',
+        'transaksi.id_barang',
+        'transaksi.tanggal_transaksi',
+        'transaksi.tipe_transaksi',
+        'transaksi.jumlah_barang',
+        'transaksi.keterangan_transaksi',
+        'transaksi.harga_satuan',
+        'transaksi.jumlah_satuan',
+        'transaksi.diberikan_oleh',
+        'transaksi.keperluan_transaksi',
+        'barang.nama_barang',
+    ])
+    ->orderByDesc('transaksi.id_transaksi');
 
-    return DataTables::of($transaksi)
+        return DataTables::of($transaksi)
 
-        ->addIndexColumn()
+            ->addIndexColumn()
 
-        ->addColumn('barang', function ($row) {
-            return $row->nama_barang ?? '-';
-        })
+            ->addColumn('barang', function ($row) {
+                return $row->nama_barang ?? '-';
+            })
 
-        ->addColumn('keluar', function ($row) {
-            return $row->tipe_transaksi == 'keluar'
-                ? $row->jumlah_barang
-                : '-';
-        })
+            ->addColumn('keluar', function ($row) {
+                return $row->tipe_transaksi == 'keluar'
+                    ? $row->jumlah_barang
+                    : '-';
+            })
 
-        ->addColumn('masuk', function ($row) {
-            return $row->tipe_transaksi == 'masuk'
-                ? $row->jumlah_barang
-                : '-';
-        })
+            ->addColumn('masuk', function ($row) {
+                return $row->tipe_transaksi == 'masuk'
+                    ? $row->jumlah_barang
+                    : '-';
+            })
 
-        /*
+            /*
         |--------------------------------------------------------------------------
         | CUSTOM SEARCH
         |--------------------------------------------------------------------------
         */
 
-        ->filterColumn('barang', function ($query, $keyword) {
-            $query->where('barang.nama_barang', 'like', "%{$keyword}%");
-        })
+            ->filterColumn('barang', function ($query, $keyword) {
+                $query->where('barang.nama_barang', 'like', "%{$keyword}%");
+            })
 
-        ->filterColumn('keterangan_transaksi', function ($query, $keyword) {
-            $query->where('transaksi.keterangan_transaksi', 'like', "%{$keyword}%");
-        })
+            ->filterColumn('keterangan_transaksi', function ($query, $keyword) {
+                $query->where('transaksi.keterangan_transaksi', 'like', "%{$keyword}%");
+            })
 
-        ->filterColumn('diberikan_oleh', function ($query, $keyword) {
-            $query->where('transaksi.diberikan_oleh', 'like', "%{$keyword}%");
-        })
+            ->filterColumn('diberikan_oleh', function ($query, $keyword) {
+                $query->where('transaksi.diberikan_oleh', 'like', "%{$keyword}%");
+            })
 
-        ->filterColumn('keperluan_transaksi', function ($query, $keyword) {
-            $query->where('transaksi.keperluan_transaksi', 'like', "%{$keyword}%");
-        })
+            ->filterColumn('keperluan_transaksi', function ($query, $keyword) {
+                $query->where('transaksi.keperluan_transaksi', 'like', "%{$keyword}%");
+            })
 
-        ->filterColumn('tanggal_transaksi', function ($query, $keyword) {
-            $query->whereDate('transaksi.tanggal_transaksi', $keyword);
-        })
+            ->filterColumn('tanggal_transaksi', function ($query, $keyword) {
+                $query->whereDate('transaksi.tanggal_transaksi', $keyword);
+            })
 
-        
 
-        ->orderColumn('barang', function ($query, $order) {
-            $query->orderBy('barang.nama_barang', $order);
-        })
-        /*
+
+            ->orderColumn('barang', function ($query, $order) {
+                $query->orderBy('barang.nama_barang', $order);
+            })
+            /*
         |--------------------------------------------------------------------------
         | ACTION
         |--------------------------------------------------------------------------
         */
-        ->addColumn('action', function ($row) {
-            return '
+            ->addColumn('action', function ($row) {
+                return '
                 <button class="btn btn-warning btn-sm"
                     onclick="editTransaksi(' . $row->id_transaksi . ')">
                     Edit
@@ -110,10 +111,10 @@ class TransaksiController extends Controller
                     Hapus
                 </button>
             ';
-        })
-        ->rawColumns(['action'])
-        ->make(true);
-}
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
 
     public function store(Request $request)
     {

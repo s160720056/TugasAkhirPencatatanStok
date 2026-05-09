@@ -148,7 +148,8 @@
                         <label for="barang_new">Barang</label>
                         <select class="form-control select2" id="barang_new" style="width:100%">
                             @foreach ($barang as $item)
-                                <option value="{{ $item->id_barang }}">{{ $item->kode_barang }} - {{ $item->nama_barang }}</option>
+                                <option value="{{ $item->id_barang }}">{{ $item->kode_barang }} - {{ $item->nama_barang }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -196,21 +197,20 @@
             </div>
         </div>
     </div>
-<script src="https://cdn.jsdelivr.net/npm/autonumeric@4.10.5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.10.5"></script>
     <script>
-    
         $(document).ready(function() {
-    const hargaSatuanMask = new AutoNumeric('#harga_satuan_new', {
-            digitGroupSeparator: '.',
-            decimalCharacter: ',',
-            decimalPlaces: 0
-        });
+            const hargaSatuanMask = new AutoNumeric('#harga_satuan_new', {
+                digitGroupSeparator: '.',
+                decimalCharacter: ',',
+                decimalPlaces: 0
+            });
 
-        const jumlahSatuanMask = new AutoNumeric('#jumlah_satuan_new', {
-            digitGroupSeparator: '.',
-            decimalCharacter: ',',
-            decimalPlaces: 0
-        });
+            const jumlahSatuanMask = new AutoNumeric('#jumlah_satuan_new', {
+                digitGroupSeparator: '.',
+                decimalCharacter: ',',
+                decimalPlaces: 0
+            });
             // Select2
             // Modal tambah
             $('#barang_new, #tipe_transaksi_new').select2({
@@ -229,6 +229,9 @@
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('transaksi.data') }}",
+                order: [
+                    [0, 'desc']
+                ],
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
@@ -370,8 +373,8 @@
                 $('#keterangan_transaksi_new').val('');
                 $('#diberikan_oleh_new').val('');
                 $('#keperluan_transaksi_new').val('');
-               hargaSatuanMask.clear();
-jumlahSatuanMask.clear();
+                hargaSatuanMask.clear();
+                jumlahSatuanMask.clear();
             }
 
             // ==================== EDIT TRANSAKSI ====================

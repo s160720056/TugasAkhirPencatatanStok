@@ -28,7 +28,8 @@
                             <th>Nama Barang</th>
                             <th>Seri</th>
                             <th class="text-end">Stok Awal</th>
-                            {{-- <th class="text-end">Stok Akhir</th> --}}
+                            <th class="text-end">Harga Satuan</th>
+                            {{-- <th class="text-end">Jumlah Satuan</th> --}}
                             <th>Tanggal Input</th>
 
                             <th>Status</th>
@@ -43,7 +44,8 @@
                             <th>Nama Barang</th>
                             <th>Seri</th>
                             <th class="text-end">Stok Awal</th>
-                            {{-- <th class="text-end">Stok Akhir</th> --}}
+                            <th class="text-end">Harga Satuan</th>
+                            {{-- <th class="text-end">Jumlah Satuan</th> --}}
                             <th>Tanggal Input</th>
 
                             <th>Status</th>
@@ -64,22 +66,29 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
+                    {{-- ROW 1 --}}
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Kode Barang <span class="text-danger">*</span></label>
+                                <label>
+                                    Kode Barang
+                                    <span class="text-danger">*</span>
+                                </label>
                                 <input type="text" class="form-control" id="kode_barang_new"
                                     placeholder="Contoh: BRG001">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Nama Barang <span class="text-danger">*</span></label>
+                                <label>
+                                    Nama Barang
+                                    <span class="text-danger">*</span>
+                                </label>
                                 <input type="text" class="form-control" id="nama_barang_new">
                             </div>
                         </div>
                     </div>
-
+                    {{-- ROW 2 --}}
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -87,17 +96,6 @@
                                 <input type="text" class="form-control" id="seri_new">
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Stok Awal</label>
-                                <input type="number" class="form-control text-end" id="stok_awal_new" value="0"
-                                    min="0">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-3">
-
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Status Barang</label>
@@ -109,10 +107,38 @@
                             </div>
                         </div>
                     </div>
+                    {{-- ROW 3 --}}
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Stok Awal</label>
+                                <input type="text" class="form-control text-end currency-mask" id="stok_awal_new"
+                                    value="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Harga Satuan</label>
+                                <input type="text" class="form-control text-end currency-mask" id="harga_satuan_new"
+                                    value="0">
+                            </div>
+                        </div>
+                        {{-- <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Jumlah Satuan</label>
+                                <input type="text" class="form-control text-end currency-mask" id="jumlah_satuan_new"
+                                    value="0">
+                            </div>
+                        </div> --}}
+                    </div>
                 </div>
                 <div class="modal-footer bg-light">
-                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button class="btn btn-primary px-4" id="doneAdd">Simpan</button>
+                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Batal
+                    </button>
+                    <button class="btn btn-primary px-4" id="doneAdd">
+                        Simpan
+                    </button>
                 </div>
             </div>
         </div>
@@ -128,22 +154,26 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="id_barang">
-
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Kode Barang <span class="text-danger">*</span></label>
+                                <label>
+                                    Kode Barang
+                                    <span class="text-danger">*</span>
+                                </label>
                                 <input type="text" class="form-control" id="kode_barang">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Nama Barang <span class="text-danger">*</span></label>
+                                <label>
+                                    Nama Barang
+                                    <span class="text-danger">*</span>
+                                </label>
                                 <input type="text" class="form-control" id="nama_barang">
                             </div>
                         </div>
                     </div>
-
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -151,22 +181,6 @@
                                 <input type="text" class="form-control" id="seri">
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>Stok Awal</label>
-                                <input type="number" class="form-control text-end" id="stok_awal" min="0">
-                            </div>
-                        </div>
-                        {{-- <div class="col-md-3">
-                            <div class="form-group">
-                                <label>Stok Akhir</label>
-                                <input type="number" class="form-control text-end" id="stok_akhir" readonly>
-                            </div>
-                        </div> --}}
-                    </div>
-
-                    <div class="row mt-3">
-
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Status Barang</label>
@@ -178,19 +192,73 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Stok Awal</label>
+                                <input type="text" class="form-control text-end currency-mask" id="stok_awal"
+                                    value="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Harga Satuan</label>
+                                <input type="text" class="form-control text-end currency-mask" id="harga_satuan"
+                                    value="0">
+                            </div>
+                        </div>
+                        {{-- <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Jumlah Satuan</label>
+                                <input type="text" class="form-control text-end currency-mask" id="jumlah_satuan"
+                                    value="0">
+                            </div>
+                        </div> --}}
+                    </div>
                 </div>
+
                 <div class="modal-footer bg-light">
-                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button class="btn btn-primary px-4" id="doneEdit">Simpan Perubahan</button>
+
+                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Batal
+                    </button>
+
+                    <button class="btn btn-primary px-4" id="doneEdit">
+                        Simpan Perubahan
+                    </button>
+
                 </div>
+
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.10.5"></script>
     <script>
         $(document).ready(function() {
+
+            const numericOptions = {
+                digitGroupSeparator: '.',
+                decimalCharacter: ',',
+                decimalPlaces: 0,
+                unformatOnSubmit: true,
+                modifyValueOnWheel: false
+            };
+
+            function initMask() {
+
+                $('.currency-mask').each(function() {
+
+                    if (AutoNumeric.getAutoNumericElement(this)) {
+                        return;
+                    }
+
+                    new AutoNumeric(this, numericOptions);
+                });
+            }
+
+            initMask();
 
             const table = $('#barang-table').DataTable({
                 destroy: true,
@@ -216,8 +284,13 @@
                         className: 'text-end',
                         render: data => Number(data || 0).toLocaleString('id-ID')
                     },
+                    {
+                        data: 'harga_satuan',
+                        className: 'text-end',
+                        render: data => Number(data || 0).toLocaleString('id-ID')
+                    },
                     // {
-                    //     data: 'stok_akhir',
+                    //     data: 'jumlah_satuan',
                     //     className: 'text-end',
                     //     render: data => Number(data || 0).toLocaleString('id-ID')
                     // },
@@ -274,7 +347,13 @@
                 $('#addBarang').modal('show');
                 $('#kode_barang_new').focus();
                 //reset form
-                $('#addBarang').find('input, textarea').val('');
+                $('#addBarang').find('input[type=text]').val('');
+                $('.currency-mask').each(function() {
+                    const anElement = AutoNumeric.getAutoNumericElement(this);
+                    if (anElement) {
+                        anElement.set(0);
+                    }
+                });
                 // $('#addBarang').find('input[type="checkbox"]').prop('checked', false);
             });
 
@@ -283,7 +362,9 @@
                         kode_barang: $('#kode_barang_new').val(),
                         nama_barang: $('#nama_barang_new').val(),
                         seri: $('#seri_new').val(),
-                        stok_awal: $('#stok_awal_new').val() || 0,
+                        stok_awal: AutoNumeric.getNumber('#stok_awal_new'),
+                        harga_satuan: AutoNumeric.getNumber('#harga_satuan_new'),
+                        // jumlah_satuan: AutoNumeric.getNumber('#jumlah_satuan_new'),
                         STATUS_BARANG: $('#status_barang_new').val()
                     })
                     .then(() => {
@@ -314,9 +395,9 @@
                         $('#kode_barang').val(b.kode_barang);
                         $('#nama_barang').val(b.nama_barang);
                         $('#seri').val(b.seri);
-                        $('#stok_awal').val(b.stok_awal);
-                        // $('#stok_akhir').val(b.stok_akhir);
-
+                        AutoNumeric.getAutoNumericElement('#stok_awal').set(b.stok_awal || 0);
+                        AutoNumeric.getAutoNumericElement('#harga_satuan').set(b.harga_satuan || 0);
+                        // AutoNumeric.getAutoNumericElement('#jumlah_satuan').set(b.jumlah_satuan || 0);
                         $('#status_barang').val(b.STATUS_BARANG);
 
                         $('#editBarang').modal('show');
@@ -329,7 +410,9 @@
                         kode_barang: $('#kode_barang').val(),
                         nama_barang: $('#nama_barang').val(),
                         seri: $('#seri').val(),
-                        stok_awal: $('#stok_awal').val(),
+                        stok_awal: AutoNumeric.getNumber('#stok_awal'),
+                        harga_satuan: AutoNumeric.getNumber('#harga_satuan'),
+                        // jumlah_satuan: AutoNumeric.getNumber('#jumlah_satuan'),
                         STATUS_BARANG: $('#status_barang').val()
                     })
                     .then(() => {
@@ -362,13 +445,30 @@
                 }).then(result => {
                     if (result.isConfirmed) {
                         axiosDelete(`/barang/${id}`)
-                            .then(() => {
+                            .then((response) => {
+
                                 Swal.fire({
                                     title: "Terhapus!",
+                                    text: response.data?.message ||
+                                        "Barang berhasil dihapus",
                                     icon: "success",
-                                    timer: 1500
+                                    timer: 1500,
+                                    showConfirmButton: false
                                 });
+
                                 table.ajax.reload(null, false);
+
+                            })
+                            .catch((err) => {
+
+                                Swal.fire({
+                                    title: "Gagal",
+                                    text: err.response?.data?.message ||
+                                        err.response?.data?.error ||
+                                        "Terjadi kesalahan saat menghapus barang",
+                                    icon: "error"
+                                });
+
                             });
                     }
                 });
