@@ -29,6 +29,8 @@
                             <th>Seri</th>
                             <th class="text-end">Stok Awal</th>
                             <th class="text-end">Stok Akhir</th>
+                            <th>Tanggal Input</th>
+
                             <th>Status</th>
                             <th class="text-center">Action</th>
                         </tr>
@@ -42,6 +44,7 @@
                             <th>Seri</th>
                             <th class="text-end">Stok Awal</th>
                             <th class="text-end">Stok Akhir</th>
+                            <th>Tanggal Input</th>
 
                             <th>Status</th>
                             <th class="text-center">Action</th>
