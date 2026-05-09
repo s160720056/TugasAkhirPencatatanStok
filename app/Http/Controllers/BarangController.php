@@ -30,16 +30,16 @@ class BarangController extends Controller
     // DataTable
     public function getDataTable(Request $request)
     {
-        $barang = Barang::select([
-            'id_barang', 
-            'kode_barang', 
-            'nama_barang', 
-            'seri', 
-            'stok_awal', 
-            'stok_akhir', 
-            'tanggal_input',
-            'STATUS_BARANG'
-        ]);
+$barang = Barang::select([
+    'id_barang', 
+    'kode_barang', 
+    'nama_barang', 
+    'seri', 
+    'stok_awal', 
+    'stok_akhir', 
+    'tanggal_input',
+    'STATUS_BARANG'
+])->where('STATUS_BARANG', '!=', 2);
 
         return DataTables::of($barang)
             ->addIndexColumn()

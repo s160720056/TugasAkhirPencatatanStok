@@ -31,6 +31,8 @@
                             <th>Keperluan</th>
                             <th>Keluar</th>
                             <th>Masuk</th>
+                            <th class="text-end">Harga Satuan</th>
+                            <th class="text-end">Jumlah Satuan</th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
@@ -44,6 +46,8 @@
                             <th>Keperluan</th>
                             <th>Keluar</th>
                             <th>Masuk</th>
+                            <th class="text-end">Harga Satuan</th>
+                            <th class="text-end">Jumlah Satuan</th>
                             <th class="text-center">Action</th>
                         </tr>
                     </tfoot>
@@ -92,6 +96,15 @@
                             <option value="masuk">Masuk</option>
                         </select>
                         <input type="hidden" id="tipe_transaksi_hidden">
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="harga_satuan_edit">Harga Satuan</label>
+                        <input type="number" min="0" class="form-control" id="harga_satuan_edit" readonly>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="jumlah_satuan_edit">Jumlah Satuan</label>
+                        <input type="number" min="1" class="form-control" id="jumlah_satuan_edit" readonly>
                     </div>
 
                     <div class="form-group mb-4">
@@ -154,6 +167,16 @@
                     </div>
 
                     <div class="form-group mb-4">
+                        <label for="harga_satuan_new">Harga Satuan</label>
+                        <input type="text" class="form-control" id="harga_satuan_new">
+
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="jumlah_satuan_new">Jumlah Satuan</label>
+                        <input type="text" class="form-control" id="jumlah_satuan_new">
+                    </div>
+
+                    <div class="form-group mb-4">
                         <label for="keterangan_transaksi_new">Keterangan</label>
                         <input type="text" class="form-control" id="keterangan_transaksi_new">
                     </div>
@@ -173,9 +196,21 @@
             </div>
         </div>
     </div>
-
+<script src="https://cdn.jsdelivr.net/npm/autonumeric@4.10.5"></script>
     <script>
+    
         $(document).ready(function() {
+    const hargaSatuanMask = new AutoNumeric('#harga_satuan_new', {
+            digitGroupSeparator: '.',
+            decimalCharacter: ',',
+            decimalPlaces: 0
+        });
+
+        const jumlahSatuanMask = new AutoNumeric('#jumlah_satuan_new', {
+            digitGroupSeparator: '.',
+            decimalCharacter: ',',
+            decimalPlaces: 0
+        });
             // Select2
             // Modal tambah
             $('#barang_new, #tipe_transaksi_new').select2({
@@ -190,57 +225,87 @@
             });
 
             // DataTable
-           $('#transaksi-table').DataTable({
-    processing: true,
-    serverSide: true,
-    ajax: "{{ route('transaksi.data') }}",
-    columns: [
-        {
-            data: 'DT_RowIndex',
-            name: 'DT_RowIndex',
-            orderable: false,
-            searchable: false,
-            className: 'text-center'
-        },
-        {
-            data: 'tanggal_transaksi',
-            name: 'transaksi.tanggal_transaksi'
-        },
-        {
-            data: 'barang',
-            name: 'barang.nama_barang'
-        },
-        {
-            data: 'keterangan_transaksi',
-            name: 'transaksi.keterangan_transaksi'
-        },
-        {
-            data: 'diberikan_oleh',
-            name: 'transaksi.diberikan_oleh'
-        },
-        {
-            data: 'keperluan_transaksi',
-            name: 'transaksi.keperluan_transaksi'
-        },
-        {
-            data: 'keluar',
-            name: 'transaksi.jumlah_barang',
-            className: 'text-danger'
-        },
-        {
-            data: 'masuk',
-            name: 'transaksi.jumlah_barang',
-            className: 'text-success'
-        },
-        {
-            data: 'action',
-            name: 'action',
-            orderable: false,
-            searchable: false,
-            className: 'text-center'
-        }
-    ]
-});
+            $('#transaksi-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('transaksi.data') }}",
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'tanggal_transaksi',
+                        name: 'transaksi.tanggal_transaksi'
+                    },
+                    {
+                        data: 'barang',
+                        name: 'barang.nama_barang'
+                    },
+                    {
+                        data: 'keterangan_transaksi',
+                        name: 'transaksi.keterangan_transaksi'
+                    },
+                    {
+                        data: 'diberikan_oleh',
+                        name: 'transaksi.diberikan_oleh'
+                    },
+                    {
+                        data: 'keperluan_transaksi',
+                        name: 'transaksi.keperluan_transaksi'
+                    },
+                    {
+                        data: 'keluar',
+                        name: 'transaksi.jumlah_barang',
+                        className: 'text-danger'
+                    },
+                    {
+                        data: 'masuk',
+                        name: 'transaksi.jumlah_barang',
+                        className: 'text-success'
+                    },
+                    {
+                        data: 'harga_satuan',
+                        name: 'transaksi.harga_satuan',
+                        render: function(data) {
+                            return new Intl.NumberFormat('id-ID').format(data);
+                        }
+                    },
+                    {
+                        data: 'jumlah_satuan',
+                        name: 'transaksi.jumlah_satuan',
+                        render: function(data) {
+                            return new Intl.NumberFormat('id-ID').format(data);
+                        }
+                    },
+
+
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                        className: 'text-center'
+                    }
+                ]
+            });
+
+            function hitungJumlahSatuan() {
+                let jumlahBarang = Number($('#jumlah_barang_new').val()) || 0;
+
+                let hargaSatuan = Number(
+                    hargaSatuanMask.getNumericString()
+                ) || 0;
+
+                jumlahSatuanMask.set(jumlahBarang * hargaSatuan);
+            }
+
+            $('#jumlah_barang_new, #harga_satuan_new').on('input', function() {
+                hitungJumlahSatuan();
+            });
+
             // ==================== TAMBAH TRANSAKSI ====================
             $('#addTransaksiDone').click(function() {
                 const data = {
@@ -251,7 +316,13 @@
                     keterangan_transaksi: $('#keterangan_transaksi_new').val(),
                     diberikan_oleh: $('#diberikan_oleh_new').val(),
                     keperluan_transaksi: $('#keperluan_transaksi_new').val(),
+                    harga_satuan: hargaSatuanMask.getNumericString(),
+                    jumlah_satuan: jumlahSatuanMask.getNumericString(),
+
                 };
+
+
+
 
                 if (!data.jumlah_barang || data.jumlah_barang <= 0) {
                     Swal.fire({
@@ -299,6 +370,8 @@
                 $('#keterangan_transaksi_new').val('');
                 $('#diberikan_oleh_new').val('');
                 $('#keperluan_transaksi_new').val('');
+               hargaSatuanMask.clear();
+jumlahSatuanMask.clear();
             }
 
             // ==================== EDIT TRANSAKSI ====================
@@ -319,6 +392,8 @@
                         $('#keperluan_transaksi_edit').val(response.data.keperluan_transaksi);
                         $('#id_barang_hidden').val(response.data.id_barang);
                         $('#tipe_transaksi_hidden').val(response.data.tipe_transaksi);
+                        $('#harga_satuan_edit').val(response.data.harga_satuan);
+                        $('#jumlah_satuan_edit').val(response.data.jumlah_satuan);
 
                         const editModal = new bootstrap.Modal(document.getElementById('editTransaksi'));
                         editModal.show();
@@ -335,6 +410,8 @@
                     keterangan_transaksi: $('#keterangan_transaksi_edit').val(),
                     diberikan_oleh: $('#diberikan_oleh_edit').val(),
                     keperluan_transaksi: $('#keperluan_transaksi_edit').val(),
+                    harga_satuan: $('#harga_satuan_edit').val(),
+                    jumlah_satuan: $('#jumlah_satuan_edit').val(),
                 };
 
                 axiosPut(`/transaksi/${id}`, data).then(response => {

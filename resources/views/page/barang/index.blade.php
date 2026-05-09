@@ -28,7 +28,7 @@
                             <th>Nama Barang</th>
                             <th>Seri</th>
                             <th class="text-end">Stok Awal</th>
-                            <th class="text-end">Stok Akhir</th>
+                            {{-- <th class="text-end">Stok Akhir</th> --}}
                             <th>Tanggal Input</th>
 
                             <th>Status</th>
@@ -43,7 +43,7 @@
                             <th>Nama Barang</th>
                             <th>Seri</th>
                             <th class="text-end">Stok Awal</th>
-                            <th class="text-end">Stok Akhir</th>
+                            {{-- <th class="text-end">Stok Akhir</th> --}}
                             <th>Tanggal Input</th>
 
                             <th>Status</th>
@@ -157,12 +157,12 @@
                                 <input type="number" class="form-control text-end" id="stok_awal" min="0">
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        {{-- <div class="col-md-3">
                             <div class="form-group">
                                 <label>Stok Akhir</label>
                                 <input type="number" class="form-control text-end" id="stok_akhir" readonly>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     <div class="row mt-3">
@@ -216,11 +216,11 @@
                         className: 'text-end',
                         render: data => Number(data || 0).toLocaleString('id-ID')
                     },
-                    {
-                        data: 'stok_akhir',
-                        className: 'text-end',
-                        render: data => Number(data || 0).toLocaleString('id-ID')
-                    },
+                    // {
+                    //     data: 'stok_akhir',
+                    //     className: 'text-end',
+                    //     render: data => Number(data || 0).toLocaleString('id-ID')
+                    // },
                     {
                         data: 'tanggal_input',
                         render: data => data ? moment(data).format('DD/MM/YYYY') : '-'
@@ -312,7 +312,7 @@
                         $('#nama_barang').val(b.nama_barang);
                         $('#seri').val(b.seri);
                         $('#stok_awal').val(b.stok_awal);
-                        $('#stok_akhir').val(b.stok_akhir);
+                        // $('#stok_akhir').val(b.stok_akhir);
 
                         $('#status_barang').val(b.STATUS_BARANG);
 

@@ -34,6 +34,8 @@ class TransaksiController extends Controller
             'transaksi.tipe_transaksi',
             'transaksi.jumlah_barang',
             'transaksi.keterangan_transaksi',
+            'transaksi.harga_satuan',
+            'transaksi.jumlah_satuan',
             'transaksi.diberikan_oleh',
             'transaksi.keperluan_transaksi',
             'barang.nama_barang',
@@ -84,6 +86,9 @@ class TransaksiController extends Controller
         ->filterColumn('tanggal_transaksi', function ($query, $keyword) {
             $query->whereDate('transaksi.tanggal_transaksi', $keyword);
         })
+
+        
+
         ->orderColumn('barang', function ($query, $order) {
             $query->orderBy('barang.nama_barang', $order);
         })
@@ -122,7 +127,17 @@ class TransaksiController extends Controller
                 'keterangan_transaksi' => 'nullable',
                 'diberikan_oleh' => 'nullable',
                 'keperluan_transaksi' => 'nullable',
+                'harga_satuan' => 'nullable',
+                'jumlah_satuan' => 'nullable',
             ]);
+
+            //cek apakah harga_satuan * jumlah == jumlah_satuan
+            if ($request->harga_satuan * $request->jumlah_satuan != $request->jumlah_satuan) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Harga satuan * jumlah != jumlah satuan'
+                ]);
+            }
 
             $barang = Barang::where('id_barang', $request->id_barang)->first();
 
@@ -158,6 +173,8 @@ class TransaksiController extends Controller
                 'keterangan_transaksi' => $request->keterangan_transaksi,
                 'diberikan_oleh' => $request->diberikan_oleh,
                 'keperluan_transaksi' => $request->keperluan_transaksi,
+                'harga_satuan' => $request->harga_satuan,
+                'jumlah_satuan' => $request->jumlah_satuan,
 
             ]);
 
@@ -231,6 +248,8 @@ class TransaksiController extends Controller
                 'keterangan_transaksi' => 'nullable',
                 'diberikan_oleh' => 'nullable',
                 'keperluan_transaksi' => 'nullable',
+                'harga_satuan' => 'nullable',
+                'jumlah_satuan' => 'nullable',
             ]);
 
             $transaksi = Transaksi::find($id);
@@ -292,6 +311,8 @@ class TransaksiController extends Controller
                 'keterangan_transaksi' => $request->keterangan_transaksi,
                 'diberikan_oleh' => $request->diberikan_oleh,
                 'keperluan_transaksi' => $request->keperluan_transaksi,
+                // 'harga_satuan' => $request->harga_satuan,
+                // 'jumlah_satuan' => $request->jumlah_satuan,
             ]);
 
             $afterData = $transaksi->fresh()->toArray();
