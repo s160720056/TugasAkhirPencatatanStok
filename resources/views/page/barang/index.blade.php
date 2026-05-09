@@ -299,7 +299,7 @@
                     .catch(err => {
                         Swal.fire({
                             title: "Gagal",
-                            text: err.response?.data?.error || "Terjadi kesalahan",
+                            text: err.response?.data?.message || "Terjadi kesalahan",
                             icon: "error"
                         });
                     });

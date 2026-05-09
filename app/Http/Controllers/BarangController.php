@@ -75,6 +75,15 @@ $barang = Barang::select([
           
         ]);
 
+        //check dupplicate
+        // $existingBarang = Barang::where('kode_barang', $request->kode_barang)
+        //                         ->where('STATUS_BARANG', '!=', '2')
+        //                         ->first();
+
+        // if ($existingBarang) {
+        //     return response()->json(['message' => 'Kode barang sudah digunakan'], 400);
+        // }
+
 
         $barang = Barang::create([
             'kode_barang'   => $request->kode_barang,
