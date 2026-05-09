@@ -68,10 +68,10 @@ class HakAksesController extends Controller
             $menuArray['pengaturanStruk'] = '/pengaturanStruk';
             // $menuArray['pengaturanAbsensi'] = "/pengaturanAbsensi";
             // $menuArray['pengaturanPoin'] = "/pengaturanPoin";
-        }
+        } 
         $dataCategories = [
             'home' => ['home'],
-            'master' => ['barang', 'transaksi', 'user', 'hakAkses'],
+            'master' => ['barang', 'transaksi', 'bukuStok', 'user', 'hakAkses'],
             'laporan' => ['laporanTimbangan'],
             'pengaturan' => ['pengaturan'],
         ];

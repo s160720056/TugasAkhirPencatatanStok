@@ -110,7 +110,10 @@
         /* Ensure the scaling is applied correctly */
     }
 
-    .select2-container--default .select2-selection--single {
+   
+</style> --}}
+<style>
+     .select2-container--default .select2-selection--single {
         height: 38px;
         line-height: 36px;
     }
@@ -123,8 +126,6 @@
         padding: 0.375rem 0.75rem;
         font-size: 1rem;
     }
-</style> --}}
-<style>
     .lock-screen {
         display: none;
         position: fixed;

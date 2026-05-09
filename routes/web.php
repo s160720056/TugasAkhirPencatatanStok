@@ -6,6 +6,7 @@ use App\Http\Controllers\HakAksesController;
 use App\Http\Controllers\HomeController;
 // use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\BukuStokController;
 use App\Http\Controllers\TransaksiController;
  use App\Http\Controllers\DeployController;
 
@@ -95,6 +96,13 @@ Route::middleware([SetDynamicDatabase::class, 'auth:user', 'throttle:user-area']
     Route::get('/barang/export_excel', [BarangController::class, 'export_excel'])->name('export_excel');
     Route::get('/barang/get-data', [BarangController::class, 'getData'])->name('barang.getData');
     Route::resource('barang', BarangController::class);
+
+    // Buku Stok
+    Route::get('/bukuStok/data', [BukuStokController::class, 'getDataTable'])->name('bukuStok.data');
+    Route::get('/bukuStok/indexWebView', [BukuStokController::class, 'indexWebView'])->name('bukuStok.indexWebView');
+    Route::get('/bukuStok/getKodeBukuStok', [BukuStokController::class, 'getKodeBukuStok'])->name('getKodeBukuStok');
+    Route::get('/bukuStok/getBukuStokDetail/{id}', [BukuStokController::class, 'getBukuStokDetail'])->name('getBukuStokDetail');
+    Route::resource('/bukuStok', BukuStokController::class);
 
     // Transaksi
     Route::get('/transaksi/data', [TransaksiController::class, 'getDataTable'])->name('transaksi.data');

@@ -7,6 +7,7 @@ use App\Models\Transaksi;
 use App\Models\Barang;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class TransaksiController extends Controller
 {
@@ -44,7 +45,7 @@ class TransaksiController extends Controller
                 return $row->nama_barang ?? '-';
             })
 
-            ->addColumn('pengeluaran', function ($row) {
+            ->addColumn('keluar', function ($row) {
                 if ($row->tipe_transaksi == 'keluar') {
                     return $row->jumlah_barang;
                 }
@@ -52,7 +53,7 @@ class TransaksiController extends Controller
                 return '-';
             })
 
-            ->addColumn('pemasukan', function ($row) {
+            ->addColumn('masuk', function ($row) {
                 if ($row->tipe_transaksi == 'masuk') {
                     return $row->jumlah_barang;
                 }
@@ -92,6 +93,8 @@ class TransaksiController extends Controller
                 'tipe_transaksi' => 'required|in:masuk,keluar',
                 'jumlah_barang' => 'required|numeric|min:1',
                 'keterangan_transaksi' => 'nullable',
+                'diberikan_oleh' => 'nullable',
+                'keperluan_transaksi' => 'nullable',
             ]);
 
             $barang = Barang::where('id_barang', $request->id_barang)->first();
@@ -103,15 +106,9 @@ class TransaksiController extends Controller
                 ]);
             }
 
-            /*
-            |--------------------------------------------------------------------------
-            | VALIDASI STOK
-            |--------------------------------------------------------------------------
-            */
-
             if (
                 $request->tipe_transaksi == 'keluar' &&
-                $barang->stok_akhir < $request->jumlah_barang
+                $barang->stok_awal < $request->jumlah_barang
             ) {
 
                 return response()->json([
@@ -134,6 +131,7 @@ class TransaksiController extends Controller
                 'keterangan_transaksi' => $request->keterangan_transaksi,
                 'diberikan_oleh' => $request->diberikan_oleh,
                 'keperluan_transaksi' => $request->keperluan_transaksi,
+
             ]);
 
             /*
@@ -144,10 +142,10 @@ class TransaksiController extends Controller
 
             if ($request->tipe_transaksi == 'masuk') {
 
-                $barang->stok_akhir += $request->jumlah_barang;
+                $barang->stok_awal += $request->jumlah_barang;
             } else {
 
-                $barang->stok_akhir -= $request->jumlah_barang;
+                $barang->stok_awal -= $request->jumlah_barang;
             }
 
             $barang->save();
@@ -195,6 +193,9 @@ class TransaksiController extends Controller
                 'id_barang' => 'required',
                 'tipe_transaksi' => 'required|in:masuk,keluar',
                 'jumlah_barang' => 'required|numeric|min:1',
+                'keterangan_transaksi' => 'nullable',
+                'diberikan_oleh' => 'nullable',
+                'keperluan_transaksi' => 'nullable',
             ]);
 
             $transaksi = Transaksi::find($id);
@@ -217,10 +218,10 @@ class TransaksiController extends Controller
 
             if ($transaksi->tipe_transaksi == 'masuk') {
 
-                $barangLama->stok_akhir -= $transaksi->jumlah_barang;
+                $barangLama->stok_awal -= $transaksi->jumlah_barang;
             } else {
 
-                $barangLama->stok_akhir += $transaksi->jumlah_barang;
+                $barangLama->stok_awal += $transaksi->jumlah_barang;
             }
 
             $barangLama->save();
@@ -235,7 +236,7 @@ class TransaksiController extends Controller
 
             if (
                 $request->tipe_transaksi == 'keluar' &&
-                $barangBaru->stok_akhir < $request->jumlah_barang
+                $barangBaru->stok_awal < $request->jumlah_barang
             ) {
 
                 DB::rollBack();
@@ -248,10 +249,10 @@ class TransaksiController extends Controller
 
             if ($request->tipe_transaksi == 'masuk') {
 
-                $barangBaru->stok_akhir += $request->jumlah_barang;
+                $barangBaru->stok_awal += $request->jumlah_barang;
             } else {
 
-                $barangBaru->stok_akhir -= $request->jumlah_barang;
+                $barangBaru->stok_awal -= $request->jumlah_barang;
             }
 
             $barangBaru->save();
@@ -268,6 +269,8 @@ class TransaksiController extends Controller
                 'tipe_transaksi' => $request->tipe_transaksi,
                 'jumlah_barang' => $request->jumlah_barang,
                 'keterangan_transaksi' => $request->keterangan_transaksi,
+                'diberikan_oleh' => $request->diberikan_oleh,
+                'keperluan_transaksi' => $request->keperluan_transaksi,
             ]);
 
             DB::commit();
@@ -313,10 +316,10 @@ class TransaksiController extends Controller
 
             if ($transaksi->tipe_transaksi == 'masuk') {
 
-                $barang->stok_akhir -= $transaksi->jumlah_barang;
+                $barang->stok_awal -= $transaksi->jumlah_barang;
             } else {
 
-                $barang->stok_akhir += $transaksi->jumlah_barang;
+                $barang->stok_awal += $transaksi->jumlah_barang;
             }
 
             $barang->save();
