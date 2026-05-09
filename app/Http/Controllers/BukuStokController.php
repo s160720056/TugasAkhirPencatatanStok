@@ -10,77 +10,113 @@ use Carbon\Carbon;
 
 class BukuStokController extends Controller
 {
-public function index()
-{
-    $transaksis = Transaksi::leftJoin('barang', 'barang.id_barang', '=', 'transaksi.id_barang')
-        ->select('transaksi.*', 'barang.kode_barang', 'barang.nama_barang', 'barang.seri')
-        ->orderBy('tanggal_transaksi', 'desc')
-        // ->where('transaksi.STATUS_TRANSAKSI', '!=', '2')
-        ->get();
+    public function index()
+    {
+        $transaksis = Transaksi::leftJoin('barang', 'barang.id_barang', '=', 'transaksi.id_barang')
+            ->select('transaksi.*', 'barang.kode_barang', 'barang.nama_barang', 'barang.seri')
+            ->orderBy('tanggal_transaksi', 'desc')
+            // ->where('transaksi.STATUS_TRANSAKSI', '!=', '2')
+            ->get();
 
-    $grouped = $transaksis->groupBy(function ($item) {
-        return Carbon::parse($item->tanggal_transaksi)->format('Y-m');
-    });
+        $grouped = $transaksis->groupBy(function ($item) {
+            return Carbon::parse($item->tanggal_transaksi)->format('Y-m');
+        });
 
-    $barangList = Barang::where('STATUS_BARANG', '!=', '2')->orderBy('nama_barang')->get();
-    $months = collect();
-    $summaries = collect();
-    $barangSummary = [];   // ← Tambahkan ini
+        $barangList = Barang::where('STATUS_BARANG', '!=', '2')->orderBy('nama_barang')->get();
+        $months = collect();
+        $summaries = collect();
+        $barangSummary = [];   // ← Tambahkan ini
 
-    if ($transaksis->isEmpty()) {
-        return view('page.bukuStok.index', compact('months', 'summaries', 'barangList', 'barangSummary'));
-    }
+        if ($transaksis->isEmpty()) {
+            return view('page.bukuStok.index', compact('months', 'summaries', 'barangList', 'barangSummary'));
+        }
 
-    $firstMonthKey = $transaksis->first()->tanggal_transaksi 
-        ? Carbon::parse($transaksis->first()->tanggal_transaksi)->format('Y-m') 
-        : null;
+        // $firstMonthKey = $transaksis->first()->tanggal_transaksi
+        //     ? Carbon::parse($transaksis->first()->tanggal_transaksi)->format('Y-m')
+        //     : null;
+        $firstMonthKey = now()->format('Y-m');
 
-    // Hitung barangSummary untuk bulan pertama
-    if ($firstMonthKey) {
-        $firstMonthTransaksi = $grouped->get($firstMonthKey, collect());
+        // Hitung barangSummary untuk bulan pertama
+        if ($firstMonthKey) {
+            $firstMonthTransaksi = $grouped->get($firstMonthKey, collect());
 
-        foreach ($barangList as $b) {
-            $trx = $firstMonthTransaksi->where('id_barang', $b->id_barang);
+            foreach ($barangList as $b) {
+                $trx = $firstMonthTransaksi->where('id_barang', $b->id_barang);
 
-            $masuk = (int) $trx->where('tipe_transaksi', 'masuk')->sum('jumlah_barang');
-            $keluar = (int) $trx->where('tipe_transaksi', 'keluar')->sum('jumlah_barang');
-            $stokAwal = (int) $b->stok_awal;
-            $stokAkhir = $stokAwal + $masuk - $keluar;
+                $masuk = (int) $trx->where('tipe_transaksi', 'masuk')->sum('jumlah_barang');
+                $keluar = (int) $trx->where('tipe_transaksi', 'keluar')->sum('jumlah_barang');
 
-            $barangSummary[] = [
-                'kode_barang' => $b->kode_barang,
-                'nama_barang' => $b->nama_barang,
-                'seri'        => $b->seri ?? '-',
-                'stok_awal'   => $stokAwal,
-                'masuk'       => $masuk,
-                'keluar'      => $keluar,
-                'stok_akhir'  => $stokAkhir,
+                /*
+|--------------------------------------------------------------------------
+| Reverse stok dari transaksi masa depan
+|--------------------------------------------------------------------------
+*/
+
+                $targetMonth = Carbon::createFromFormat('Y-m', $firstMonthKey);
+
+                $currentStock = (int) $b->stok_awal;
+
+                $futureTransactions = Transaksi::where('id_barang', $b->id_barang)
+                    ->whereDate(
+                        'tanggal_transaksi',
+                        '>',
+                        $targetMonth->copy()->endOfMonth()
+                    )
+                    ->get();
+
+                foreach ($futureTransactions as $ft) {
+                    if ($ft->tipe_transaksi == 'masuk') {
+                        $currentStock -= (int) $ft->jumlah_barang;
+                    } else {
+                        $currentStock += (int) $ft->jumlah_barang;
+                    }
+                }
+
+                /*
+|--------------------------------------------------------------------------
+| Hitung stok bulan target
+|--------------------------------------------------------------------------
+*/
+
+                $stokAwal = $currentStock - $masuk + $keluar;
+                $stokAkhir = $currentStock;
+
+                $barangSummary[] = [
+                    'kode_barang' => $b->kode_barang,
+                    'nama_barang' => $b->nama_barang,
+                    'seri'        => $b->seri ?? '-',
+                    'stok_awal'   => $stokAwal,
+                    'masuk'       => $masuk,
+                    'keluar'      => $keluar,
+                    'stok_akhir'  => $stokAkhir,
+                ];
+            }
+        }
+
+        // Isi months dan summaries (dari bulan lama ke baru)
+        // $lastMonth  = Carbon::parse($transaksis->last()->tanggal_transaksi)->startOfMonth();
+        // $firstMonth = Carbon::parse($transaksis->first()->tanggal_transaksi)->startOfMonth();
+        $lastMonth  = Carbon::parse($transaksis->last()->tanggal_transaksi)->startOfMonth();
+
+        $firstMonth = now()->startOfMonth();
+        for ($date = $firstMonth->copy(); $date->gte($lastMonth); $date->subMonth()) {
+            $key = $date->format('Y-m');
+            $items = $grouped->get($key, collect());
+
+            $months[$key] = $items;
+
+            $masuk = $items->where('tipe_transaksi', 'masuk')->sum('jumlah_barang');
+            $keluar = $items->where('tipe_transaksi', 'keluar')->sum('jumlah_barang');
+
+            $summaries[$key] = [
+                'masuk'  => $masuk,
+                'keluar' => $keluar,
+                'netto'  => $masuk - $keluar,
             ];
         }
+
+        return view('page.bukuStok.index', compact('months', 'summaries', 'barangList', 'barangSummary'));
     }
-
-    // Isi months dan summaries (dari bulan lama ke baru)
-    $lastMonth  = Carbon::parse($transaksis->last()->tanggal_transaksi)->startOfMonth();
-    $firstMonth = Carbon::parse($transaksis->first()->tanggal_transaksi)->startOfMonth();
-
-    for ($date = $lastMonth->copy(); $date->lte($firstMonth); $date->addMonth()) {
-        $key = $date->format('Y-m');
-        $items = $grouped->get($key, collect());
-
-        $months[$key] = $items;
-
-        $masuk = $items->where('tipe_transaksi', 'masuk')->sum('jumlah_barang');
-        $keluar = $items->where('tipe_transaksi', 'keluar')->sum('jumlah_barang');
-
-        $summaries[$key] = [
-            'masuk'  => $masuk,
-            'keluar' => $keluar,
-            'netto'  => $masuk - $keluar,
-        ];
-    }
-
-    return view('page.bukuStok.index', compact('months', 'summaries', 'barangList', 'barangSummary'));
-}
 
     public function flipbookMonth($bulan)
     {
@@ -100,8 +136,43 @@ public function index()
 
             $masuk = (int) $trx->where('tipe_transaksi', 'masuk')->sum('jumlah_barang');
             $keluar = (int) $trx->where('tipe_transaksi', 'keluar')->sum('jumlah_barang');
-            $stokAwal = (int) $b->stok_awal;
-            $stokAkhir = $stokAwal + $masuk - $keluar;
+            $currentStock = (int) $b->stok_awal;
+
+            /*
+|--------------------------------------------------------------------------
+| Reverse transaksi setelah bulan target
+|--------------------------------------------------------------------------
+| Jika ada transaksi setelah bulan ini:
+| - transaksi masuk  -> kurangi
+| - transaksi keluar -> tambahkan
+|--------------------------------------------------------------------------
+*/
+
+            $futureTransactions = Transaksi::where('id_barang', $b->id_barang)
+                ->whereDate('tanggal_transaksi', '>', $targetMonth->copy()->endOfMonth())
+                ->get();
+
+            foreach ($futureTransactions as $ft) {
+                if ($ft->tipe_transaksi == 'masuk') {
+                    $currentStock -= (int) $ft->jumlah_barang;
+                } else {
+                    $currentStock += (int) $ft->jumlah_barang;
+                }
+            }
+
+            /*
+|--------------------------------------------------------------------------
+| Stok awal bulan
+|--------------------------------------------------------------------------
+*/
+            $stokAwal = $currentStock - $masuk + $keluar;
+
+            /*
+|--------------------------------------------------------------------------
+| Stok akhir bulan
+|--------------------------------------------------------------------------
+*/
+            $stokAkhir = $currentStock;
 
             $barangSummary[] = [
                 'nama_barang' => $b->nama_barang,
@@ -124,10 +195,10 @@ public function index()
         ];
 
         return view('page.bukuStok.flipbook_month', compact(
-            'bulan', 
-            'masukItems', 
-            'keluarItems', 
-            'summary', 
+            'bulan',
+            'masukItems',
+            'keluarItems',
+            'summary',
             'barangSummary'
         ));
     }

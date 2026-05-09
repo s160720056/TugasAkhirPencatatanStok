@@ -344,7 +344,7 @@
             if (loadedMonths.has(month)) return;
 
             try {
-                const response = await fetch(`/buku-stok/month/${month}`);  // ← Perbaikan route
+                const response = await fetch(`/bukuStok/month/${month}`);  // ← Perbaikan route
                 const html = await response.text();
 
                 book.insertAdjacentHTML('beforeend', html);
