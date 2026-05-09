@@ -7,6 +7,7 @@ use App\Models\Transaksi;
 use App\Models\Barang;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\AuditHelper;
 use Carbon\Carbon;
 
 class TransaksiController extends Controller
@@ -150,6 +151,14 @@ class TransaksiController extends Controller
 
             $barang->save();
 
+            AuditHelper::log(
+                'create',
+                'transaksi',
+                $transaksi->id_transaksi,
+                null,
+                $transaksi->fresh()->toArray()
+            );
+
             DB::commit();
 
             return response()->json([
@@ -199,6 +208,7 @@ class TransaksiController extends Controller
             ]);
 
             $transaksi = Transaksi::find($id);
+            $beforeData = $transaksi->toArray();
 
             if (!$transaksi) {
 
@@ -273,6 +283,15 @@ class TransaksiController extends Controller
                 'keperluan_transaksi' => $request->keperluan_transaksi,
             ]);
 
+            $afterData = $transaksi->fresh()->toArray();
+            AuditHelper::log(
+    'update',
+    'transaksi',
+    $transaksi->id_transaksi,
+    $beforeData,
+    $afterData
+);
+
             DB::commit();
 
             return response()->json([
@@ -297,6 +316,7 @@ class TransaksiController extends Controller
         try {
 
             $transaksi = Transaksi::find($id);
+            $beforeDelete = $transaksi->toArray();
 
             if (!$transaksi) {
 
@@ -325,6 +345,13 @@ class TransaksiController extends Controller
             $barang->save();
 
             $transaksi->delete();
+            AuditHelper::log(
+    'delete',
+    'transaksi',
+    $id,
+    $beforeDelete,
+    null
+);
 
             DB::commit();
 
