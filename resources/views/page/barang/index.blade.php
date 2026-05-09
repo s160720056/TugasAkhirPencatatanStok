@@ -273,6 +273,9 @@
             $('.add-button').on('click', function() {
                 $('#addBarang').modal('show');
                 $('#kode_barang_new').focus();
+                //reset form
+                $('#addBarang').find('input, textarea').val('');
+                // $('#addBarang').find('input[type="checkbox"]').prop('checked', false);
             });
 
             $('#doneAdd').on('click', function() {
