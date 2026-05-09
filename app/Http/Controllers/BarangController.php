@@ -78,7 +78,7 @@ class BarangController extends Controller
                 'seri'           => 'nullable|string',
                 'stok_awal'      => 'nullable|integer|min:0',
                 'harga_satuan'   => 'nullable|integer|min:0',
-                // 'jumlah_satuan'  => 'nullable|integer|min:0',
+
             ]);
 
             $barang = Barang::create([
@@ -89,7 +89,7 @@ class BarangController extends Controller
                 'tanggal_input'  => now()->toDateString(),
                 'STATUS_BARANG'  => $request->STATUS_BARANG ?? '1',
                 'harga_satuan'   => $request->harga_satuan ?? 0,
-                // 'jumlah_satuan'  => $request->jumlah_satuan ?? 0,
+
             ]);
 
             /*
@@ -139,40 +139,96 @@ class BarangController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $id_toko = session()->get('id_toko');
-
-        $barang = Barang::where('id_barang', $id)
-            ->first();
-
-        if (!$barang) {
-            return response()->json(['message' => 'Barang tidak ditemukan'], 404);
+        DB::beginTransaction();
+        try {
+            $barang = Barang::where('id_barang', $id)->first();
+            if (!$barang) {
+                return response()->json([
+                    'message' => 'Barang tidak ditemukan'
+                ], 404);
+            }
+            $request->validate([
+                // 'kode_barang'   => 'required|unique:barang,kode_barang,' . $id . ',id_barang',
+                'nama_barang'   => 'required|string|max:255',
+                // 'seri'          => 'nullable|string',
+                // 'stok_awal'     => 'nullable|integer|min:0',
+                // 'harga_satuan'  => 'nullable|integer|min:0',
+                // 'jumlah_satuan' => 'nullable|integer|min:0',
+            ]);
+            /*
+        |--------------------------------------------------------------------------
+        | SIMPAN DATA LAMA
+        |--------------------------------------------------------------------------
+        */
+            $stokLama = $barang->stok_awal ?? 0;
+            $hargaLama = $barang->harga_satuan ?? 0;
+            // $jumlahSatuanLama = $barang->jumlah_satuan ?? 0;
+            /*
+        |--------------------------------------------------------------------------
+        | UPDATE BARANG
+        |--------------------------------------------------------------------------
+        */
+            $barang->update([
+                // 'kode_barang'    => $request->kode_barang,
+                'nama_barang'    => $request->nama_barang,
+                // 'seri'           => $request->seri,
+                // 'stok_awal'      => $request->stok_awal ?? $barang->stok_awal,
+                // 'tanggal_input'  => now()->toDateString(),
+                // 'STATUS_BARANG'  => $request->STATUS_BARANG ?? $barang->STATUS_BARANG,
+                // 'harga_satuan'   => $request->harga_satuan ?? $barang->harga_satuan,
+                // 'jumlah_satuan'  => $request->jumlah_satuan ?? $barang->jumlah_satuan,
+            ]);
+            /*
+        |--------------------------------------------------------------------------
+        | CEK TOTAL TRANSAKSI
+        |--------------------------------------------------------------------------
+        */
+            $totalTransaksi = Transaksi::where('id_barang', $barang->id_barang)
+                ->count();
+            /*
+        |--------------------------------------------------------------------------
+        | JIKA HANYA ADA 1 TRANSAKSI
+        |--------------------------------------------------------------------------
+        */
+            if ($totalTransaksi == 1) {
+                $transaksiAwal = Transaksi::where('id_barang', $barang->id_barang)
+                    ->where('tipe_transaksi', 'masuk')
+                    ->first();
+                /*
+            |--------------------------------------------------------------------------
+            | VALIDASI TRANSAKSI MASIH ORIGINAL
+            |--------------------------------------------------------------------------
+            */
+                if (
+                    $transaksiAwal &&
+                    (int)$transaksiAwal->jumlah_barang === (int)$stokLama &&
+                    (int)$transaksiAwal->harga_satuan === (int)$hargaLama &&
+                    (int)$transaksiAwal->jumlah_satuan === (int)$hargaLama * $stokLama
+                ) {
+                    /*
+                |--------------------------------------------------------------------------
+                | UPDATE TRANSAKSI
+                |--------------------------------------------------------------------------
+                */
+                    $transaksiAwal->update([
+                        'jumlah_barang' => $request->stok_awal ?? 0,
+                        'harga_satuan' => $request->harga_satuan ?? 0,
+                        'jumlah_satuan' => $request->harga_satuan * $request->stok_awal ?? 0,
+                        'tanggal_transaksi' => now(),
+                    ]);
+                }
+            }
+            DB::commit();
+            return response()->json([
+                'message' => 'Barang berhasil diperbarui'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Gagal memperbarui barang',
+                'error'   => $e->getMessage()
+            ], 500);
         }
-
-        $request->validate([
-            'kode_barang' => 'required|unique:barang,kode_barang,' . $id . ',id_barang',
-            'nama_barang' => 'required|string|max:255',
-            'seri'        => 'nullable|string',
-            'stok_awal'   => 'nullable|integer|min:0',
-            'harga_satuan' => 'nullable|integer|min:0',
-            // 'jumlah_satuan' => 'nullable|integer|min:0',
-
-        ]);
-
-        $barang->update([
-            'kode_barang'   => $request->kode_barang,
-            'nama_barang'   => $request->nama_barang,
-            'seri'          => $request->seri,
-            'stok_awal'     => $request->stok_awal ?? $barang->stok_awal,
-            'tanggal_input' =>  now()->toDateString(),
-            'STATUS_BARANG' => $request->STATUS_BARANG ?? $barang->STATUS_BARANG,
-            'harga_satuan' => $request->harga_satuan ?? $barang->harga_satuan,
-            // 'jumlah_satuan' => $request->jumlah_satuan ?? $barang->jumlah_satuan,
-        ]);
-
-        // Optional: update stok_akhir jika diperlukan
-        // $barang->stok_akhir = ... logic mutasi stok
-
-        return response()->json(['message' => 'Barang berhasil diperbarui']);
     }
 
     public function destroy(string $id)
@@ -189,12 +245,7 @@ class BarangController extends Controller
         |--------------------------------------------------------------------------
         */
 
-            // if (($barang->stok_awal ?? 0) > 0) {
 
-            //     return response()->json([
-            //         'message' => 'Barang tidak dapat dihapus karena stok masih ada'
-            //     ], 400);
-            //}
 
             /*
         |--------------------------------------------------------------------------
@@ -221,6 +272,13 @@ class BarangController extends Controller
                 return response()->json([
                     'message' => 'Barang berhasil dihapus permanen'
                 ]);
+            }
+
+            if (($barang->stok_awal ?? 0) > 0) {
+
+                return response()->json([
+                    'message' => 'Barang tidak dapat dihapus karena stok masih ada'
+                ], 400);
             }
 
             /*

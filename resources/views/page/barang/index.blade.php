@@ -400,6 +400,13 @@
                         // AutoNumeric.getAutoNumericElement('#jumlah_satuan').set(b.jumlah_satuan || 0);
                         $('#status_barang').val(b.STATUS_BARANG);
 
+                        // disable input
+                        $('#kode_barang').prop('disabled', true);
+                        $('#seri').prop('disabled', true);
+                        $('#stok_awal').prop('disabled', true);
+                        $('#harga_satuan').prop('disabled', true);
+                        $('#status_barang').prop('disabled', true);
+
                         $('#editBarang').modal('show');
                     });
             };

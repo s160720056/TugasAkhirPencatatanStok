@@ -148,7 +148,8 @@
                         <label for="barang_new">Barang</label>
                         <select class="form-control select2" id="barang_new" style="width:100%">
                             @foreach ($barang as $item)
-                                <option value="{{ $item->id_barang }}">{{ $item->kode_barang }} - {{ $item->nama_barang }}
+                                <option value="{{ $item->id_barang }}" data-harga="{{ $item->harga_satuan }}">
+                                    {{ $item->kode_barang }} - {{ $item->nama_barang }}
                                 </option>
                             @endforeach
                         </select>
@@ -169,12 +170,12 @@
 
                     <div class="form-group mb-4">
                         <label for="harga_satuan_new">Harga Satuan</label>
-                        <input type="text" class="form-control" id="harga_satuan_new">
-
+                        <input type="text" class="form-control readonly-field" id="harga_satuan_new" readonly>
                     </div>
+
                     <div class="form-group mb-4">
                         <label for="jumlah_satuan_new">Jumlah Satuan</label>
-                        <input type="text" class="form-control" id="jumlah_satuan_new">
+                        <input type="text" class="form-control readonly-field" id="jumlah_satuan_new" readonly>
                     </div>
 
                     <div class="form-group mb-4">
@@ -211,6 +212,22 @@
                 decimalCharacter: ',',
                 decimalPlaces: 0
             });
+
+            function loadBarangInfo() {
+                const selected = $('#barang_new option:selected');
+                const harga = Number(
+                    selected.data('harga')
+                ) || 0;
+                hargaSatuanMask.set(harga);
+                hitungJumlahSatuan();
+            }
+            $('#barang_new').on('change', function() {
+                loadBarangInfo();
+            });
+            loadBarangInfo();
+
+
+
             // Select2
             // Modal tambah
             $('#barang_new, #tipe_transaksi_new').select2({
@@ -296,16 +313,18 @@
             });
 
             function hitungJumlahSatuan() {
-                let jumlahBarang = Number($('#jumlah_barang_new').val()) || 0;
-
+                let jumlahBarang = Number(
+                    $('#jumlah_barang_new').val()
+                ) || 0;
                 let hargaSatuan = Number(
                     hargaSatuanMask.getNumericString()
                 ) || 0;
-
-                jumlahSatuanMask.set(jumlahBarang * hargaSatuan);
+                jumlahSatuanMask.set(
+                    jumlahBarang * hargaSatuan
+                );
             }
 
-            $('#jumlah_barang_new, #harga_satuan_new').on('input', function() {
+            $('#jumlah_barang_new').on('input', function() {
                 hitungJumlahSatuan();
             });
 
