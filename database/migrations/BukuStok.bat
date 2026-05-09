@@ -10,9 +10,9 @@ if %errorlevel%==0 (
 
 :: Change directory to target location, pull latest changes, and run php artisan serve
 cd /d "c:/xampp/htdocs/TugasAkhirPencatatanStok"
-git pull
+
 
 start cmd /k "php artisan serve"
 
-:: Open Microsoft Edge to localhost
-start msedge "http://127.0.0.1:8000"
+:: Open Google Chrome to localhost
+start chrome "http://127.0.0.1:8000"
