@@ -28,6 +28,19 @@
             --secondary: #795548;
             --light: #fff8f0;
         }
+
+
+
+        :root {
+    --primary: #166534;        /* Hijau Gelap (Professional & Trust) */
+    --primary-light: #4ade80;  /* Hijau Terang (Accent) */
+    --secondary: #854d0e;      /* Coklat Kekuningan (Warehouse feel) */
+    --accent: #eab308;         /* Kuning Emas (Warning / Attention) */
+    --dark: #0f172a;           /* Dark Slate */
+    --light: #f8fafc;
+    --success: #15803d;
+    --danger: #dc2626;
+}
     </style>
 
 
