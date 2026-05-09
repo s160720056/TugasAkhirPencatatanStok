@@ -18,7 +18,9 @@ class TransaksiController extends Controller
             return redirect('/home');
         }
 
-        $barang = Barang::orderBy('nama_barang', 'asc')->get();
+        $barang = Barang::where('STATUS_BARANG', '!=', '2')->orderBy('nama_barang', 'asc')->get();
+
+
 
         return view('page.transaksi.index', compact('barang'));
     }
