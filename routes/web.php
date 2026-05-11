@@ -93,7 +93,6 @@ Route::middleware([SetDynamicDatabase::class, 'auth:user', 'throttle:user-area']
     Route::get('/barang/indexWebView', [BarangController::class, 'indexWebView'])->name('barang.indexWebView');
     Route::get('/barang/getKodeBarang', [BarangController::class, 'getKodeBarang'])->name('getKodeBarang');
     Route::get('/barang/getBarangDetail/{id}', [BarangController::class, 'getBarangDetail'])->name('getBarangDetail');
-    Route::get('/barang/export_excel', [BarangController::class, 'export_excel'])->name('export_excel');
     Route::get('/barang/get-data', [BarangController::class, 'getData'])->name('barang.getData');
     Route::resource('barang', BarangController::class);
 
@@ -111,7 +110,6 @@ Route::middleware([SetDynamicDatabase::class, 'auth:user', 'throttle:user-area']
     // Transaksi
     Route::get('/transaksi/data', [TransaksiController::class, 'getDataTable'])->name('transaksi.data');
     Route::get('/transaksi/getTransaksiDetail/{id}', [TransaksiController::class, 'getTransaksiDetail'])->name('getTransaksiDetail');
-    Route::get('/transaksi/export_excel', [TransaksiController::class, 'export_excel'])->name('export_excel');
     Route::resource('transaksi', TransaksiController::class);
 
     // ==================== USER & HAK AKSES ====================
