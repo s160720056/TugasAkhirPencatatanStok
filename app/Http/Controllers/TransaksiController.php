@@ -118,6 +118,7 @@ class TransaksiController extends Controller
 
     public function store(Request $request)
     {
+        
         DB::beginTransaction();
 
         try {
@@ -158,7 +159,9 @@ class TransaksiController extends Controller
             $tanggalTransaksi = Carbon::parse($request->tanggal_transaksi)->startOfDay();
             $tanggalBarangDibuat = Carbon::parse($barang->created_at)->startOfDay();
 
-            if ($tanggalTransaksi->lt($tanggalBarangDibuat)) {
+            if ($tanggalTransaksi == $tanggalBarangDibuat) {
+                // allow same-day transaction
+            } elseif ($tanggalTransaksi < $tanggalBarangDibuat) {
 
                 return response()->json([
                     'status' => 'error',
