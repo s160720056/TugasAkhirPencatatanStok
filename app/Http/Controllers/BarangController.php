@@ -148,9 +148,9 @@ class BarangController extends Controller
                 ], 404);
             }
             $request->validate([
-                // 'kode_barang'   => 'required|unique:barang,kode_barang,' . $id . ',id_barang',
+                'kode_barang'   => 'required|unique:barang,kode_barang,' . $id . ',id_barang',
                 'nama_barang'   => 'required|string|max:255',
-                // 'seri'          => 'nullable|string',
+                'seri'          => 'nullable|string',
                 // 'stok_awal'     => 'nullable|integer|min:0',
                 // 'harga_satuan'  => 'nullable|integer|min:0',
                 // 'jumlah_satuan' => 'nullable|integer|min:0',
@@ -169,9 +169,9 @@ class BarangController extends Controller
         |--------------------------------------------------------------------------
         */
             $barang->update([
-                // 'kode_barang'    => $request->kode_barang,
+                'kode_barang'    => $request->kode_barang,
                 'nama_barang'    => $request->nama_barang,
-                // 'seri'           => $request->seri,
+                'seri'           => $request->seri,
                 // 'stok_awal'      => $request->stok_awal ?? $barang->stok_awal,
                 // 'tanggal_input'  => now()->toDateString(),
                 // 'STATUS_BARANG'  => $request->STATUS_BARANG ?? $barang->STATUS_BARANG,

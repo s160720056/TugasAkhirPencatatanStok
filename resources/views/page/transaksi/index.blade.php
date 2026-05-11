@@ -77,7 +77,7 @@
                         <label for="barang_edit">Barang</label>
                         <select class="form-control select2" id="barang_edit" style="width:100%" disabled>
                             @foreach ($barang as $item)
-                                <option value="{{ $item->id_barang }}">{{ $item->nama_barang }}</option>
+                                <option value="{{ $item->id_barang }}">{{ $item->nama_barang }} - {{$item->kode_barang}} - {{$item->seri}}</option>
                             @endforeach
                         </select>
                         <input type="hidden" id="id_barang_hidden">
