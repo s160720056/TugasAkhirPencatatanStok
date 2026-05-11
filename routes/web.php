@@ -103,6 +103,7 @@ Route::middleware([SetDynamicDatabase::class, 'auth:user', 'throttle:user-area']
     Route::get('/bukuStok/getKodeBukuStok', [BukuStokController::class, 'getKodeBukuStok'])->name('getKodeBukuStok');
     Route::get('/bukuStok/getBukuStokDetail/{id}', [BukuStokController::class, 'getBukuStokDetail'])->name('getBukuStokDetail');
     // /buku-stok/month/2026-04
+    Route::get('/bukuStok/rekap/{bulan}', [BukuStokController::class, 'rekapMonth'])->name('bukuStok.rekap');
     Route::get('/bukuStok/month/{month}', [BukuStokController::class, 'flipbookMonth'])->name('flipbookMonth');
 
     Route::resource('/bukuStok', BukuStokController::class);

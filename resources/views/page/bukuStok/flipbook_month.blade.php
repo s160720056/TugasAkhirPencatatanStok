@@ -97,32 +97,4 @@
         </tr>
     </table>
 
-    <h4 style="margin-top: 30px; text-align:center;">Rekap Stok per Barang</h4>
-    
-    <table border="1" width="100%">
-        <thead>
-            <tr>
-                <th>Kode</th>
-                <th>Nama Barang</th>
-                <th>Seri</th>
-                <th>Stok Awal</th>
-                <th>Masuk</th>
-                <th>Keluar</th>
-                <th>Stok Akhir</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($barangSummary as $b)
-                <tr>
-                    <td>{{ $b['kode_barang'] }}</td>
-                    <td>{{ $b['nama_barang'] }}</td>
-                    <td>{{ $b['seri'] ?? '-' }}</td>
-                    <td style="text-align: right;">{{ number_format($b['stok_awal'], 0, ',', '.') }}</td>
-                    <td style="text-align: right; color: green;">+{{ number_format($b['masuk'], 0, ',', '.') }}</td>
-                    <td style="text-align: right; color: red;">-{{ number_format($b['keluar'], 0, ',', '.') }}</td>
-                    <td style="text-align: right; font-weight: bold;">{{ number_format($b['stok_akhir'], 0, ',', '.') }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
 </div>

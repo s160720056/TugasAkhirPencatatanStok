@@ -90,6 +90,28 @@ public function index()
         'barangSummary'
     ));
 }
+public function rekapMonth($bulan)
+{
+    $targetMonth = Carbon::createFromFormat('Y-m', $bulan);
+    $start = $targetMonth->copy()->startOfMonth();
+    $end   = $targetMonth->copy()->endOfMonth();
+
+    // Ambil transaksi bulan tersebut
+    $transaksis = Transaksi::leftJoin('barang', 'barang.id_barang', '=', 'transaksi.id_barang')
+        ->whereBetween('tanggal_transaksi', [$start, $end])
+        ->select('transaksi.*', 'barang.kode_barang', 'barang.nama_barang', 'barang.seri')
+        ->get();
+
+    $barangList = Barang::where('STATUS_BARANG', '!=', '2')
+                    ->orderBy('nama_barang')
+                    ->get();
+
+    $futureAdjustments = $this->getFutureAdjustments($bulan);
+
+    $barangSummary = $this->calculateBarangSummary($barangList, $transaksis, $futureAdjustments);
+
+    return response()->json($barangSummary);
+}
 
     private function getFutureAdjustments(string $targetMonth)
     {
