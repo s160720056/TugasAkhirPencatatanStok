@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/page-flip/dist/css/page-flip.css">
 
     <style>
+        
         .container {
             margin: 20px auto;
         }
@@ -22,7 +23,7 @@
 
         /* flipbook */
         .flip-book {
-            max-width: 1200px;
+            max-width: 1500px;
             width: 100%;
             height: 1500px;
             margin: auto;
@@ -340,14 +341,23 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const book = document.getElementById("book");
-        const pageFlip = new St.PageFlip(book, {
+       const pageFlip = new St.PageFlip(book, {
             width: 600,
             height: 4500,
             showCover: true,
-            maxShadowOpacity: 0.2,
-            mobileScrollSupport: false,
+            maxShadowOpacity: 0,        // Matikan efek bayangan / kertas
+            drawShadow: false,          // Matikan shadow sepenuhnya
+            flippingTime: 600,
             usePortrait: false,
-            flippingTime: 700
+            mobileScrollSupport: false,
+            startZIndex: 0,
+
+                        // --- ADD THESE SETTINGS ---
+            showCornerHover: false,      // Disables the corner animation on hover
+            disableFlipByClick: true,    // Disables flipping by clicking the page
+            swipeDistance: 0,            // Effectively disables mouse dragging/swiping
+            clickEventForward: true,     // Allows clicks to pass through to buttons/tables
+            // --------------------------
         });
 
         const allMonths = @json($months->keys()->toArray());

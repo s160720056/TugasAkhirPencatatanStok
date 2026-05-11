@@ -17,13 +17,13 @@ class TransaksiFactory extends Factory
 
         // pilih tanggal dalam bulan tersebut
         $tanggal = Carbon::create(
-            now()->year,
-            $bulan,
-            fake()->numberBetween(1, 28),
-            fake()->numberBetween(0, 23),
-            fake()->numberBetween(0, 59),
-            fake()->numberBetween(0, 59)
-        );
+    2026,
+    rand(1, 5),
+    rand(1, 28),
+    rand(0, 23),
+    rand(0, 59),
+    rand(0, 59)
+);
 
         return [
             'id_barang' => fake()->numberBetween(1, 100),

@@ -43,7 +43,7 @@ return [
             'url' => env('DB_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
-            'database' =>'catatstok_1',
+            'database' =>'',
     'username' => env('DB_USERNAME'),
     'password' => env('DB_PASSWORD'),
             'unix_socket' => env('DB_SOCKET', ''),
