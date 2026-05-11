@@ -157,7 +157,7 @@ class TransaksiController extends Controller
 |--------------------------------------------------------------------------
 */
             $tanggalTransaksi = Carbon::parse($request->tanggal_transaksi)->startOfDay();
-            $tanggalBarangDibuat = Carbon::parse($barang->created_at)->startOfDay();
+            $tanggalBarangDibuat = Carbon::parse($barang->tanggal_input)->startOfDay();
 
             if ($tanggalTransaksi == $tanggalBarangDibuat) {
                 // allow same-day transaction
