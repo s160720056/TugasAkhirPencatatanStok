@@ -27,22 +27,22 @@ class TransaksiController extends Controller
 
     public function getDataTable(Request $request)
     {
-       $transaksi = Transaksi::query()
-    ->leftJoin('barang', 'transaksi.id_barang', '=', 'barang.id_barang')
-    ->select([
-        'transaksi.id_transaksi',
-        'transaksi.id_barang',
-        'transaksi.tanggal_transaksi',
-        'transaksi.tipe_transaksi',
-        'transaksi.jumlah_barang',
-        'transaksi.keterangan_transaksi',
-        'transaksi.harga_satuan',
-        'transaksi.jumlah_satuan',
-        'transaksi.diberikan_oleh',
-        'transaksi.keperluan_transaksi',
-        'barang.nama_barang',
-    ])
-    ->orderByDesc('transaksi.id_transaksi');
+        $transaksi = Transaksi::query()
+            ->leftJoin('barang', 'transaksi.id_barang', '=', 'barang.id_barang')
+            ->select([
+                'transaksi.id_transaksi',
+                'transaksi.id_barang',
+                'transaksi.tanggal_transaksi',
+                'transaksi.tipe_transaksi',
+                'transaksi.jumlah_barang',
+                'transaksi.keterangan_transaksi',
+                'transaksi.harga_satuan',
+                'transaksi.jumlah_satuan',
+                'transaksi.diberikan_oleh',
+                'transaksi.keperluan_transaksi',
+                'barang.nama_barang',
+            ])
+            ->orderByDesc('transaksi.id_transaksi');
 
         return DataTables::of($transaksi)
 
@@ -148,6 +148,22 @@ class TransaksiController extends Controller
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Barang tidak ditemukan'
+                ]);
+            }
+            /*
+|--------------------------------------------------------------------------
+| BOUNDARY TANGGAL BARANG
+|--------------------------------------------------------------------------
+*/
+            $tanggalTransaksi = Carbon::parse($request->tanggal_transaksi)->startOfDay();
+            $tanggalBarangDibuat = Carbon::parse($barang->created_at)->startOfDay();
+
+            if ($tanggalTransaksi->lt($tanggalBarangDibuat)) {
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Tanggal transaksi tidak boleh sebelum tanggal barang dibuat (' .
+                        $tanggalBarangDibuat->format('d-m-Y') . ')'
                 ]);
             }
 
