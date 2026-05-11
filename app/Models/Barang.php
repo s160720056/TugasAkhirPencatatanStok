@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Barang extends Model
 {
+        use HasFactory;
     protected $table = 'barang';
     protected $primaryKey = 'id_barang';
     public $timestamps = false;

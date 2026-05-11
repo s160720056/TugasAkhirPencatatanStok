@@ -318,7 +318,7 @@
         const book = document.getElementById("book");
         const pageFlip = new St.PageFlip(book, {
             width: 600,
-            height: 1500,
+            height: 4500,
             showCover: true,
             maxShadowOpacity: 0.2,
             mobileScrollSupport: false
