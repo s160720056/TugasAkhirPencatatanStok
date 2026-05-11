@@ -1,14 +1,13 @@
-
-<div class="page" data-month="{{ $bulan }}">
-    <h3 style="text-align:center">
+<div class="page" data-month="{{ $bulan }}" style="font-size: 13px;">
+    <h3 style="text-align:center;">
         {{ \Carbon\Carbon::parse($bulan . '-01')->translatedFormat('F Y') }} 
         <br> Barang Masuk
     </h3>
 
     @if ($masukItems->isEmpty())
-        <p style="text-align:center; margin-top: 50px; font-size: 16px;">Tidak ada transaksi barang masuk pada bulan ini.</p>
+        <p style="text-align:center; margin-top: 50px; font-size: 13px;">Tidak ada transaksi barang masuk pada bulan ini.</p>
     @else
-        <table border="1" width="100%" style="margin-top: 10px;">
+        <table border="1" width="100%" style="margin-top: 10px; font-size: 13px;">
             <thead>
                 <tr>
                     <th>Tanggal</th>
@@ -16,7 +15,7 @@
                     <th>Nama Barang</th>
                     <th>Seri</th>
                     <th>Jumlah</th>
-                    <th>Keterangan</th>
+                    {{-- <th>Keterangan</th> --}}
                     <th>Diberikan Oleh</th>
                 </tr>
             </thead>
@@ -30,7 +29,7 @@
                         <td style="text-align: right; font-weight: bold;">
                             {{ number_format($trx->jumlah_barang, 0, ',', '.') }}
                         </td>
-                        <td>{{ $trx->keterangan_transaksi ?? '-' }}</td>
+                        {{-- <td>{{ $trx->keterangan_transaksi ?? '-' }}</td> --}}
                         <td>{{ $trx->diberikan_oleh ?? '-' }}</td>
                     </tr>
                 @endforeach
@@ -38,7 +37,7 @@
         </table>
     @endif
 
-    <table border="1" width="100%" style="margin-top: 15px;">
+    <table border="1" width="100%" style="margin-top: 15px; font-size: 13px;">
         <tr>
             <td colspan="6" style="text-align: right; font-weight: bold;">Total Barang Masuk</td>
             <td style="text-align: right; font-weight: bold; color: green;">
@@ -49,16 +48,16 @@
 </div>
 
 <!-- Halaman 2: Barang Keluar & Rekap Stok -->
-<div class="page" data-month="{{ $bulan }}">
-    <h3 style="text-align:center">
+<div class="page" data-month="{{ $bulan }}" style="font-size: 13px;">
+    <h3 style="text-align:center; ">
         {{ \Carbon\Carbon::parse($bulan . '-01')->translatedFormat('F Y') }} 
         <br> Barang Keluar & Rekap Stok
     </h3>
 
     @if ($keluarItems->isEmpty())
-        <p style="text-align:center; margin-top: 50px; font-size: 16px;">Tidak ada transaksi barang keluar pada bulan ini.</p>
+        <p style="text-align:center; margin-top: 50px; font-size: 13px;">Tidak ada transaksi barang keluar pada bulan ini.</p>
     @else
-        <table border="1" width="100%" style="margin-top: 10px;">
+        <table border="1" width="100%" style="margin-top: 10px; font-size: 13px;">
             <thead>
                 <tr>
                     <th>Tanggal</th>
@@ -88,7 +87,7 @@
         </table>
     @endif
  
-    <table border="1" width="100%" style="margin-top: 15px;">
+    <table border="1" width="100%" style="margin-top: 15px; font-size: 13px;">
         <tr>
             <td colspan="6" style="text-align: right; font-weight: bold;">Total Barang Keluar</td>
             <td style="text-align: right; font-weight: bold; color: red;">

@@ -342,8 +342,8 @@
     document.addEventListener("DOMContentLoaded", function() {
         const book = document.getElementById("book");
        const pageFlip = new St.PageFlip(book, {
-            width: 600,
-            height: 4500,
+            width: 845,
+            height: 5000,
             showCover: true,
             maxShadowOpacity: 0,        // Matikan efek bayangan / kertas
             drawShadow: false,          // Matikan shadow sepenuhnya

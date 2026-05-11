@@ -73,6 +73,7 @@ class BukuStokController extends Controller
                     'netto'  => $masuk - $keluar,
                 ];
             }
+         
 
             return view('page.bukuStok.index', compact(
                 'months', 'summaries', 'barangList', 'barangSummary'
