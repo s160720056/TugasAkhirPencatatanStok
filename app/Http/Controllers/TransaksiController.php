@@ -41,15 +41,17 @@ class TransaksiController extends Controller
                 'transaksi.diberikan_oleh',
                 'transaksi.keperluan_transaksi',
                 'barang.nama_barang',
+                'barang.kode_barang',
+                'barang.seri',
             ])
             ->orderByDesc('transaksi.id_transaksi');
 
         return DataTables::of($transaksi)
 
             ->addIndexColumn()
-
+ 
             ->addColumn('barang', function ($row) {
-                return $row->nama_barang ?? '-';
+                return $row->nama_barang . ' - ' . $row->kode_barang . ' - ' . ($row->seri ?? '-');
             })
 
             ->addColumn('keluar', function ($row) {

@@ -32,25 +32,44 @@ class BarangController extends Controller
     }
 
     // DataTable
-    public function getDataTable(Request $request)
-    {
-        $barang = Barang::select([
-            'id_barang',
-            'kode_barang',
-            'nama_barang',
-            'seri',
-            'stok_awal',
-            'tanggal_input',
-            'STATUS_BARANG',
-            'harga_satuan',
-        ])->where('STATUS_BARANG', '!=', '2');
+public function getDataTable(Request $request)
+{
+    $barang = Barang::select([
+        'id_barang',
+        'kode_barang',
+        'nama_barang',
+        'seri',
+        'stok_awal',
+        'tanggal_input',
+        'STATUS_BARANG',
+        'harga_satuan',
+    ])
+    ->where('STATUS_BARANG', '!=', '2');
 
-        return DataTables::of($barang)
-            ->addIndexColumn()
-            ->editColumn('stok_awal', fn($row) => number_format($row->stok_awal ?? 0))
-            ->editColumn('tanggal_input', fn($row) => $row->tanggal_input ? \Carbon\Carbon::parse($row->tanggal_input)->format('d/m/Y') : '-')
-            ->make(true);
+    // ================= FILTER TANGGAL =================
+    if ($request->filled('filter_tanggal')) {
+
+        $barang->whereDate(
+            'tanggal_input',
+            $request->filter_tanggal
+        );
     }
+
+    return DataTables::of($barang)
+        ->addIndexColumn()
+
+        ->editColumn('stok_awal', function ($row) {
+            return number_format($row->stok_awal ?? 0);
+        })
+
+        ->editColumn('tanggal_input', function ($row) {
+            return $row->tanggal_input
+                ? \Carbon\Carbon::parse($row->tanggal_input)->format('d/m/Y')
+                : '-';
+        })
+
+        ->make(true);
+}
 
     public function getData()
     {

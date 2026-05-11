@@ -9,15 +9,49 @@
         <h4 class="mb-4">Data Barang</h4>
 
         <div class="widget-content widget-content-area br-6">
-            <button type="button" class="btn btn-primary d-inline-flex align-items-center gap-2 add-button"
-                data-bs-toggle="modal" data-bs-target="#addBarang">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-                <span>Tambah Barang</span>
-            </button>
+
+
+            <div class="row mb-4 align-items-end g-2">
+
+                <!-- Tambah Barang -->
+                <div class="col-md-auto">
+                    <button type="button" class="btn btn-primary d-inline-flex align-items-center gap-2 add-button"
+                        data-bs-toggle="modal" data-bs-target="#addBarang">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+
+                        <span>Tambah Barang</span>
+                    </button>
+                </div>
+
+                <!-- Filter Tanggal -->
+                <div class="col-md-3">
+                    <label class="form-label mb-1">Filter Tanggal</label>
+
+                    <input type="date" class="form-control" id="filterTanggal">
+                </div>
+
+                <!-- Tombol Proses -->
+                <div class="col-md-auto">
+                    <button type="button" class="btn btn-success" id="btnProses">
+                        Proses
+                    </button>
+                </div>
+
+                <!-- Tampilkan Semua -->
+                <div class="col-md-auto">
+                    <button type="button" class="btn btn-info" id="btnTampilkanSemua">
+                        Tampilkan Semua
+                    </button>
+                </div>
+
+            </div>
 
             <div class="table-responsive mb-4 mt-4">
                 <table id="barang-table" class="table table-hover" style="width:100%">
@@ -264,7 +298,19 @@
                 destroy: true,
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('barang.data') }}',
+
+                pageLength: 25,
+
+                lengthMenu: [
+                    [10, 25, 50, 100, 500, 1000],
+                    [10, 25, 50, 100, 500, 1000]
+                ],
+                ajax: {
+                    url: '{{ route('barang.data') }}',
+                    data: function(d) {
+                        d.filter_tanggal = $('#filterTanggal').val();
+                    }
+                },
                 columns: [{
                         data: 'DT_RowIndex',
                         orderable: false,
@@ -340,6 +386,20 @@
                 order: [
                     [1, 'asc']
                 ]
+            });
+            table.on('preXhr.dt', function(e, settings, data) {
+                data.filter_tanggal = $('#filterTanggal').val();
+            });
+
+            // tombol proses
+            $('#btnProses').on('click', function() {
+                table.ajax.reload();
+            });
+
+            // tombol tampilkan semua
+            $('#btnTampilkanSemua').on('click', function() {
+                $('#filterTanggal').val('');
+                table.ajax.reload();
             });
 
             // ===================== ADD =====================

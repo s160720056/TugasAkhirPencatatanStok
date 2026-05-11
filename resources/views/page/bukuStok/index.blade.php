@@ -342,7 +342,7 @@
     document.addEventListener("DOMContentLoaded", function() {
         const book = document.getElementById("book");
        const pageFlip = new St.PageFlip(book, {
-            width: 845,
+            width: 700,
             height: 5000,
             showCover: true,
             maxShadowOpacity: 0,        // Matikan efek bayangan / kertas
@@ -351,6 +351,8 @@
             usePortrait: false,
             mobileScrollSupport: false,
             startZIndex: 0,
+            //  useMouseEvents: false,
+            showPageCorners: false,
 
                         // --- ADD THESE SETTINGS ---
             showCornerHover: false,      // Disables the corner animation on hover
