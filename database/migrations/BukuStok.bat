@@ -51,12 +51,12 @@ if "!ARTISAN_RUNNING!"=="1" (
 
         php artisan optimize:clear
 
-        echo.
-        echo ============================================
-        echo OPTIMIZE LARAVEL...
-        echo ============================================
+        @REM echo.
+        @REM echo ============================================
+        @REM echo OPTIMIZE LARAVEL...
+        @REM echo ============================================
 
-        php artisan optimize
+        @REM php artisan optimize
 
     ) else (
 
