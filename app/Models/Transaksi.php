@@ -11,7 +11,7 @@ class Transaksi extends Model
      use HasFactory;
     protected $table = 'transaksi';
     protected $primaryKey = 'id_transaksi';
-    public $timestamps = false;
+    public $timestamps = true;
     protected $guarded = [];
     protected $connection = 'dynamic';
 

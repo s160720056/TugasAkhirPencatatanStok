@@ -11,7 +11,7 @@ class Barang extends Model
         use HasFactory;
     protected $table = 'barang';
     protected $primaryKey = 'id_barang';
-    public $timestamps = false;
+    public $timestamps = true;
     protected $guarded = [];
     protected $connection = 'dynamic';
 
