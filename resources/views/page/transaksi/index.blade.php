@@ -77,7 +77,8 @@
                         <label for="barang_edit">Barang</label>
                         <select class="form-control select2" id="barang_edit" style="width:100%" disabled>
                             @foreach ($barang as $item)
-                                <option value="{{ $item->id_barang }}">{{ $item->nama_barang }} - {{$item->kode_barang}} - {{$item->seri}}</option>
+                                <option value="{{ $item->id_barang }}">{{ $item->nama_barang }} - {{ $item->kode_barang }} -
+                                    {{ $item->seri }}</option>
                             @endforeach
                         </select>
                         <input type="hidden" id="id_barang_hidden">
@@ -249,6 +250,11 @@
                 order: [
                     [0, 'desc']
                 ],
+                columnDefs: [{
+                    targets: '_all',
+                    className: 'fw-semibold'
+                }],
+
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
@@ -279,13 +285,13 @@
                     {
                         data: 'keluar',
                         name: 'transaksi.jumlah_barang',
-                        className: 'text-danger'
+                        className: 'text-danger fw-bold text-center'
                     },
                     {
                         data: 'masuk',
                         name: 'transaksi.jumlah_barang',
-                        className: 'text-success'
-                    },
+                        className: 'text-success fw-bold text-center'
+                    }, 
                     {
                         data: 'harga_satuan',
                         name: 'transaksi.harga_satuan',

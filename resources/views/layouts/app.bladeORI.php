@@ -2,37 +2,131 @@
 <html lang="en">
 
 <head>
-    <!-- Meta Tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1...">
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title id="title_page">
+        {{-- SV MOTOR -
 
-    <title>...</title>
+        @php
+        if (isset($menu)) {
+        echo $menu;
+        } else {
+        echo 'Dashboard';
+        }
+
+
+
+        @endphp --}}
+    </title>
+
+    <style>
+        /* :root {
+            --primary: #166534;
+            --secondary: #854d0e;
+            --light: #f8fafc;
+        } */
+
+
+
+        :root {
+    --primary: #166534;        /* Hijau Gelap (Professional & Trust) */
+    --primary-light: #4ade80;  /* Hijau Terang (Accent) */
+    --secondary: #854d0e;      /* Coklat Kekuningan (Warehouse feel) */
+    --accent: #eab308;         /* Kuning Emas (Warning / Attention) */
+    --dark: #0f172a;           /* Dark Slate */
+    --light: #f8fafc;
+    --success: #15803d;
+    --danger: #dc2626;
+}
+    </style>
+
+
     <link rel="icon" href="{{ asset('favicon.ico') }}">
 
-    <!-- CSS (Urut dari umum ke spesifik) -->
-    <link href="{{ asset('bootstrap5/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/mdb/css/mdb.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('assets/css/plugins.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/dashboard/dash_1.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/fontawesome.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/select2/select2.min.css') }}" rel="stylesheet">
-
-    <!-- Datatable & Plugin CSS -->
-    <link rel="stylesheet" href="plugins/table/datatable/datatables.css">
-    <link rel="stylesheet" href="plugins/table/datatable/dt-global_style.css">
-    <link rel="stylesheet" href="plugins/sweetalerts/sweetalert2.css">
-    <link rel="stylesheet" href="plugins/tempus-dominus/tempus-dominus.min.css">
-
-    <!-- Font -->
-    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,600,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="{{ asset('assets/css/loader.css') }}" rel="stylesheet" type="text/css" />
     <script src="{{ asset('assets/js/loader.js') }}"></script>
-    <!-- Loader CSS (jika critical) -->
-    <link href="{{ asset('assets/css/loader.css') }}" rel="stylesheet">
+
+    <link href="{{ asset('assets/mdb/css/mdb.min.css') }}" rel="stylesheet" />
+
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,600,700&display=swap" rel="stylesheet">
+    <link href="{{ asset('bootstrap5/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/plugins.css') }}" rel="stylesheet" type="text/css" />
+    {{-- <link href="{{ asset('plugins/apex/apexcharts.css') }}" rel="stylesheet" type="text/css"> --}}
+    <script src="{{ asset('assets/apexchart/apex.min.js') }}"></script>
+    <link href="{{ asset('assets/css/dashboard/dash_1.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/fontawesome.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/fontAwesome/css/all.css') }}" rel="stylesheet" type="text/css">
+
+
+    <link href="{{ asset('assets/select2/select2.min.css') }}" rel="stylesheet" />
+
+    {{-- select2 --}}
+
+
+
+
+
+    <link rel="stylesheet" type="text/css" href="plugins/table/datatable/datatables.css">
+    <link rel="stylesheet" type="text/css" href="plugins/sweetalerts/sweetalert2.css">
+    <link rel="stylesheet" type="text/css" href="plugins/tempus-dominus/tempus-dominus.min.js">
+    <link rel="stylesheet" type="text/css" href="plugins/tempus-dominus/tempus-dominus.min.css">
+    <link rel="stylesheet" type="text/css" href="plugins/table/datatable/dt-global_style.css">
+
+
+
+
+
+
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> -->
+
+
+
+
+    <script src="{{ asset('assets/js/moment/moment.js') }}"></script>
+    <script src="{{ asset('assets/webcam/webcam.min.js') }}"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
 </head>
+
+
+{{-- <style>
+    @font-face {
+        font-family: 'Material Symbols Outlined';
+        font-style: normal;
+        font-weight: 400;
+        src: url(https://fonts.gstatic.com/s/materialsymbolsoutlined/v213/kJF1BvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzByHX9rA6RzaxHMPdY43zj-jCxv3fzvRNU22ZXGJpEpjC_1v-p_4MrImHCIJIZrDCvHOej.woff2) format('woff2');
+    }
+
+    .material-symbols-outlined {
+        font-family: 'Material Symbols Outlined';
+        font-weight: normal;
+        font-style: normal;
+        font-size: 24px;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        word-wrap: normal;
+        direction: ltr;
+        -webkit-font-feature-settings: 'liga';
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .icon {
+        transform: scale(0.8);
+        /* Adjust the scale factor as needed */
+        display: inline-block;
+        /* Ensure the scaling is applied correctly */
+    }
+
+   
+</style> --}}
 <style>
-    .select2-container--default .select2-selection--single {
+     .select2-container--default .select2-selection--single {
         height: 38px;
         line-height: 36px;
     }
@@ -45,7 +139,6 @@
         padding: 0.375rem 0.75rem;
         font-size: 1rem;
     }
-
     .lock-screen {
         display: none;
         position: fixed;
@@ -88,6 +181,9 @@
 <script src="assets/js/scrollspyNav.js"></script>
 <script src="plugins/sweetalerts/sweetalert2.all.js"></script>
 
+{{--
+<script src="plugins/sweetalerts/sweetalert2.min.js"></script> --}}
+<script src="plugins/sweetalerts/custom-sweetalert.js"></script>
 
 @php
 
@@ -620,38 +716,30 @@
         <button type="submit" style="display: none" id="tombolLogout"></button>
     </form>
 
-    <!-- ==================== SCRIPTS ==================== -->
-
-    <!-- 1. jQuery (Hanya Sekali) -->
+    <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="{{ asset('assets/js/libs/jquery-3.1.1.min.js') }}"></script>
-
-    <!-- 2. Core Libraries -->
     <script src="{{ asset('bootstrap5/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/mdb/js/mdb.umd.min.js') }}"></script>
     <script src="{{ asset('plugins/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('assets/js/app.js') }}"></script>
 
-    <!-- 3. Axios (PENTING!) -->
-    <script src="{{ asset('assets/axios/axios.min.js') }}"></script>
-    <script src="{{ asset('js/axios.js') }}"></script> {{-- wrapper axiosPost, axiosGet dll --}}
-
-    <!-- 4. Utility & Plugins -->
-    <script src="{{ asset('assets/js/moment/moment.js') }}"></script>
-    <script src="{{ asset('assets/webcam/webcam.min.js') }}"></script>
-    <script src="{{ asset('assets/select2/select2.min.js') }}"></script>
-    <script src="{{ asset('assets/apexchart/apex.min.js') }}"></script>
-    <script src="plugins/sweetalerts/sweetalert2.all.js"></script>
-    <script src="plugins/sweetalerts/custom-sweetalert.js"></script> {{-- tambahkan ini --}}
-    <script src="plugins/table/datatable/datatables.js"></script>
-    <script src="https://cdn.datatables.net/searchpanes/2.3.2/js/dataTables.searchPanes.js"></script>
-
-    <!-- 5. Custom & Page Specific -->
+    <script>
+        $(document).ready(function() {
+            App.init();
+        });
+    </script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
-    <script src="{{ asset('assets/js/dashboard/dash_1.js') }}"></script>
     <script src="{{ asset('assets/js/scrollspyNav.js') }}"></script>
     <script src="{{ asset('plugins/input-mask/jquery.inputmask.bundle.min.js') }}"></script>
+    <script src="{{ asset('plugins/input-mask/input-mask.js') }}"></script>
+    {{-- <script src="{{ asset('plugins/apex/apexcharts.min.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/dashboard/dash_1.js') }}"></script>
+    <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.3.2/js/dataTables.searchPanes.js"></script>
     <script src="{{ asset('assets/js/qrCodeScanner/qrcodescan.min.js') }}"></script>
+    <script src="{{ asset('assets/select2/select2.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script>
+    <script src="{{ asset('assets/mdb/js/mdb.umd.min.js') }}"></script>
+
     <script>
         $.extend(true, $.fn.dataTable.defaults, {
             processing: true,
@@ -870,7 +958,43 @@
         $(document).ready(function() {
             // $('.sidebarCollapse').click();
         });
+
+
+
+
+
+
+        // {{-- Swal.fire({
+        //     title: "Success!",
+        //     text: "Data Berhasil Diubah",
+        //     icon: "success",//imageUrl: "/random_image.php",
+        //     imageWidth: 400,
+        //     imageHeight: 200,
+        //     imageAlt: "Custom image"
+        // }).then(() => {
+        //     location.reload();
+        // }); --}}
+
+        //every buttonn that showing swall show this
+
+        // $('.swalDefaultSuccess').click(function() {
+        //     Swal.fire({
+        //         title: "Success!",
+        //         text: "Data Berhasil Diubah",
+        //      icon: "success",//imageUrl: "/random_image.php",
+        //     imageWidth: 400,
+        //     imageHeight: 200,
+        //     imageAlt: "Custom image"
+        // }).then(() => {
+        //     location.reload();
+        // });
     </script>
+
+
+
+
+
+
 
     <script>
         let check = 0;
@@ -1039,7 +1163,10 @@
     </script>
 
 
+
+    <!-- Taruh script ini di PALING BAWAH sebelum tag </body> -->
     <script src="https://cdn.jsdelivr.net/npm/disable-devtool@latest"></script>
+
     <script>
         // alert(DisableDevtool.md5("0000wkid"));
         DisableDevtool({
