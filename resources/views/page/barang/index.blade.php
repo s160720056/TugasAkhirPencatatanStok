@@ -334,17 +334,17 @@ $(document).ready(function() {
             { data: 'seri' },
             {
                 data: 'stok_awal',
-                className: 'text-end',
+                className: 'text-center',
                 render: data => Number(data || 0).toLocaleString('id-ID')
             },
             {
                 data: 'harga_satuan',
-                className: 'text-end',
-                render: data => Number(data || 0).toLocaleString('id-ID')
+                className: 'text-center',
+                render: data => `Rp ${data}`
             },
             {
                 data: 'tanggal_input',
-                render: data => data ? moment(data).format('DD/MM/YYYY') : '-'
+                className: 'text-center',
             },
             {
                 data: 'STATUS_BARANG',

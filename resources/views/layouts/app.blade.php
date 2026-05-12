@@ -607,13 +607,13 @@
     <!-- END MAIN CONTAINER -->
     <div id="lock-screen" class="lock-screen">
         <div class="lock-content">
-           <span class="material-symbols-outlined">
-lock
-</span>
+            <span class="material-symbols-outlined" id="iconLock">
+                lock
+            </span>
 
             <h2 style="color:white">Screen Locked</h2>
             <form id="unlock-form">
-                <label for="password" style="color:white" >Enter Password:</label>
+                <label for="password" style="color:white">Enter Password:</label>
                 <input type="password" id="password" name="password" required value="">
                 <button type="submit">Unlock</button>
                 <button type="button" onclick="logOut()">Logout</button>
@@ -962,6 +962,7 @@ lock
             const lockElement = document.getElementById('lock-screen');
             lockElement.style.display = 'flex';
             lockElement.classList.add('locked');
+             document.getElementById('iconLock').textContent = 'lock';
             document.getElementById('content').style.display = 'none';
         }
 
@@ -971,14 +972,15 @@ lock
         document.addEventListener('DOMContentLoaded', () => {
             let timeout;
             // const lockDuration = 30000; // 3 seconds
-            const MINUTE = 60 * 1000;
-            const lockDuration = 5 * MINUTE;
+            const lockDuration = 300 * 1000; // 300 seconds
 
             const lockScreen = () => {
                 const lockElement = document.getElementById('lock-screen');
                 lockElement.style.display = 'flex';
                 lockElement.classList.add('locked');
                 document.getElementById('content').style.display = 'none';
+                document.getElementById('iconLock').textContent = 'lock';
+                $('#password').val(''); // Clear password field
                 //add session locked
                 // window.location.href = "/logout";
 
@@ -997,6 +999,7 @@ lock
 
             const resetTimer = () => {
                 clearTimeout(timeout);
+                 document.getElementById('iconLock').textContent = 'lock';
                 timeout = setTimeout(lockScreen, lockDuration);
             };
 
@@ -1019,7 +1022,23 @@ lock
                     const data = await response.json();
 
                     if (data.success) {
-                        unlockScreen();
+                        const iconLock = document.getElementById('iconLock');
+
+                        // Ubah icon jadi unlock
+                        iconLock.textContent = 'lock_open_right';
+
+                        // Unlock screen
+
+
+                        // Setelah 10 detik lock kembali
+                        setTimeout(() => {
+
+                            // jika ada fungsi lockScreen()
+                            if (typeof lockScreen === 'function') {
+                                  unlockScreen();
+                            }
+                        }, 1000); // 10000ms = 10 detik
+
                     } else {
                         alert('Invalid password');
                     }
