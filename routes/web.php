@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 // use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\BukuStokController;
+use App\Http\Controllers\RekapStokBarangController;
 use App\Http\Controllers\TransaksiController;
  use App\Http\Controllers\DeployController;
 
@@ -97,16 +98,18 @@ Route::middleware([SetDynamicDatabase::class, 'auth:user', 'throttle:user-area']
     Route::resource('barang', BarangController::class);
 
     // Buku Stok
-    // Route::get('/bukuStok/data', [BukuStokController::class, 'getDataTable'])->name('bukuStok.data');
-    // Route::get('/bukuStok/indexWebView', [BukuStokController::class, 'indexWebView'])->name('bukuStok.indexWebView');
-    // Route::get('/bukuStok/getKodeBukuStok', [BukuStokController::class, 'getKodeBukuStok'])->name('getKodeBukuStok');
-    // Route::get('/bukuStok/getBukuStokDetail/{id}', [BukuStokController::class, 'getBukuStokDetail'])->name('getBukuStokDetail');
-    // /buku-stok/month/2026-04
     Route::get('/bukuStok/rekap/{bulan}', [BukuStokController::class, 'rekapMonth'])->name('bukuStok.rekap');
     Route::get('/bukuStok/month/{month}', [BukuStokController::class, 'flipbookMonth'])->name('flipbookMonth');
-Route::get('/buku-stok/clear-cache', [BukuStokController::class, 'clearAllCache'])
-     ->name('buku-stok.clear-cache');
+    // Route::get('/buku-stok/clear-cache', [BukuStokController::class, 'clearAllCache'])
+    //     ->name('buku-stok.clear-cache');
+
+    //rekapStokBarang
+    // Route::get('/rekap StokBarang', [BukuStokController::class, 'rekapHarian'])->name('rekapStokBarang.index');
     Route::resource('/bukuStok', BukuStokController::class);
+
+    // //rekap stok barang
+    Route::get('rekapStokBarang/rekap-harian', [RekapStokBarangController::class, 'rekapHarian'])->name('rekapHarian');
+    Route::resource('/rekapStokBarang', RekapStokBarangController::class);
 
     // Transaksi
     Route::get('/transaksi/data', [TransaksiController::class, 'getDataTable'])->name('transaksi.data');
@@ -129,7 +132,7 @@ Route::get('/buku-stok/clear-cache', [BukuStokController::class, 'clearAllCache'
     // ==================== PENGATURAN TOKO ====================
     Route::get('/pengaturanToko', [PengaturanController::class, 'pengaturanToko'])->name('PengaturanToko');
     Route::get('/pengaturanStruk', [PengaturanController::class, 'pengaturanStruk'])->name('PengaturanStruk');
-  
+
     Route::post('/toko/store', [PengaturanController::class, 'store'])->name('toko.store');
     Route::post('/toko/verifikasiUlang', [PengaturanController::class, 'verifikasiUlang'])->name('toko.verifikasiUlang');
     Route::post('/toko/connect/{id}', [PengaturanController::class, 'connect'])->name('toko.connect');

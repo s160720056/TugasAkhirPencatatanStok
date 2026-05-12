@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Barang;
 use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+
 
 class BukuStokController extends Controller
 {
@@ -15,12 +17,13 @@ class BukuStokController extends Controller
     private function getLastUpdatedKey(): string
     {
         $lastUpdated = Transaksi::max('updated_at') ?? now();
+
         return Carbon::parse($lastUpdated)->format('YmdHis'); // Example: 20260511143322
     }
 
     public function index()
     {
-        $cacheKey = 'buku_stok_index_' . $this->getLastUpdatedKey();
+        $cacheKey = 'buku_stok_index_'.$this->getLastUpdatedKey();
 
         return Cache::remember($cacheKey, now()->addMinutes(1), function () {
             $barangList = Barang::where('STATUS_BARANG', '!=', '2')
@@ -39,8 +42,7 @@ class BukuStokController extends Controller
                 ->cursor();
 
             $grouped = $transaksis->groupBy(
-                fn($item) =>
-                Carbon::parse($item->tanggal_transaksi)->format('Y-m')
+                fn ($item) => Carbon::parse($item->tanggal_transaksi)->format('Y-m')
             );
 
             $firstMonthKey = now()->format('Y-m');
@@ -64,17 +66,16 @@ class BukuStokController extends Controller
                 $key = $date->format('Y-m');
                 $items = $grouped->get($key, collect());
 
-                $masuk  = (int)$items->where('tipe_transaksi', 'masuk')->sum('jumlah_barang');
-                $keluar = (int)$items->where('tipe_transaksi', 'keluar')->sum('jumlah_barang');
+                $masuk = (int) $items->where('tipe_transaksi', 'masuk')->sum('jumlah_barang');
+                $keluar = (int) $items->where('tipe_transaksi', 'keluar')->sum('jumlah_barang');
 
                 $months[$key] = $items;
                 $summaries[$key] = [
-                    'masuk'  => $masuk,
+                    'masuk' => $masuk,
                     'keluar' => $keluar,
-                    'netto'  => $masuk - $keluar,
+                    'netto' => $masuk - $keluar,
                 ];
             }
-
 
             return view('page.bukuStok.index', compact(
                 'months',
@@ -93,7 +94,7 @@ class BukuStokController extends Controller
         return Cache::remember($cacheKey, now()->addMinutes(1), function () use ($bulan) {
             $targetMonth = Carbon::createFromFormat('Y-m', $bulan);
             $start = $targetMonth->copy()->startOfMonth();
-            $end   = $targetMonth->copy()->endOfMonth();
+            $end = $targetMonth->copy()->endOfMonth();
 
             $transaksis = Transaksi::leftJoin('barang', 'barang.id_barang', '=', 'transaksi.id_barang')
                 ->whereBetween('tanggal_transaksi', [$start, $end])
@@ -108,13 +109,13 @@ class BukuStokController extends Controller
             $futureAdjustments = $this->getFutureAdjustments($bulan);
             $barangSummary = $this->calculateBarangSummary($barangList, $transaksis, $futureAdjustments);
 
-            $masukItems  = $transaksis->where('tipe_transaksi', 'masuk');
+            $masukItems = $transaksis->where('tipe_transaksi', 'masuk');
             $keluarItems = $transaksis->where('tipe_transaksi', 'keluar');
 
             $summary = [
-                'masuk'  => $masukItems->sum('jumlah_barang'),
+                'masuk' => $masukItems->sum('jumlah_barang'),
                 'keluar' => $keluarItems->sum('jumlah_barang'),
-                'netto'  => $masukItems->sum('jumlah_barang') - $keluarItems->sum('jumlah_barang'),
+                'netto' => $masukItems->sum('jumlah_barang') - $keluarItems->sum('jumlah_barang'),
             ];
 
             return view('page.bukuStok.flipbook_month', compact(
@@ -135,7 +136,7 @@ class BukuStokController extends Controller
         return Cache::remember($cacheKey, now()->addMinutes(1), function () use ($bulan) {
             $targetMonth = Carbon::createFromFormat('Y-m', $bulan);
             $start = $targetMonth->copy()->startOfMonth();
-            $end   = $targetMonth->copy()->endOfMonth();
+            $end = $targetMonth->copy()->endOfMonth();
 
             $transaksis = Transaksi::leftJoin('barang', 'barang.id_barang', '=', 'transaksi.id_barang')
                 ->whereBetween('tanggal_transaksi', [$start, $end])
@@ -164,8 +165,8 @@ class BukuStokController extends Controller
             $barangSummary = collect($barangSummary)
                 ->sort(function ($a, $b) {
 
-                    $aMasuk  = (float) $a['masuk'];
-                    $bMasuk  = (float) $b['masuk'];
+                    $aMasuk = (float) $a['masuk'];
+                    $bMasuk = (float) $b['masuk'];
 
                     $aKeluar = (float) $a['keluar'];
                     $bKeluar = (float) $b['keluar'];
@@ -213,24 +214,26 @@ class BukuStokController extends Controller
         foreach ($barangList as $b) {
             $trx = $transaksis->where('id_barang', $b->id_barang);
 
-            $masuk  = (int)$trx->where('tipe_transaksi', 'masuk')->sum('jumlah_barang');
-            $keluar = (int)$trx->where('tipe_transaksi', 'keluar')->sum('jumlah_barang');
+            $masuk = (int) $trx->where('tipe_transaksi', 'masuk')->sum('jumlah_barang');
+            $keluar = (int) $trx->where('tipe_transaksi', 'keluar')->sum('jumlah_barang');
 
-            $adjustment   = $futureAdjustments[$b->id_barang] ?? 0;
-            $currentStock = (int)$b->stok_awal + $adjustment;
+            $adjustment = $futureAdjustments[$b->id_barang] ?? 0;
+            $currentStock = (int) $b->stok_awal + $adjustment;
 
             $result[] = [
                 'kode_barang' => $b->kode_barang,
                 'nama_barang' => $b->nama_barang,
-                'seri'        => $b->seri ?? '-',
-                'stok_awal'   => $currentStock - $masuk + $keluar,
-                'masuk'       => $masuk,
-                'keluar'      => $keluar,
-                'stok_akhir'  => $currentStock,
+                'seri' => $b->seri ?? '-',
+                'stok_awal' => $currentStock - $masuk + $keluar,
+                'masuk' => $masuk,
+                'keluar' => $keluar,
+                'stok_akhir' => $currentStock,
             ];
         }
+
         return $result;
     }
+
     public function clearAllCache()
     {
         $cleared = [];
@@ -242,12 +245,12 @@ class BukuStokController extends Controller
 
         // 2. Clear semua cache buku stok (jika menggunakan Redis)
         if (config('cache.default') === 'redis') {
-            $prefix = config('cache.prefix') ? config('cache.prefix') . ':' : '';
+            $prefix = config('cache.prefix') ? config('cache.prefix').':' : '';
             $keys = Cache::getRedis()->keys("{$prefix}buku_stok_*");
 
-            if (!empty($keys)) {
+            if (! empty($keys)) {
                 Cache::getRedis()->del($keys);
-                $cleared[] = count($keys) . ' buku_stok_* keys';
+                $cleared[] = count($keys).' buku_stok_* keys';
             }
         }
 
@@ -255,7 +258,10 @@ class BukuStokController extends Controller
             'success' => true,
             'message' => 'Cache berhasil dihapus',
             'cleared' => $cleared,
-            'timestamp' => now()->format('Y-m-d H:i:s')
+            'timestamp' => now()->format('Y-m-d H:i:s'),
         ]);
     }
+
+    // Tambahkan method baru ini
+ 
 }
