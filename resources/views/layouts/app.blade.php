@@ -27,9 +27,9 @@
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,600,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    <script src="{{ asset('assets/js/loader.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/loader.js') }}"></script> --}}
     <!-- Loader CSS (jika critical) -->
-    <link href="{{ asset('assets/css/loader.css') }}" rel="stylesheet">
+    {{-- <link href="{{ asset('assets/css/loader.css') }}" rel="stylesheet"> --}}
 </head>
 <style>
     .select2-container--default .select2-selection--single {
@@ -626,10 +626,16 @@
     <script src="{{ asset('assets/js/libs/jquery-3.1.1.min.js') }}"></script>
 
     <!-- 2. Core Libraries -->
-    <script src="{{ asset('bootstrap5/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/mdb/js/mdb.umd.min.js') }}"></script>
     <script src="{{ asset('plugins/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
+    <script src="{{ asset('bootstrap5/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/app.js') }}"></script>
+    <script src="{{ asset('assets/mdb/js/mdb.umd.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            App.init();
+        });
+    </script>
+
 
     <!-- 3. Axios (PENTING!) -->
     <script src="{{ asset('assets/axios/axios.min.js') }}"></script>
