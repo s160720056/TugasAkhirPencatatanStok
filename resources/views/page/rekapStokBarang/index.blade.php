@@ -6,7 +6,7 @@
         Carbon::setLocale('id');
     @endphp
     <!-- Flatpickr CSS & JS -->
-   
+
     <div class="container mt-4">
         <h3 class="text-center mb-4">Rekap Stok Harian</h3>
 
@@ -15,7 +15,7 @@
             <div class="card-body">
                 <form id="filterForm" class="row g-3 align-items-end">
                     <div class="col-md-6">
-                        <label class="form-label">Periode Tanggal</label>
+                        <label class="form-label" >Periode Tanggal</label>
                         <input type="text" id="tanggal_range" class="form-control" placeholder="Pilih rentang tanggal..."
                             readonly>
                     </div>
@@ -67,7 +67,7 @@
             <div class="col-lg-6">
                 <div class="card h-100">
                     <div class="card-header bg-danger text-white">
-                        <h5 class="mb-0">📤 Rincian Barang Keluar</h5>
+                        <h5 class="mb-0" style="color:white">📤 Rincian Barang Keluar</h5>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">

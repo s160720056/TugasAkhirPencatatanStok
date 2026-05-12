@@ -607,10 +607,13 @@
     <!-- END MAIN CONTAINER -->
     <div id="lock-screen" class="lock-screen">
         <div class="lock-content">
-            <i class="fas fa-lock fa-4x lock-icon"></i>
+           <span class="material-symbols-outlined">
+lock
+</span>
+
             <h2 style="color:white">Screen Locked</h2>
             <form id="unlock-form">
-                <label for="password">Enter Password:</label>
+                <label for="password" style="color:white" >Enter Password:</label>
                 <input type="password" id="password" name="password" required value="">
                 <button type="submit">Unlock</button>
                 <button type="button" onclick="logOut()">Logout</button>
