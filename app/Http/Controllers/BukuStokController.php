@@ -148,7 +148,43 @@ class BukuStokController extends Controller
                 ->get();
 
             $futureAdjustments = $this->getFutureAdjustments($bulan);
-            $barangSummary = $this->calculateBarangSummary($barangList, $transaksis, $futureAdjustments);
+            // $barangSummary = $this->calculateBarangSummary($barangList, $transaksis, $futureAdjustments);
+            $barangSummary = $this->calculateBarangSummary(
+                $barangList,
+                $transaksis,
+                $futureAdjustments
+            );
+
+            /**
+             * SORT PRIORITAS:
+             * 1. Barang masuk terbesar
+             * 2. Barang keluar terbesar
+             * 3. Barang tanpa transaksi di bawah
+             */
+            $barangSummary = collect($barangSummary)
+                ->sort(function ($a, $b) {
+
+                    $aMasuk  = (float) $a['masuk'];
+                    $bMasuk  = (float) $b['masuk'];
+
+                    $aKeluar = (float) $a['keluar'];
+                    $bKeluar = (float) $b['keluar'];
+
+                    // PRIORITAS 1 → barang masuk
+                    if ($aMasuk != $bMasuk) {
+                        return $bMasuk <=> $aMasuk;
+                    }
+
+                    // PRIORITAS 2 → barang keluar
+                    if ($aKeluar != $bKeluar) {
+                        return $bKeluar <=> $aKeluar;
+                    }
+
+                    // PRIORITAS 3 → nama barang
+                    return strcmp($a['nama_barang'], $b['nama_barang']);
+                })
+                ->values()
+                ->toArray();
 
             return response()->json($barangSummary);
         });

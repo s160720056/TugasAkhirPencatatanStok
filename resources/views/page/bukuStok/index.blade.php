@@ -9,6 +9,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/page-flip/dist/css/page-flip.css">
 
     <style>
+        .highlight-mutasi {
+    background-color: #fff3cd !important;
+}
+
+.highlight-mutasi td {
+    font-weight: 700;
+    color: #000 !important;
+}
+        
         .container {
             margin: 20px auto;
         }
@@ -206,18 +215,17 @@
             box-sizing: border-box;
             font-family: Arial, Helvetica, sans-serif;
         }
-
         .rekap-container {
             margin-top: 40px;
             background: #fff;
             padding: 20px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
     </style>
 
-    <div class="container">
+<div class="container">
         <div>
             <button type="button" class="btn-prev">Previous page</button>
             [<span class="page-current">Cover</span> of <span class="page-total">-</span>]
@@ -235,10 +243,10 @@
 
         <!-- Daftar Barang -->
         <!-- ... (Halaman 1 & 2 Daftar Barang tetap sama) ... -->
-        <div class="page">
+ <div class="page">
             <h3 style="text-align:center">Daftar Barang</h3>
             <p style="text-align:center; margin-bottom: 10px; font-size: 14px;">Halaman 1</p>
-
+            
             <table>
                 <tr>
                     <th>No</th>
@@ -267,7 +275,7 @@
         <div class="page">
             <h3 style="text-align:center">Daftar Barang</h3>
             <p style="text-align:center; margin-bottom: 10px; font-size: 14px;">Halaman 2</p>
-
+            
             <table>
                 <tr>
                     <th>No</th>
@@ -298,15 +306,15 @@
                 @endif
             </table>
         </div>
-        @if ($months->isNotEmpty())
+        @if ($months->isNotEmpty()) 
             @php $firstMonth = $months->keys()->first(); @endphp
 
             @include('page.bukuStok.flipbook_month', [
-                'bulan' => $firstMonth,
-                'masukItems' => $months[$firstMonth]->where('tipe_transaksi', 'masuk'),
-                'keluarItems' => $months[$firstMonth]->where('tipe_transaksi', 'keluar'),
-                'summary' => $summaries->get($firstMonth) ?? [],
-                'barangSummary' => [], // tidak perlu dikirim lagi
+                'bulan'         => $firstMonth,
+                'masukItems'    => $months[$firstMonth]->where('tipe_transaksi', 'masuk'),
+                'keluarItems'   => $months[$firstMonth]->where( 'tipe_transaksi', 'keluar'),
+                'summary'       => $summaries->get($firstMonth) ?? [],
+                'barangSummary' => []   // tidak perlu dikirim lagi
             ])
         @endif
     </div>
@@ -316,7 +324,7 @@
         <h5 class="text-center mb-2" id="rekap-title">
             Rekap Stok - {{ Carbon::parse($firstMonth ?? now()->format('Y-m'))->translatedFormat('F Y') }}
         </h5>
-
+        
         <div class="table-responsive">
             <table class="table table-sm table-bordered table-striped" style="font-size: 12px;">
                 <thead class="table-light">
@@ -336,162 +344,169 @@
             </table>
         </div>
     </div>
-    <script src="{{ asset('js/page-flip.browser.js') }}"></script>
+<script src="{{ asset('js/page-flip.browser.js') }}"></script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const book = document.getElementById("book");
-            const pageFlip = new St.PageFlip(book, {
-                width: 700,
-                height: 5000,
-                showCover: true,
-                maxShadowOpacity: 0, // Matikan efek bayangan / kertas
-                drawShadow: false, // Matikan shadow sepenuhnya
-                flippingTime: 600,
-                usePortrait: false,
-                mobileScrollSupport: false,
-                startZIndex: 0,
-                //  useMouseEvents: false,
-                showPageCorners: false,
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const book = document.getElementById("book");
+       const pageFlip = new St.PageFlip(book, {
+            width: 700,
+            height: 5000,
+            showCover: true,
+            maxShadowOpacity: 0,        // Matikan efek bayangan / kertas
+            drawShadow: false,          // Matikan shadow sepenuhnya
+            flippingTime: 600,
+            usePortrait: false,
+            mobileScrollSupport: false,
+            startZIndex: 0,
+            //  useMouseEvents: false,
+            showPageCorners: false,
 
-                // --- ADD THESE SETTINGS ---
-                showCornerHover: false, // Disables the corner animation on hover
-                disableFlipByClick: true, // Disables flipping by clicking the page
-                swipeDistance: 0, // Effectively disables mouse dragging/swiping
-                clickEventForward: true, // Allows clicks to pass through to buttons/tables
-                // --------------------------
+                        // --- ADD THESE SETTINGS ---
+            showCornerHover: false,      // Disables the corner animation on hover
+            disableFlipByClick: true,    // Disables flipping by clicking the page
+            swipeDistance: 0,            // Effectively disables mouse dragging/swiping
+            clickEventForward: true,     // Allows clicks to pass through to buttons/tables
+            // --------------------------
+        });
+
+        const allMonths = @json($months->keys()->toArray());
+        const loadedMonths = new Set(['{{ $firstMonth ?? '' }}']);
+        let currentMonth = '{{ $firstMonth }}';
+
+        let monthMap = new Map();
+
+        // Load halaman awal
+        pageFlip.loadFromHTML(document.querySelectorAll(".page"));
+
+        // Build Mapping dengan offset yang benar
+        function buildMonthMap() {
+            monthMap.clear();
+            const monthPages = document.querySelectorAll('.page[data-month]');
+            
+            monthPages.forEach((page, arrayIndex) => {
+                const month = page.getAttribute('data-month');
+                // Halaman transaksi mulai dari index ke-3 di array (karena ada Cover + 2 Daftar Barang)
+                const pageIndex = arrayIndex + 3;   // Offset penting!
+                if (month) monthMap.set(pageIndex, month);
             });
+        }
 
-            const allMonths = @json($months->keys()->toArray());
-            const loadedMonths = new Set(['{{ $firstMonth ?? '' }}']);
-            let currentMonth = '{{ $firstMonth }}';
+        buildMonthMap();
 
-            let monthMap = new Map();
+        const totalPagesEl = document.querySelector(".page-total");
+        const currentSpan = document.querySelector(".page-current");
 
-            // Load halaman awal
-            pageFlip.loadFromHTML(document.querySelectorAll(".page"));
+        totalPagesEl.innerText = Math.max(0, pageFlip.getPageCount() - 1);
+        currentSpan.innerText = 'Cover';
 
-            // Build Mapping dengan offset yang benar
-            function buildMonthMap() {
-                monthMap.clear();
-                const monthPages = document.querySelectorAll('.page[data-month]');
+        // Tombol Prev & Next
+        document.querySelector(".btn-prev").addEventListener("click", () => pageFlip.flipPrev());
+        document.querySelector(".btn-next").addEventListener("click", () => pageFlip.flipNext());
 
-                monthPages.forEach((page, arrayIndex) => {
-                    const month = page.getAttribute('data-month');
-                    // Halaman transaksi mulai dari index ke-3 di array (karena ada Cover + 2 Daftar Barang)
-                    const pageIndex = arrayIndex + 3; // Offset penting!
-                    if (month) monthMap.set(pageIndex, month);
-                });
+        // Lazy Load
+        const loadMonth = async (month) => {
+            if (loadedMonths.has(month)) return;
+
+            try {
+                const response = await fetch(`/bukuStok/month/${month}`);
+                const html = await response.text();
+
+                book.insertAdjacentHTML('beforeend', html);
+                pageFlip.updateFromHtml(document.querySelectorAll(".page"));
+
+                loadedMonths.add(month);
+                totalPagesEl.innerText = Math.max(0, pageFlip.getPageCount() - 1);
+
+                setTimeout(buildMonthMap, 400);
+            } catch (error) {
+                console.error('Gagal load bulan:', month, error);
             }
+        };
 
-            buildMonthMap();
+        // Update Rekap
+        const updateRekap = (month) => {
+            // if (month === currentMonth) return;
+            currentMonth = month;
 
-            const totalPagesEl = document.querySelector(".page-total");
-            const currentSpan = document.querySelector(".page-current");
+            document.getElementById('rekap-title').textContent = 
+                `Rekap Stok - ${new Date(month + '-01').toLocaleString('id-ID', { month: 'long', year: 'numeric' })}`;
 
-            totalPagesEl.innerText = Math.max(0, pageFlip.getPageCount() - 1);
-            currentSpan.innerText = 'Cover';
+            fetch(`/bukuStok/rekap/${month}`)
+                .then(r => r.json())
+                .then(data => {
+                    let html = '';
+ 
+data.forEach(b => {
 
-            // Tombol Prev & Next
-            document.querySelector(".btn-prev").addEventListener("click", () => pageFlip.flipPrev());
-            document.querySelector(".btn-next").addEventListener("click", () => pageFlip.flipNext());
+    const highlight = (Number(b.masuk) > 0 || Number(b.keluar) > 0)
+        ? 'highlight-mutasi fw-bold table-warning'
+        : 'fw-bold';
 
-            // Lazy Load
-            const loadMonth = async (month) => {
-                if (loadedMonths.has(month)) return;
-
-                try {
-                    const response = await fetch(`/bukuStok/month/${month}`);
-                    const html = await response.text();
-
-                    book.insertAdjacentHTML('beforeend', html);
-                    pageFlip.updateFromHtml(document.querySelectorAll(".page"));
-
-                    loadedMonths.add(month);
-                    totalPagesEl.innerText = Math.max(0, pageFlip.getPageCount() - 1);
-
-                    setTimeout(buildMonthMap, 400);
-                } catch (error) {
-                    console.error('Gagal load bulan:', month, error);
-                }
-            };
-
-            // Update Rekap
-            const updateRekap = (month) => {
-                // if (month === currentMonth) return;
-                currentMonth = month;
-
-                document.getElementById('rekap-title').textContent =
-                    `Rekap Stok - ${new Date(month + '-01').toLocaleString('id-ID', { month: 'long', year: 'numeric' })}`;
-
-                fetch(`/bukuStok/rekap/${month}`)
-                    .then(r => r.json())
-                    .then(data => {
-                        let html = '';
-                        data.forEach(b => {
-
-                            const highlight = (Number(b.masuk) > 0 || Number(b.keluar) > 0) ?
-                                'table-warning' :
-                                '';
-
-                            html += `
+    html += `
         <tr class="${highlight}">
             <td>${b.kode_barang}</td>
             <td>${b.nama_barang}</td>
             <td>${b.seri || '-'}</td>
-            <td class="text-end">${Number(b.stok_awal).toLocaleString('id-ID')}</td>
-            <td class="text-end text-success">
+
+            <td class="text-end">
+                ${Number(b.stok_awal).toLocaleString('id-ID')}
+            </td>
+
+            <td class="text-end text-success fw-bold">
                 +${Number(b.masuk).toLocaleString('id-ID')}
             </td>
-            <td class="text-end text-danger">
+
+            <td class="text-end text-danger fw-bold">
                 -${Number(b.keluar).toLocaleString('id-ID')}
             </td>
+
             <td class="text-end fw-bold">
                 ${Number(b.stok_akhir).toLocaleString('id-ID')}
             </td>
         </tr>`;
-                        });
-                        document.getElementById('rekap-body').innerHTML = html;
-                    });
-            };
+});
+                    document.getElementById('rekap-body').innerHTML = html;
+                });
+        };
 
-            // Event Flip
-            pageFlip.on("flip", (e) => {
-                const currentIndex = e.data;
-                currentSpan.innerText = currentIndex === 0 ? 'Cover' : currentIndex + 1;
+        // Event Flip
+        pageFlip.on("flip", (e) => {
+            const currentIndex = e.data;
+            currentSpan.innerText = currentIndex === 0 ? 'Cover' : currentIndex + 1;
 
-                // Ambil bulan dari mapping
-                const activeMonth = monthMap.get(currentIndex);
-
-                if (activeMonth) {
-
-                    updateRekap(activeMonth);
-                }
-
-                // Lazy load
-                const total = pageFlip.getPageCount();
-                if (currentIndex >= total - 4) {
-                    const nextMonth = allMonths.find(m => !loadedMonths.has(m));
-                    if (nextMonth) loadMonth(nextMonth);
-                }
-            });
-
-            // Backup update
-            pageFlip.on("update", () => {
-                const currentIndex = pageFlip.getCurrentPageIndex();
-                const activeMonth = monthMap.get(currentIndex);
-                if (activeMonth) updateRekap(activeMonth);
-            });
-
-            // Inisialisasi
-            if ('{{ $firstMonth }}') {
-                updateRekap('{{ $firstMonth }}');
+            // Ambil bulan dari mapping
+            const activeMonth = monthMap.get(currentIndex);
+            
+            if (activeMonth) {
+                
+                updateRekap(activeMonth);
             }
 
-            setTimeout(() => {
-                pageFlip.update();
-                buildMonthMap();
-            }, 800);
+            // Lazy load
+            const total = pageFlip.getPageCount();
+            if (currentIndex >= total - 4) {
+                const nextMonth = allMonths.find(m => !loadedMonths.has(m));
+                if (nextMonth) loadMonth(nextMonth);
+            }
         });
-    </script>
+
+        // Backup update
+        pageFlip.on("update", () => {
+            const currentIndex = pageFlip.getCurrentPageIndex();
+            const activeMonth = monthMap.get(currentIndex);
+            if (activeMonth) updateRekap(activeMonth);
+        });
+
+        // Inisialisasi
+        if ('{{ $firstMonth }}') {
+            updateRekap('{{ $firstMonth }}');
+        }
+
+        setTimeout(() => {
+            pageFlip.update();
+            buildMonthMap();
+        }, 800);
+    });
+</script>
 @endsection
