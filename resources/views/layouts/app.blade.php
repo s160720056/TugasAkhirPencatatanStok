@@ -27,6 +27,10 @@
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,600,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
     {{-- <script src="{{ asset('assets/js/loader.js') }}"></script> --}}
     <!-- Loader CSS (jika critical) -->
     {{-- <link href="{{ asset('assets/css/loader.css') }}" rel="stylesheet"> --}}

@@ -46,28 +46,25 @@ public function getDataTable(Request $request)
     ])
     ->where('STATUS_BARANG', '!=', '2');
 
-    // ================= FILTER TANGGAL =================
-    if ($request->filled('filter_tanggal')) {
-
-        $barang->whereDate(
-            'tanggal_input',
-            $request->filter_tanggal
-        );
+    // ================= FILTER RANGE TANGGAL =================
+    if ($request->filled('tanggal_awal') && $request->filled('tanggal_akhir')) {
+        $barang->whereBetween('tanggal_input', [
+            $request->tanggal_awal,
+            $request->tanggal_akhir
+        ]);
+    }
+    // Jika hanya tanggal_awal (fallback)
+    elseif ($request->filled('tanggal_awal')) {
+        $barang->whereDate('tanggal_input', '>=', $request->tanggal_awal);
     }
 
     return DataTables::of($barang)
         ->addIndexColumn()
-
-        ->editColumn('stok_awal', function ($row) {
-            return number_format($row->stok_awal ?? 0);
-        })
-
-        ->editColumn('tanggal_input', function ($row) {
-            return $row->tanggal_input
-                ? \Carbon\Carbon::parse($row->tanggal_input)->format('d/m/Y')
-                : '-';
-        })
-
+        ->editColumn('stok_awal', fn($row) => number_format($row->stok_awal ?? 0))
+        ->editColumn('harga_satuan', fn($row) => number_format($row->harga_satuan ?? 0))
+        ->editColumn('tanggal_input', fn($row) => $row->tanggal_input
+            ? \Carbon\Carbon::parse($row->tanggal_input)->format('d/m/Y')
+            : '-')
         ->make(true);
 }
 

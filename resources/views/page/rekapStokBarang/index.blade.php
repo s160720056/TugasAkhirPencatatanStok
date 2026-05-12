@@ -6,9 +6,7 @@
         Carbon::setLocale('id');
     @endphp
     <!-- Flatpickr CSS & JS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
+   
     <div class="container mt-4">
         <h3 class="text-center mb-4">Rekap Stok Harian</h3>
 
