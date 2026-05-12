@@ -100,12 +100,12 @@ if %errorlevel%==0 (
 
     php artisan optimize:clear
 
-    echo.
-    echo ============================================
-    echo OPTIMIZE LARAVEL...
-    echo ============================================
+    @REM echo.
+    @REM echo ============================================
+    @REM echo OPTIMIZE LARAVEL...
+    @REM echo ============================================
 
-    php artisan optimize
+    @REM php artisan optimize
 
 ) else (
 
@@ -124,7 +124,7 @@ echo ============================================
 :: ============================================
 :: AUTO MIGRATE
 :: ============================================
-php artisan migrate --force
+php artisan migrate 
 
 if %errorlevel%==0 (
     echo MIGRATION BERHASIL / TIDAK ADA YANG PERLU DIMIGRATE
