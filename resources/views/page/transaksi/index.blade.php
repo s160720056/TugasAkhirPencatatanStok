@@ -150,7 +150,7 @@
                         <select class="form-control select2" id="barang_new" style="width:100%">
                             @foreach ($barang as $item)
                                 <option value="{{ $item->id_barang }}" data-harga="{{ $item->harga_satuan }}">
-                                    {{ $item->kode_barang }} - {{ $item->nama_barang }}
+                                    {{ $item->kode_barang }} - {{ $item->nama_barang }} - {{ $item->seri }}
                                 </option>
                             @endforeach
                         </select>
@@ -291,7 +291,7 @@
                         data: 'masuk',
                         name: 'transaksi.jumlah_barang',
                         className: 'text-success fw-bold text-center'
-                    }, 
+                    },
                     {
                         data: 'harga_satuan',
                         name: 'transaksi.harga_satuan',
