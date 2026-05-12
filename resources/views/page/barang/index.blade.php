@@ -436,7 +436,7 @@ $(document).ready(function() {
                         // $('#kode_barang').prop('disabled', true);
                         // $('#seri').prop('disabled', true);
                         $('#stok_awal').prop('disabled', true);
-                        $('#harga_satuan').prop('disabled', true);
+                        // $('#harga_satuan').prop('disabled', true);
                         $('#status_barang').prop('disabled', true);
 
                         $('#editBarang').modal('show');

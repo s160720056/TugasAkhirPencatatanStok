@@ -168,7 +168,7 @@ public function getDataTable(Request $request)
                 'nama_barang'   => 'required|string|max:255',
                 'seri'          => 'nullable|string',
                 // 'stok_awal'     => 'nullable|integer|min:0',
-                // 'harga_satuan'  => 'nullable|integer|min:0',
+                'harga_satuan'  => 'nullable|integer|min:0',
                 // 'jumlah_satuan' => 'nullable|integer|min:0',
             ]);
             /*
@@ -191,7 +191,7 @@ public function getDataTable(Request $request)
                 // 'stok_awal'      => $request->stok_awal ?? $barang->stok_awal,
                 // 'tanggal_input'  => now()->toDateString(),
                 // 'STATUS_BARANG'  => $request->STATUS_BARANG ?? $barang->STATUS_BARANG,
-                // 'harga_satuan'   => $request->harga_satuan ?? $barang->harga_satuan,
+                'harga_satuan'   => $request->harga_satuan ?? $barang->harga_satuan,
                 // 'jumlah_satuan'  => $request->jumlah_satuan ?? $barang->jumlah_satuan,
             ]);
             /*
