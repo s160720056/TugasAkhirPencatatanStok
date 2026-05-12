@@ -22,7 +22,7 @@ class BukuStokController extends Controller
     {
         $cacheKey = 'buku_stok_index_' . $this->getLastUpdatedKey();
 
-        return Cache::remember($cacheKey, now()->addHours(12), function () {
+        return Cache::remember($cacheKey, now()->addMinutes(1), function () {
             $barangList = Barang::where('STATUS_BARANG', '!=', '2')
                 ->orderBy('nama_barang')
                 ->get();
@@ -38,7 +38,8 @@ class BukuStokController extends Controller
                 ->orderBy('transaksi.tanggal_transaksi', 'desc')
                 ->cursor();
 
-            $grouped = $transaksis->groupBy(fn($item) => 
+            $grouped = $transaksis->groupBy(
+                fn($item) =>
                 Carbon::parse($item->tanggal_transaksi)->format('Y-m')
             );
 
@@ -46,13 +47,13 @@ class BukuStokController extends Controller
             $futureAdjustments = $this->getFutureAdjustments($firstMonthKey);
 
             $barangSummary = $this->calculateBarangSummary(
-                $barangList, 
-                $grouped->get($firstMonthKey, collect()), 
+                $barangList,
+                $grouped->get($firstMonthKey, collect()),
                 $futureAdjustments
             );
 
             // Summary per bulan
-            $lastMonth = $transaksis->isNotEmpty() 
+            $lastMonth = $transaksis->isNotEmpty()
                 ? Carbon::parse($transaksis->last()->tanggal_transaksi)->startOfMonth()
                 : now()->startOfMonth();
 
@@ -73,10 +74,13 @@ class BukuStokController extends Controller
                     'netto'  => $masuk - $keluar,
                 ];
             }
-         
+
 
             return view('page.bukuStok.index', compact(
-                'months', 'summaries', 'barangList', 'barangSummary'
+                'months',
+                'summaries',
+                'barangList',
+                'barangSummary'
             ))->render(); // render agar bisa di-cache
         });
     }
@@ -86,7 +90,7 @@ class BukuStokController extends Controller
         $lastUpdated = $this->getLastUpdatedKey();
         $cacheKey = "buku_stok_flipbook_{$bulan}_{$lastUpdated}";
 
-        return Cache::remember($cacheKey, now()->addHours(12), function () use ($bulan) {
+        return Cache::remember($cacheKey, now()->addMinutes(1), function () use ($bulan) {
             $targetMonth = Carbon::createFromFormat('Y-m', $bulan);
             $start = $targetMonth->copy()->startOfMonth();
             $end   = $targetMonth->copy()->endOfMonth();
@@ -98,8 +102,8 @@ class BukuStokController extends Controller
                 ->get();
 
             $barangList = Barang::where('STATUS_BARANG', '!=', '2')
-                            ->orderBy('nama_barang')
-                            ->get();
+                ->orderBy('nama_barang')
+                ->get();
 
             $futureAdjustments = $this->getFutureAdjustments($bulan);
             $barangSummary = $this->calculateBarangSummary($barangList, $transaksis, $futureAdjustments);
@@ -114,7 +118,11 @@ class BukuStokController extends Controller
             ];
 
             return view('page.bukuStok.flipbook_month', compact(
-                'bulan', 'masukItems', 'keluarItems', 'summary', 'barangSummary'
+                'bulan',
+                'masukItems',
+                'keluarItems',
+                'summary',
+                'barangSummary'
             ))->render();
         });
     }
@@ -124,7 +132,7 @@ class BukuStokController extends Controller
         $lastUpdated = $this->getLastUpdatedKey();
         $cacheKey = "buku_stok_rekap_{$bulan}_{$lastUpdated}";
 
-        return Cache::remember($cacheKey, now()->addHours(6), function () use ($bulan) {
+        return Cache::remember($cacheKey, now()->addMinutes(1), function () use ($bulan) {
             $targetMonth = Carbon::createFromFormat('Y-m', $bulan);
             $start = $targetMonth->copy()->startOfMonth();
             $end   = $targetMonth->copy()->endOfMonth();
@@ -136,8 +144,8 @@ class BukuStokController extends Controller
                 ->get();
 
             $barangList = Barang::where('STATUS_BARANG', '!=', '2')
-                            ->orderBy('nama_barang')
-                            ->get();
+                ->orderBy('nama_barang')
+                ->get();
 
             $futureAdjustments = $this->getFutureAdjustments($bulan);
             $barangSummary = $this->calculateBarangSummary($barangList, $transaksis, $futureAdjustments);
@@ -186,5 +194,32 @@ class BukuStokController extends Controller
             ];
         }
         return $result;
+    }
+    public function clearAllCache()
+    {
+        $cleared = [];
+
+        // 1. Hapus last updated key (paling penting)
+        if (Cache::forget('transaksi_last_updated')) {
+            $cleared[] = 'transaksi_last_updated';
+        }
+
+        // 2. Clear semua cache buku stok (jika menggunakan Redis)
+        if (config('cache.default') === 'redis') {
+            $prefix = config('cache.prefix') ? config('cache.prefix') . ':' : '';
+            $keys = Cache::getRedis()->keys("{$prefix}buku_stok_*");
+
+            if (!empty($keys)) {
+                Cache::getRedis()->del($keys);
+                $cleared[] = count($keys) . ' buku_stok_* keys';
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cache berhasil dihapus',
+            'cleared' => $cleared,
+            'timestamp' => now()->format('Y-m-d H:i:s')
+        ]);
     }
 }
