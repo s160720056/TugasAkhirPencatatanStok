@@ -271,8 +271,7 @@
                 mode: "range",
                 locale: "id",
                 dateFormat: "Y-m-d",
-                defaultDate: [new Date().setDate(new Date().getDate() - 30),
-            new Date()], // nilai default tetap 30 hari terakhir
+                defaultDate:"",
                 separator: " to ",
                 onOpen: function(selectedDates, dateStr, instance) {
                     // Saat kalender terbuka, fokus ke hari ini

@@ -19,6 +19,7 @@ class BarangController extends Controller
         if (empty(config('database.connections.dynamic.database'))) {
             return redirect('/home');
         }
+        
         return view('page.barang.index');
     }
 
