@@ -962,7 +962,7 @@
             const lockElement = document.getElementById('lock-screen');
             lockElement.style.display = 'flex';
             lockElement.classList.add('locked');
-             document.getElementById('iconLock').textContent = 'lock';
+            document.getElementById('iconLock').textContent = 'lock';
             document.getElementById('content').style.display = 'none';
         }
 
@@ -999,7 +999,7 @@
 
             const resetTimer = () => {
                 clearTimeout(timeout);
-                 document.getElementById('iconLock').textContent = 'lock';
+                document.getElementById('iconLock').textContent = 'lock';
                 timeout = setTimeout(lockScreen, lockDuration);
             };
 
@@ -1035,7 +1035,7 @@
 
                             // jika ada fungsi lockScreen()
                             if (typeof lockScreen === 'function') {
-                                  unlockScreen();
+                                unlockScreen();
                             }
                         }, 1000); // 10000ms = 10 detik
 

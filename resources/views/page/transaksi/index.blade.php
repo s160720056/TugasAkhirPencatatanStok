@@ -76,149 +76,461 @@
         </div>
     </div>
 
-    {{-- Modal Edit --}}
-    <div class="modal fade" id="editTransaksi" tabindex="-1" role="dialog" aria-labelledby="editTransaksiLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editTransaksiLabel">Edit Transaksi</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="id_transaksi">
+{{-- ========================= --}}
+{{-- Modal Edit --}}
+{{-- ========================= --}}
+<div class="modal fade" id="editTransaksi" tabindex="-1"
+    aria-labelledby="editTransaksiLabel"
+    aria-hidden="true">
 
-                    <div class="form-group mb-4">
-                        <label for="tanggal_transaksi_edit">Tanggal Transaksi</label>
-                        <input type="date" class="form-control readonly-field" id="tanggal_transaksi_edit" readonly>
-                    </div>
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg">
 
-                    <div class="form-group mb-4">
-                        <label for="barang_edit">Barang</label>
-                        <select class="form-control select2" id="barang_edit" style="width:100%" disabled>
-                            @foreach ($barang as $item)
-                                <option value="{{ $item->id_barang }}">{{ $item->nama_barang }} - {{ $item->kode_barang }} -
-                                    {{ $item->seri }}</option>
-                            @endforeach
-                        </select>
-                        <input type="hidden" id="id_barang_hidden">
-                    </div>
+            {{-- Header --}}
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-semibold" id="editTransaksiLabel">
+                    Edit Transaksi
+                </h5>
 
-                    <div class="form-group mb-4">
-                        <label for="jumlah_barang_edit">Jumlah Barang</label>
-                        <input type="number" min="1" class="form-control readonly-field" id="jumlah_barang_edit"
-                            readonly>
-                    </div>
-
-                    <div class="form-group mb-4">
-                        <label for="tipe_transaksi_edit">Tipe Transaksi</label>
-                        <select class="form-control select2" id="tipe_transaksi_edit" style="width:100%" disabled>
-                            <option value="keluar">Keluar</option>
-                            <option value="masuk">Masuk</option>
-                        </select>
-                        <input type="hidden" id="tipe_transaksi_hidden">
-                    </div>
-
-                    <div class="form-group mb-4">
-                        <label for="harga_satuan_edit">Harga Satuan</label>
-                        <input type="number" min="0" class="form-control" id="harga_satuan_edit" readonly>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="jumlah_satuan_edit">Jumlah Satuan</label>
-                        <input type="number" min="1" class="form-control" id="jumlah_satuan_edit" readonly>
-                    </div>
-
-                    <div class="form-group mb-4">
-                        <label for="keterangan_transaksi_edit">Keterangan</label>
-                        <input type="text" class="form-control" id="keterangan_transaksi_edit">
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="diberikan_oleh_edit">Diberikan Oleh</label>
-                        <input type="text" class="form-control" id="diberikan_oleh_edit">
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="keperluan_transaksi_edit">Keperluan</label>
-                        <input type="text" class="form-control" id="keperluan_transaksi_edit">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" id="doneEdit" class="btn btn-primary">Simpan</button>
-                </div>
+                <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"></button>
             </div>
+
+            {{-- Body --}}
+            <div class="modal-body">
+
+                <input type="hidden" id="id_transaksi">
+
+                <div class="row g-4">
+
+                    {{-- ========================= --}}
+                    {{-- KOLOM KIRI --}}
+                    {{-- ========================= --}}
+                    <div class="col-lg-6">
+
+                        <div class="card border-0 bg-light h-100">
+                            <div class="card-body">
+
+                                <h6 class="fw-bold mb-4 text-primary">
+                                    Informasi Transaksi
+                                </h6>
+
+                                {{-- Tanggal --}}
+                                <div class="mb-3">
+                                    <label for="tanggal_transaksi_edit"
+                                        class="form-label fw-semibold">
+                                        Tanggal Transaksi
+                                    </label>
+
+                                    <input type="date"
+                                        class="form-control readonly-field"
+                                        id="tanggal_transaksi_edit"
+                                        readonly>
+                                </div>
+
+                                {{-- Barang --}}
+                                <div class="mb-3">
+                                    <label for="barang_edit"
+                                        class="form-label fw-semibold">
+                                        Barang
+                                    </label>
+
+                                    <select class="form-control select2"
+                                        id="barang_edit"
+                                        style="width:100%"
+                                        disabled>
+
+                                        @foreach ($barang as $item)
+                                            <option value="{{ $item->id_barang }}">
+                                                {{ $item->nama_barang }}
+                                                -
+                                                {{ $item->kode_barang }}
+                                                -
+                                                {{ $item->seri }}
+                                            </option>
+                                        @endforeach
+
+                                    </select>
+
+                                    <input type="hidden" id="id_barang_hidden">
+                                </div>
+
+                                {{-- Jumlah Barang --}}
+                                <div class="mb-3">
+                                    <label for="jumlah_barang_edit"
+                                        class="form-label fw-semibold">
+                                        Jumlah Barang
+                                    </label>
+
+                                    <input type="number"
+                                        min="1"
+                                        class="form-control readonly-field"
+                                        id="jumlah_barang_edit"
+                                        readonly>
+                                </div>
+
+                                {{-- Tipe --}}
+                                <div class="mb-0">
+                                    <label for="tipe_transaksi_edit"
+                                        class="form-label fw-semibold">
+                                        Tipe Transaksi
+                                    </label>
+
+                                    <select class="form-control select2"
+                                        id="tipe_transaksi_edit"
+                                        style="width:100%"
+                                        disabled>
+
+                                        <option value="keluar">Keluar</option>
+                                        <option value="masuk">Masuk</option>
+
+                                    </select>
+
+                                    <input type="hidden" id="tipe_transaksi_hidden">
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {{-- ========================= --}}
+                    {{-- KOLOM KANAN --}}
+                    {{-- ========================= --}}
+                    <div class="col-lg-6">
+
+                        <div class="card border-0 bg-light h-100">
+                            <div class="card-body">
+
+                                <h6 class="fw-bold mb-4 text-success">
+                                    Detail Tambahan
+                                </h6>
+
+                                <div class="row">
+
+                                    {{-- Harga --}}
+                                    <div class="col-md-6 mb-3">
+                                        <label for="harga_satuan_edit"
+                                            class="form-label fw-semibold">
+                                            Harga Satuan
+                                        </label>
+
+                                        <input type="number"
+                                            min="0"
+                                            class="form-control"
+                                            id="harga_satuan_edit"
+                                            readonly>
+                                    </div>
+
+                                    {{-- Jumlah Satuan --}}
+                                    <div class="col-md-6 mb-3">
+                                        <label for="jumlah_satuan_edit"
+                                            class="form-label fw-semibold">
+                                            Jumlah Satuan
+                                        </label>
+
+                                        <input type="number"
+                                            min="1"
+                                            class="form-control"
+                                            id="jumlah_satuan_edit"
+                                            readonly>
+                                    </div>
+
+                                </div>
+
+                                {{-- Keterangan --}}
+                                <div class="mb-3">
+                                    <label for="keterangan_transaksi_edit"
+                                        class="form-label fw-semibold">
+                                        Keterangan
+                                    </label>
+
+                                    <input type="text"
+                                        class="form-control"
+                                        id="keterangan_transaksi_edit">
+                                </div>
+
+                                {{-- Diberikan Oleh --}}
+                                <div class="mb-3">
+                                    <label for="diberikan_oleh_edit"
+                                        class="form-label fw-semibold">
+                                        Diberikan Oleh
+                                    </label>
+
+                                    <input type="text"
+                                        class="form-control"
+                                        id="diberikan_oleh_edit">
+                                </div>
+
+                                {{-- Keperluan --}}
+                                <div class="mb-0">
+                                    <label for="keperluan_transaksi_edit"
+                                        class="form-label fw-semibold">
+                                        Keperluan
+                                    </label>
+
+                                    <input type="text"
+                                        class="form-control"
+                                        id="keperluan_transaksi_edit">
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {{-- Footer --}}
+            <div class="modal-footer bg-light">
+
+                <button class="btn btn-outline-secondary"
+                    data-bs-dismiss="modal">
+                    Batal
+                </button>
+
+                <button type="button"
+                    id="doneEdit"
+                    class="btn btn-primary px-4">
+                    Simpan
+                </button>
+
+            </div>
+
         </div>
     </div>
 
-    {{-- Modal Tambah --}}
-    <div class="modal fade" id="addTransaksi" tabindex="-1" role="dialog" aria-labelledby="addTransaksiLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addTransaksiLabel">Tambah Transaksi</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group mb-4">
-                        <label for="tanggal_transaksi_new">Tanggal Transaksi</label>
-                        <input type="date" class="form-control" value="{{ date('Y-m-d') }}"
-                            id="tanggal_transaksi_new">
-                    </div>
+</div>
 
-                    <div class="form-group mb-4">
-                        <label for="barang_new">Barang</label>
-                        <select class="form-control select2" id="barang_new" style="width:100%">
-                            @foreach ($barang as $item)
-                                <option value="{{ $item->id_barang }}" data-harga="{{ $item->harga_satuan }}">
-                                    {{ $item->kode_barang }} - {{ $item->nama_barang }} - {{ $item->seri }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
 
-                    <div class="form-group mb-4">
-                        <label for="jumlah_barang_new">Jumlah Barang</label>
-                        <input type="number" min="1" class="form-control" id="jumlah_barang_new">
-                    </div>
 
-                    <div class="form-group mb-4">
-                        <label for="tipe_transaksi_new">Tipe Transaksi</label>
-                        <select class="form-control select2" id="tipe_transaksi_new" style="width:100%">
-                            <option value="keluar">Keluar</option>
-                            <option value="masuk">Masuk</option>
-                        </select>
-                    </div>
 
-                    <div class="form-group mb-4">
-                        <label for="harga_satuan_new">Harga Satuan</label>
-                        <input type="text" class="form-control readonly-field" id="harga_satuan_new" readonly>
-                    </div>
 
-                    <div class="form-group mb-4">
-                        <label for="jumlah_satuan_new">Jumlah Satuan</label>
-                        <input type="text" class="form-control readonly-field" id="jumlah_satuan_new" readonly>
-                    </div>
+{{-- ========================= --}}
+{{-- Modal Tambah --}}
+{{-- ========================= --}}
+<div class="modal fade" id="addTransaksi" tabindex="-1"
+    aria-labelledby="addTransaksiLabel"
+    aria-hidden="true">
 
-                    <div class="form-group mb-4">
-                        <label for="keterangan_transaksi_new">Keterangan</label>
-                        <input type="text" class="form-control" id="keterangan_transaksi_new">
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="diberikan_oleh_new">Diberikan Oleh</label>
-                        <input type="text" class="form-control" id="diberikan_oleh_new">
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="keperluan_transaksi_new">Keperluan</label>
-                        <input type="text" class="form-control" id="keperluan_transaksi_new">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" id="addTransaksiDone" class="btn btn-primary">Tambah</button>
-                </div>
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg">
+
+            {{-- Header --}}
+            <div class="modal-header bg-light">
+
+                <h5 class="modal-title fw-semibold" id="addTransaksiLabel">
+                    Tambah Transaksi
+                </h5>
+
+                <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"></button>
+
             </div>
+
+            {{-- Body --}}
+            <div class="modal-body">
+
+                <div class="row g-4">
+
+                    {{-- ========================= --}}
+                    {{-- KOLOM KIRI --}}
+                    {{-- ========================= --}}
+                    <div class="col-lg-6">
+
+                        <div class="card border-0 bg-light h-100">
+                            <div class="card-body">
+
+                                <h6 class="fw-bold mb-4 text-primary">
+                                    Informasi Transaksi
+                                </h6>
+
+                                {{-- Tanggal --}}
+                                <div class="mb-3">
+                                    <label for="tanggal_transaksi_new"
+                                        class="form-label fw-semibold">
+                                        Tanggal Transaksi
+                                    </label>
+
+                                    <input type="date"
+                                        class="form-control"
+                                        value="{{ date('Y-m-d') }}"
+                                        id="tanggal_transaksi_new">
+                                </div>
+
+                                {{-- Barang --}}
+                                <div class="mb-3">
+                                    <label for="barang_new"
+                                        class="form-label fw-semibold">
+                                        Barang
+                                    </label>
+
+                                    <select class="form-control select2"
+                                        id="barang_new"
+                                        style="width:100%">
+
+                                        @foreach ($barang as $item)
+                                            <option value="{{ $item->id_barang }}"
+                                                data-harga="{{ $item->harga_satuan }}">
+
+                                                {{ $item->kode_barang }}
+                                                -
+                                                {{ $item->nama_barang }}
+                                                -
+                                                {{ $item->seri }}
+
+                                            </option>
+                                        @endforeach
+
+                                    </select>
+                                </div>
+
+                                {{-- Jumlah Barang --}}
+                                <div class="mb-3">
+                                    <label for="jumlah_barang_new"
+                                        class="form-label fw-semibold">
+                                        Jumlah Barang
+                                    </label>
+
+                                    <input type="number"
+                                        min="1"
+                                        class="form-control"
+                                        id="jumlah_barang_new">
+                                </div>
+
+                                {{-- Tipe --}}
+                                <div class="mb-0">
+                                    <label for="tipe_transaksi_new"
+                                        class="form-label fw-semibold">
+                                        Tipe Transaksi
+                                    </label>
+
+                                    <select class="form-control select2"
+                                        id="tipe_transaksi_new"
+                                        style="width:100%">
+
+                                        <option value="keluar">Keluar</option>
+                                        <option value="masuk">Masuk</option>
+
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {{-- ========================= --}}
+                    {{-- KOLOM KANAN --}}
+                    {{-- ========================= --}}
+                    <div class="col-lg-6">
+
+                        <div class="card border-0 bg-light h-100">
+                            <div class="card-body">
+
+                                <h6 class="fw-bold mb-4 text-success">
+                                    Detail Tambahan
+                                </h6>
+
+                                <div class="row">
+
+                                    {{-- Harga --}}
+                                    <div class="col-md-6 mb-3">
+                                        <label for="harga_satuan_new"
+                                            class="form-label fw-semibold">
+                                            Harga Satuan
+                                        </label>
+
+                                        <input type="text"
+                                            class="form-control readonly-field"
+                                            id="harga_satuan_new"
+                                            readonly>
+                                    </div>
+
+                                    {{-- Jumlah Satuan --}}
+                                    <div class="col-md-6 mb-3">
+                                        <label for="jumlah_satuan_new"
+                                            class="form-label fw-semibold">
+                                            Jumlah Satuan
+                                        </label>
+
+                                        <input type="text"
+                                            class="form-control readonly-field"
+                                            id="jumlah_satuan_new"
+                                            readonly>
+                                    </div>
+
+                                </div>
+
+                                {{-- Keterangan --}}
+                                <div class="mb-3">
+                                    <label for="keterangan_transaksi_new"
+                                        class="form-label fw-semibold">
+                                        Keterangan
+                                    </label>
+
+                                    <input type="text"
+                                        class="form-control"
+                                        id="keterangan_transaksi_new">
+                                </div>
+
+                                {{-- Diberikan Oleh --}}
+                                <div class="mb-3">
+                                    <label for="diberikan_oleh_new"
+                                        class="form-label fw-semibold">
+                                        Diberikan Oleh
+                                    </label>
+
+                                    <input type="text"
+                                        class="form-control"
+                                        id="diberikan_oleh_new">
+                                </div>
+
+                                {{-- Keperluan --}}
+                                <div class="mb-0">
+                                    <label for="keperluan_transaksi_new"
+                                        class="form-label fw-semibold">
+                                        Keperluan
+                                    </label>
+
+                                    <input type="text"
+                                        class="form-control"
+                                        id="keperluan_transaksi_new">
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {{-- Footer --}}
+            <div class="modal-footer bg-light">
+
+                <button class="btn btn-outline-secondary"
+                    data-bs-dismiss="modal">
+                    Batal
+                </button>
+
+                <button type="button"
+                    id="addTransaksiDone"
+                    class="btn btn-primary px-4">
+                    Tambah
+                </button>
+
+            </div>
+
         </div>
     </div>
+
+</div>
     <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.10.5"></script>
     <script>
         $(document).ready(function() {
