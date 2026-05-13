@@ -46,125 +46,453 @@
         </div>
     </div>
 
-    {{-- Modal Edit User --}}
-    <div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="editUserLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editUserLabel">Edit User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group mb-4">
-                        <label for="id_user">ID User</label>
-                        <input type="text" class="form-control" id="id_user" readonly>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="nama_user">Nama User</label>
-                        <input type="text" class="form-control" id="nama_user" required>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" required>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Kosongkan jika tidak diubah">
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="alamat_user">Alamat</label>
-                        <textarea class="form-control" id="alamat_user" required></textarea>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="telepon">Telepon</label>
-                        <input type="text" class="form-control" id="telepon" required>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" required>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="hak_akses">Hak Akses</label>
-                        <select class="form-control" id="hak_akses" required>
-                            @foreach ($hakAkses as $i)
-                                <option value="{{ $i->id_hak_akses }}">{{ $i->nama_hak_akses }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="status_user">Status User</label>
-                        <select class="form-control" id="status_user" required>
-                            <option value="0">BARU</option>
-                            <option value="1">AKTIF</option>
-                            <option value="2">NON-AKTIF</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" id="doneEdit" class="btn btn-primary">Simpan</button>
-                </div>
-            </div>
-        </div>
-    </div>
+{{-- ==================== MODAL EDIT USER ==================== --}}
+<div class="modal fade"
+    id="editUser"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="editUserLabel"
+    aria-hidden="true">
 
-    {{-- Modal Tambah User --}}
-    <div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="addUserLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addUserLabel">Tambah User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group mb-4">
-                        <label for="nama_user_new">Nama User</label>
-                        <input type="text" class="form-control" id="nama_user_new" required>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="username_new">Username</label>
-                        <input type="text" class="form-control" id="username_new" required>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="password_new">Password</label>
-                        <input type="password" class="form-control" id="password_new" required>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="alamat_user_new">Alamat</label>
-                        <textarea class="form-control" id="alamat_user_new" required></textarea>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="telepon_new">Telepon</label>
-                        <input type="text" class="form-control" id="telepon_new" required>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="email_new">Email</label>
-                        <input type="email" class="form-control" id="email_new" required>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="hak_akses_new">Hak Akses</label>
-                        <select class="form-control" id="hak_akses_new" required>
-                            @foreach ($hakAkses as $hakAkses)
-                                <option value="{{ $hakAkses->id_hak_akses }}">{{ $hakAkses->nama_hak_akses }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="status_user_new">Status User</label>
-                        <select class="form-control" id="status_user_new" required>
-                            <option value="0">BARU</option>
-                            <option value="1">AKTIF</option>
-                            <option value="2">NON-AKTIF</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" id="doneAdd" class="btn btn-primary">Simpan</button>
-                </div>
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable"
+        role="document">
+
+        <div class="modal-content border-0 shadow-lg">
+
+            {{-- HEADER --}}
+            <div class="modal-header bg-light">
+
+                <h5 class="modal-title fw-semibold" id="editUserLabel">
+                    Edit User
+                </h5>
+
+                <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+
             </div>
+
+            {{-- BODY --}}
+            <div class="modal-body">
+
+                <div class="row g-4">
+
+                    {{-- ========================= --}}
+                    {{-- KOLOM KIRI --}}
+                    {{-- ========================= --}}
+                    <div class="col-lg-6">
+
+                        <div class="card border-0 bg-light h-100">
+                            <div class="card-body">
+
+                                <h6 class="fw-bold text-primary mb-4">
+                                    Informasi Akun
+                                </h6>
+
+                                {{-- ID USER --}}
+                                <div class="mb-3">
+                                    <label for="id_user"
+                                        class="form-label fw-semibold">
+                                        ID User
+                                    </label>
+
+                                    <input type="text"
+                                        class="form-control"
+                                        id="id_user"
+                                        readonly>
+                                </div>
+
+                                {{-- NAMA --}}
+                                <div class="mb-3">
+                                    <label for="nama_user"
+                                        class="form-label fw-semibold">
+                                        Nama User
+                                    </label>
+
+                                    <input type="text"
+                                        class="form-control"
+                                        id="nama_user"
+                                        required>
+                                </div>
+
+                                {{-- USERNAME --}}
+                                <div class="mb-3">
+                                    <label for="username"
+                                        class="form-label fw-semibold">
+                                        Username
+                                    </label>
+
+                                    <input type="text"
+                                        class="form-control"
+                                        id="username"
+                                        required>
+                                </div>
+
+                                {{-- PASSWORD --}}
+                                <div class="mb-0">
+                                    <label for="password"
+                                        class="form-label fw-semibold">
+                                        Password
+                                    </label>
+
+                                    <input type="password"
+                                        class="form-control"
+                                        id="password"
+                                        placeholder="Kosongkan jika tidak diubah">
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {{-- ========================= --}}
+                    {{-- KOLOM KANAN --}}
+                    {{-- ========================= --}}
+                    <div class="col-lg-6">
+
+                        <div class="card border-0 bg-light h-100">
+                            <div class="card-body">
+
+                                <h6 class="fw-bold text-success mb-4">
+                                    Informasi Tambahan
+                                </h6>
+
+                                {{-- ALAMAT --}}
+                                <div class="mb-3">
+                                    <label for="alamat_user"
+                                        class="form-label fw-semibold">
+                                        Alamat
+                                    </label>
+
+                                    <textarea class="form-control"
+                                        id="alamat_user"
+                                        rows="3"
+                                        required></textarea>
+                                </div>
+
+                                {{-- TELEPON --}}
+                                <div class="mb-3">
+                                    <label for="telepon"
+                                        class="form-label fw-semibold">
+                                        Telepon
+                                    </label>
+
+                                    <input type="text"
+                                        class="form-control"
+                                        id="telepon"
+                                        required>
+                                </div>
+
+                                {{-- EMAIL --}}
+                                <div class="mb-3">
+                                    <label for="email"
+                                        class="form-label fw-semibold">
+                                        Email
+                                    </label>
+
+                                    <input type="email"
+                                        class="form-control"
+                                        id="email"
+                                        required>
+                                </div>
+
+                                <div class="row">
+
+                                    {{-- HAK AKSES --}}
+                                    <div class="col-md-6 mb-3">
+                                        <label for="hak_akses"
+                                            class="form-label fw-semibold">
+                                            Hak Akses
+                                        </label>
+
+                                        <select class="form-control"
+                                            id="hak_akses"
+                                            required>
+
+                                            @foreach ($hakAkses as $i)
+                                                <option value="{{ $i->id_hak_akses }}">
+                                                    {{ $i->nama_hak_akses }}
+                                                </option>
+                                            @endforeach
+
+                                        </select>
+                                    </div>
+
+                                    {{-- STATUS --}}
+                                    <div class="col-md-6 mb-3">
+                                        <label for="status_user"
+                                            class="form-label fw-semibold">
+                                            Status User
+                                        </label>
+
+                                        <select class="form-control"
+                                            id="status_user"
+                                            required>
+
+                                            <option value="0">BARU</option>
+                                            <option value="1">AKTIF</option>
+                                            <option value="2">NON-AKTIF</option>
+
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                <div class="alert alert-light border small mb-0">
+                                    Password hanya diubah jika field password diisi.
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {{-- FOOTER --}}
+            <div class="modal-footer bg-light">
+
+                <button type="button"
+                    class="btn btn-outline-secondary"
+                    data-bs-dismiss="modal">
+                    Batal
+                </button>
+
+                <button type="button"
+                    id="doneEdit"
+                    class="btn btn-primary px-4">
+                    Simpan
+                </button>
+
+            </div>
+
         </div>
     </div>
+</div>
+
+
+
+
+
+
+{{-- ==================== MODAL TAMBAH USER ==================== --}}
+<div class="modal fade"
+    id="addUser"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="addUserLabel"
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable"
+        role="document">
+
+        <div class="modal-content border-0 shadow-lg">
+
+            {{-- HEADER --}}
+            <div class="modal-header bg-light">
+
+                <h5 class="modal-title fw-semibold" id="addUserLabel">
+                    Tambah User
+                </h5>
+
+                <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+
+            </div>
+
+            {{-- BODY --}}
+            <div class="modal-body">
+
+                <div class="row g-4">
+
+                    {{-- ========================= --}}
+                    {{-- KOLOM KIRI --}}
+                    {{-- ========================= --}}
+                    <div class="col-lg-6">
+
+                        <div class="card border-0 bg-light h-100">
+                            <div class="card-body">
+
+                                <h6 class="fw-bold text-primary mb-4">
+                                    Informasi Akun
+                                </h6>
+
+                                {{-- NAMA --}}
+                                <div class="mb-3">
+                                    <label for="nama_user_new"
+                                        class="form-label fw-semibold">
+                                        Nama User
+                                    </label>
+
+                                    <input type="text"
+                                        class="form-control"
+                                        id="nama_user_new"
+                                        required>
+                                </div>
+
+                                {{-- USERNAME --}}
+                                <div class="mb-3">
+                                    <label for="username_new"
+                                        class="form-label fw-semibold">
+                                        Username
+                                    </label>
+
+                                    <input type="text"
+                                        class="form-control"
+                                        id="username_new"
+                                        required>
+                                </div>
+
+                                {{-- PASSWORD --}}
+                                <div class="mb-0">
+                                    <label for="password_new"
+                                        class="form-label fw-semibold">
+                                        Password
+                                    </label>
+
+                                    <input type="password"
+                                        class="form-control"
+                                        id="password_new"
+                                        required>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {{-- ========================= --}}
+                    {{-- KOLOM KANAN --}}
+                    {{-- ========================= --}}
+                    <div class="col-lg-6">
+
+                        <div class="card border-0 bg-light h-100">
+                            <div class="card-body">
+
+                                <h6 class="fw-bold text-success mb-4">
+                                    Informasi Tambahan
+                                </h6>
+
+                                {{-- ALAMAT --}}
+                                <div class="mb-3">
+                                    <label for="alamat_user_new"
+                                        class="form-label fw-semibold">
+                                        Alamat
+                                    </label>
+
+                                    <textarea class="form-control"
+                                        id="alamat_user_new"
+                                        rows="3"
+                                        required></textarea>
+                                </div>
+
+                                {{-- TELEPON --}}
+                                <div class="mb-3">
+                                    <label for="telepon_new"
+                                        class="form-label fw-semibold">
+                                        Telepon
+                                    </label>
+
+                                    <input type="text"
+                                        class="form-control"
+                                        id="telepon_new"
+                                        required>
+                                </div>
+
+                                {{-- EMAIL --}}
+                                <div class="mb-3">
+                                    <label for="email_new"
+                                        class="form-label fw-semibold">
+                                        Email
+                                    </label>
+
+                                    <input type="email"
+                                        class="form-control"
+                                        id="email_new"
+                                        required>
+                                </div>
+
+                                <div class="row">
+
+                                    {{-- HAK AKSES --}}
+                                    <div class="col-md-6 mb-3">
+                                        <label for="hak_akses_new"
+                                            class="form-label fw-semibold">
+                                            Hak Akses
+                                        </label>
+
+                                        <select class="form-control"
+                                            id="hak_akses_new"
+                                            required>
+
+                                            @foreach ($hakAkses as $hakAkses)
+                                                <option value="{{ $hakAkses->id_hak_akses }}">
+                                                    {{ $hakAkses->nama_hak_akses }}
+                                                </option>
+                                            @endforeach
+
+                                        </select>
+                                    </div>
+
+                                    {{-- STATUS --}}
+                                    <div class="col-md-6 mb-3">
+                                        <label for="status_user_new"
+                                            class="form-label fw-semibold">
+                                            Status User
+                                        </label>
+
+                                        <select class="form-control"
+                                            id="status_user_new"
+                                            required>
+
+                                            <option value="0">BARU</option>
+                                            <option value="1">AKTIF</option>
+                                            <option value="2">NON-AKTIF</option>
+
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                <div class="alert alert-light border small mb-0">
+                                    Gunakan password yang kuat untuk keamanan akun.
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {{-- FOOTER --}}
+            <div class="modal-footer bg-light">
+
+                <button type="button"
+                    class="btn btn-outline-secondary"
+                    data-bs-dismiss="modal">
+                    Batal
+                </button>
+
+                <button type="button"
+                    id="doneAdd"
+                    class="btn btn-primary px-4">
+                    Simpan
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 
     {{-- Modal Setup 2FA --}}
     <div class="modal fade" id="setup2FAModal" tabindex="-1" role="dialog" aria-labelledby="setup2FALabel"

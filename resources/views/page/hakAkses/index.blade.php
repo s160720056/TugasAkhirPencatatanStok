@@ -49,39 +49,125 @@
         </div>
     </div>
     <!-- Modal Add Hak Akses -->
-    <div class="modal fade" id="detailHakAkses" tabindex="-1" role="dialog" aria-labelledby="addHakAkses"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Ubah Hak Akses</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+<div class="modal fade"
+    id="detailHakAkses"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="addHakAkses"
+    aria-hidden="true">
 
-                    </button>
-                </div>
-                <div class="modal-body mt-3">
-                    <input type="hidden" id="id_hak_akses_detail">
-                    <div class="row">
-                        @foreach ($hakAksesMenu as $item)
-                            <div class="col-md-6 mb-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="{{ $item->id_menu }}"
-                                        id="menu_{{ $item->id_menu }}">
-                                    <label class="form-check-label" for="menu_{{ $item->id_menu }}">
-                                        {{ $item->nama_menu }}
-                                    </label>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="submitAddHakAkses">Simpan</button>
-                </div>
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable"
+        role="document">
+
+        <div class="modal-content border-0 shadow-lg">
+
+            {{-- HEADER --}}
+            <div class="modal-header bg-light">
+
+                <h5 class="modal-title fw-semibold">
+                    Ubah Hak Akses
+                </h5>
+
+                <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close">
+                </button>
+
             </div>
+
+            {{-- BODY --}}
+            <div class="modal-body">
+
+                <input type="hidden"
+                    id="id_hak_akses_detail">
+
+                <div class="card border-0 bg-light">
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+
+                            <div>
+                                <h6 class="fw-bold text-primary mb-1">
+                                    Pengaturan Hak Akses
+                                </h6>
+
+                                <small class="text-muted">
+                                    Pilih menu yang dapat diakses oleh user.
+                                </small>
+                            </div>
+
+                        </div>
+
+                        {{-- LIST MENU --}}
+                        <div class="row g-3">
+
+                            @foreach ($hakAksesMenu as $item)
+
+                                <div class="col-md-4 col-sm-6">
+
+                                    <div class="border rounded p-3 bg-white h-100">
+
+                                        <div class="form-check m-0">
+
+                                            <input class="form-check-input"
+                                                type="checkbox"
+                                                value="{{ $item->id_menu }}"
+                                                id="menu_{{ $item->id_menu }}">
+
+                                            <label class="form-check-label fw-semibold"
+                                                for="menu_{{ $item->id_menu }}">
+
+                                                {{ $item->nama_menu }}
+
+                                            </label>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            @endforeach
+
+                        </div>
+
+                        {{-- INFO --}}
+                        <div class="alert alert-light border small mt-4 mb-0">
+
+                            Hak akses menentukan menu yang dapat dilihat dan digunakan oleh user.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {{-- FOOTER --}}
+            <div class="modal-footer bg-light">
+
+                <button type="button"
+                    class="btn btn-outline-secondary"
+                    data-bs-dismiss="modal">
+                    Batal
+                </button>
+
+                <button type="button"
+                    class="btn btn-primary px-4"
+                    id="submitAddHakAkses">
+                    Simpan
+                </button>
+
+            </div>
+
         </div>
+
     </div>
 
+</div>
 
 
     <script>
