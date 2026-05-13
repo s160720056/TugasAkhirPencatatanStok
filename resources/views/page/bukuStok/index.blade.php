@@ -10,14 +10,14 @@
 
     <style>
         .highlight-mutasi {
-    background-color: #fff3cd !important;
-}
+            background-color: #fff3cd !important;
+        }
 
-.highlight-mutasi td {
-    font-weight: 700;
-    color: #000 !important;
-}
-        
+        .highlight-mutasi td {
+            font-weight: 700;
+            color: #000 !important;
+        }
+
         .container {
             margin: 20px auto;
         }
@@ -215,17 +215,18 @@
             box-sizing: border-box;
             font-family: Arial, Helvetica, sans-serif;
         }
+
         .rekap-container {
             margin-top: 40px;
             background: #fff;
             padding: 20px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
     </style>
 
-<div class="container">
+    <div class="container">
         <div>
             <button type="button" class="btn-prev">Previous page</button>
             [<span class="page-current">Cover</span> of <span class="page-total">-</span>]
@@ -243,78 +244,149 @@
 
         <!-- Daftar Barang -->
         <!-- ... (Halaman 1 & 2 Daftar Barang tetap sama) ... -->
- <div class="page">
-            <h3 style="text-align:center">Daftar Barang</h3>
-            <p style="text-align:center; margin-bottom: 10px; font-size: 14px;">Halaman 1</p>
-            
-            <table>
-                <tr>
-                    <th>No</th>
-                    <th>Kode</th>
-                    <th>Nama Barang</th>
-                    <th>Seri</th>
-                    <th>Stok Awal</th>
-                </tr>
-                @php
-                    $perPage = 25; // Sesuaikan jumlah baris per halaman
-                    $firstChunk = $barangList->take($perPage);
-                @endphp
-                @foreach ($firstChunk as $index => $b)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $b->kode_barang }}</td>
-                        <td>{{ $b->nama_barang }}</td>
-                        <td>{{ $b->seri ?? '-' }}</td>
-                        <td>{{ $b->stok_awal }}</td>
-                    </tr>
-                @endforeach
-            </table>
-        </div>
+        @php
+            $perPage = 150;
+            $i = 1;
+            $page1 = $barangList->slice(0, $perPage);
+            $page2 = $barangList->slice($perPage, $perPage);
+            $page3 = $barangList->slice($perPage * 2, $perPage);
+            $page4 = $barangList->slice($perPage * 3, $perPage);
+        @endphp
 
-        <!-- Halaman 2 Daftar Barang (selalu ditampilkan) -->
-        <div class="page">
-            <h3 style="text-align:center">Daftar Barang</h3>
-            <p style="text-align:center; margin-bottom: 10px; font-size: 14px;">Halaman 2</p>
-            
-            <table>
-                <tr>
-                    <th>No</th>
-                    <th>Kode</th>
-                    <th>Nama Barang</th>
-                    <th>Seri</th>
-                    <th>Stok Awal</th>
-                </tr>
-                @php
-                    $secondChunk = $barangList->slice($perPage);
-                @endphp
-                @if ($secondChunk->isEmpty())
+
+        <!-- Halaman 1 Daftar Barang (selalu ditampilkan) -->
+        @if ($page1->isNotEmpty())
+            <div class="page">
+                <h3 style="text-align:center">Daftar Barang</h3>
+                <p style="text-align:center; margin-bottom: 10px; font-size: 14px;">
+                    Halaman 1
+                </p>
+
+                <table>
                     <tr>
-                        <td colspan="5" style="text-align:center; padding: 80px 20px; color: #888;">
-                            <em>Lanjutan Daftar Barang<br>(Tidak ada data tambahan)</em>
-                        </td>
+                        <th>No</th>
+                        <th>Kode</th>
+                        <th>Nama Barang</th>
+                        <th>Seri</th>
+                        <th>Stok Awal</th>
                     </tr>
-                @else
-                    @foreach ($secondChunk as $index => $b)
+
+                    @foreach ($page1 as $b)
                         <tr>
-                            <td>{{ $perPage + $index + 1 }}</td>
+                            <td>{{ $i++ }}</td>
                             <td>{{ $b->kode_barang }}</td>
                             <td>{{ $b->nama_barang }}</td>
                             <td>{{ $b->seri ?? '-' }}</td>
                             <td>{{ $b->stok_awal }}</td>
                         </tr>
                     @endforeach
-                @endif
-            </table>
-        </div>
-        @if ($months->isNotEmpty()) 
+                </table>
+            </div>
+            <div class="page">
+                <h3 style="text-align:center">Daftar Barang</h3>
+
+                <p style="text-align:center; margin-bottom: 10px; font-size: 14px;">
+                    Halaman 2
+                </p>
+
+                <table>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode</th>
+                        <th>Nama Barang</th>
+                        <th>Seri</th>
+                        <th>Stok Awal</th>
+                    </tr>
+
+                    @forelse ($page2 as $b)
+                        <tr>
+                            <td>{{ $i++ }}</td>
+                            <td>{{ $b->kode_barang }}</td>
+                            <td>{{ $b->nama_barang }}</td>
+                            <td>{{ $b->seri ?? '-' }}</td>
+                            <td>{{ $b->stok_awal }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" style="text-align:center; padding:80px 20px; color:#999;">
+                                Halaman Kosong
+                            </td>
+                        </tr>
+                    @endforelse
+                </table>
+            </div>
+        @endif
+        @if ($page3->isNotEmpty())
+            <div class="page">
+                <h3 style="text-align:center">Daftar Barang</h3>
+
+                <p style="text-align:center; margin-bottom: 10px; font-size: 14px;">
+                    Halaman 3
+                </p>
+
+                <table>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode</th>
+                        <th>Nama Barang</th>
+                        <th>Seri</th>
+                        <th>Stok Awal</th>
+                    </tr>
+
+                    @foreach ($page3 as $b)
+                        <tr>
+                            <td>{{ $i++ }}</td>
+                            <td>{{ $b->kode_barang }}</td>
+                            <td>{{ $b->nama_barang }}</td>
+                            <td>{{ $b->seri ?? '-' }}</td>
+                            <td>{{ $b->stok_awal }}</td>
+                        </tr>
+                    @endforeach
+                </table>
+            </div>
+            <div class="page">
+                <h3 style="text-align:center">Daftar Barang</h3>
+
+                <p style="text-align:center; margin-bottom: 10px; font-size: 14px;">
+                    Halaman 4
+                </p>
+
+                <table>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode</th>
+                        <th>Nama Barang</th>
+                        <th>Seri</th>
+                        <th>Stok Awal</th>
+                    </tr>
+
+                    @forelse ($page4 as $b)
+                        <tr>
+                            <td>{{ $i++ }}</td>
+                            <td>{{ $b->kode_barang }}</td>
+                            <td>{{ $b->nama_barang }}</td>
+                            <td>{{ $b->seri ?? '-' }}</td>
+                            <td>{{ $b->stok_awal }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" style="text-align:center; padding:80px 20px; color:#999;">
+                                Halaman Kosong
+                            </td>
+                        </tr>
+                    @endforelse
+                </table>
+            </div>
+        @endif
+        @if ($months->isNotEmpty())
             @php $firstMonth = $months->keys()->first(); @endphp
 
             @include('page.bukuStok.flipbook_month', [
-                'bulan'         => $firstMonth,
-                'masukItems'    => $months[$firstMonth]->where('tipe_transaksi', 'masuk'),
-                'keluarItems'   => $months[$firstMonth]->where( 'tipe_transaksi', 'keluar'),
-                'summary'       => $summaries->get($firstMonth) ?? [],
-                'barangSummary' => []   // tidak perlu dikirim lagi
+                'bulan' => $firstMonth,
+                'masukItems' => $months[$firstMonth]->where('tipe_transaksi', 'masuk'),
+                'keluarItems' => $months[$firstMonth]->where('tipe_transaksi', 'keluar'),
+                'summary' => $summaries->get($firstMonth) ?? [],
+                'barangSummary' => [], // tidak perlu dikirim lagi
             ])
         @endif
     </div>
@@ -324,7 +396,7 @@
         <h5 class="text-center mb-2" id="rekap-title">
             Rekap Stok - {{ Carbon::parse($firstMonth ?? now()->format('Y-m'))->translatedFormat('F Y') }}
         </h5>
-        
+
         <div class="table-responsive">
             <table class="table table-sm table-bordered table-striped" style="font-size: 12px;">
                 <thead class="table-light">
@@ -344,106 +416,110 @@
             </table>
         </div>
     </div>
-<script src="{{ asset('js/page-flip.browser.js') }}"></script>
+    <script src="{{ asset('js/page-flip.browser.js') }}"></script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const book = document.getElementById("book");
-       const pageFlip = new St.PageFlip(book, {
-            width: 700,
-            height: 5000,
-            showCover: true,
-            maxShadowOpacity: 0,        // Matikan efek bayangan / kertas
-            drawShadow: false,          // Matikan shadow sepenuhnya
-            flippingTime: 600,
-            usePortrait: false,
-            mobileScrollSupport: false,
-            startZIndex: 0,
-            //  useMouseEvents: false,
-            showPageCorners: false,
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const book = document.getElementById("book");
+            const pageFlip = new St.PageFlip(book, {
+                width: 700,
+                height: 5000,
+                showCover: true,
+                maxShadowOpacity: 0, // Matikan efek bayangan / kertas
+                drawShadow: false, // Matikan shadow sepenuhnya
+                flippingTime: 600,
+                usePortrait: false,
+                mobileScrollSupport: false,
+                startZIndex: 0,
+                //  useMouseEvents: false,
+                showPageCorners: false,
 
-                        // --- ADD THESE SETTINGS ---
-            showCornerHover: false,      // Disables the corner animation on hover
-            disableFlipByClick: true,    // Disables flipping by clicking the page
-            swipeDistance: 0,            // Effectively disables mouse dragging/swiping
-            clickEventForward: true,     // Allows clicks to pass through to buttons/tables
-            // --------------------------
-        });
-
-        const allMonths = @json($months->keys()->toArray());
-        const loadedMonths = new Set(['{{ $firstMonth ?? '' }}']);
-        let currentMonth = '{{ $firstMonth }}';
-
-        let monthMap = new Map();
-
-        // Load halaman awal
-        pageFlip.loadFromHTML(document.querySelectorAll(".page"));
-
-        // Build Mapping dengan offset yang benar
-        function buildMonthMap() {
-            monthMap.clear();
-            const monthPages = document.querySelectorAll('.page[data-month]');
-            
-            monthPages.forEach((page, arrayIndex) => {
-                const month = page.getAttribute('data-month');
-                // Halaman transaksi mulai dari index ke-3 di array (karena ada Cover + 2 Daftar Barang)
-                const pageIndex = arrayIndex + 3;   // Offset penting!
-                if (month) monthMap.set(pageIndex, month);
+                // --- ADD THESE SETTINGS ---
+                showCornerHover: false, // Disables the corner animation on hover
+                disableFlipByClick: true, // Disables flipping by clicking the page
+                swipeDistance: 0, // Effectively disables mouse dragging/swiping
+                clickEventForward: true, // Allows clicks to pass through to buttons/tables
+                // --------------------------
             });
-        }
 
-        buildMonthMap();
+            const allMonths = @json($months->keys()->toArray());
+            const loadedMonths = new Set(['{{ $firstMonth ?? '' }}']);
+            let currentMonth = '{{ $firstMonth }}';
 
-        const totalPagesEl = document.querySelector(".page-total");
-        const currentSpan = document.querySelector(".page-current");
+            let monthMap = new Map();
 
-        totalPagesEl.innerText = Math.max(0, pageFlip.getPageCount() - 1);
-        currentSpan.innerText = 'Cover';
+            // Load halaman awal
+            pageFlip.loadFromHTML(document.querySelectorAll(".page"));
 
-        // Tombol Prev & Next
-        document.querySelector(".btn-prev").addEventListener("click", () => pageFlip.flipPrev());
-        document.querySelector(".btn-next").addEventListener("click", () => pageFlip.flipNext());
+            // Build Mapping dengan offset yang benar
+            function buildMonthMap() {
+                monthMap.clear();
 
-        // Lazy Load
-        const loadMonth = async (month) => {
-            if (loadedMonths.has(month)) return;
+                const allPages = document.querySelectorAll('.page');
 
-            try {
-                const response = await fetch(`/bukuStok/month/${month}`);
-                const html = await response.text();
+                allPages.forEach((page, index) => {
+                    const month = page.getAttribute('data-month');
 
-                book.insertAdjacentHTML('beforeend', html);
-                pageFlip.updateFromHtml(document.querySelectorAll(".page"));
+                    if (month) {
+                        monthMap.set(index, month);
+                    }
+                });
 
-                loadedMonths.add(month);
-                totalPagesEl.innerText = Math.max(0, pageFlip.getPageCount() - 1);
-
-                setTimeout(buildMonthMap, 400);
-            } catch (error) {
-                console.error('Gagal load bulan:', month, error);
+                console.log('monthMap', [...monthMap.entries()]);
             }
-        };
 
-        // Update Rekap
-        const updateRekap = (month) => {
-            // if (month === currentMonth) return;
-            currentMonth = month;
+            buildMonthMap();
 
-            document.getElementById('rekap-title').textContent = 
-                `Rekap Stok - ${new Date(month + '-01').toLocaleString('id-ID', { month: 'long', year: 'numeric' })}`;
+            const totalPagesEl = document.querySelector(".page-total");
+            const currentSpan = document.querySelector(".page-current");
 
-            fetch(`/bukuStok/rekap/${month}`)
-                .then(r => r.json())
-                .then(data => {
-                    let html = '';
- 
-data.forEach(b => {
+            totalPagesEl.innerText = Math.max(0, pageFlip.getPageCount() - 1);
+            currentSpan.innerText = 'Cover';
 
-    const highlight = (Number(b.masuk) > 0 || Number(b.keluar) > 0)
-        ? 'highlight-mutasi fw-bold table-warning'
-        : 'fw-bold';
+            // Tombol Prev & Next
+            document.querySelector(".btn-prev").addEventListener("click", () => pageFlip.flipPrev());
+            document.querySelector(".btn-next").addEventListener("click", () => pageFlip.flipNext());
 
-    html += `
+            // Lazy Load
+            const loadMonth = async (month) => {
+                if (loadedMonths.has(month)) return;
+
+                try {
+                    const response = await fetch(`/bukuStok/month/${month}`);
+                    const html = await response.text();
+
+                    book.insertAdjacentHTML('beforeend', html);
+                    pageFlip.updateFromHtml(document.querySelectorAll(".page"));
+
+                    loadedMonths.add(month);
+                    totalPagesEl.innerText = Math.max(0, pageFlip.getPageCount() - 1);
+
+                    setTimeout(buildMonthMap, 400);
+                } catch (error) {
+                    console.error('Gagal load bulan:', month, error);
+                }
+            };
+
+            // Update Rekap
+            const updateRekap = (month) => {
+                // if (month === currentMonth) return;
+                currentMonth = month;
+
+                document.getElementById('rekap-title').textContent =
+                    `Rekap Stok - ${new Date(month + '-01').toLocaleString('id-ID', { month: 'long', year: 'numeric' })}`;
+
+                fetch(`/bukuStok/rekap/${month}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        let html = '';
+
+                        data.forEach(b => {
+
+                            const highlight = (Number(b.masuk) > 0 || Number(b.keluar) > 0) ?
+                                'highlight-mutasi fw-bold table-warning' :
+                                'fw-bold';
+
+                            html += `
         <tr class="${highlight}">
             <td>${b.kode_barang}</td>
             <td>${b.nama_barang}</td>
@@ -465,48 +541,48 @@ data.forEach(b => {
                 ${Number(b.stok_akhir).toLocaleString('id-ID')}
             </td>
         </tr>`;
-});
-                    document.getElementById('rekap-body').innerHTML = html;
-                });
-        };
+                        });
+                        document.getElementById('rekap-body').innerHTML = html;
+                    });
+            };
 
-        // Event Flip
-        pageFlip.on("flip", (e) => {
-            const currentIndex = e.data;
-            currentSpan.innerText = currentIndex === 0 ? 'Cover' : currentIndex + 1;
+            // Event Flip
+            pageFlip.on("flip", (e) => {
+                const currentIndex = e.data;
+                currentSpan.innerText = currentIndex === 0 ? 'Cover' : currentIndex + 1;
 
-            // Ambil bulan dari mapping
-            const activeMonth = monthMap.get(currentIndex);
-            
-            if (activeMonth) {
-                
-                updateRekap(activeMonth);
+                // Ambil bulan dari mapping
+                const activeMonth = monthMap.get(currentIndex);
+
+                if (activeMonth) {
+
+                    updateRekap(activeMonth);
+                }
+
+                // Lazy load
+                const total = pageFlip.getPageCount();
+                if (currentIndex >= total - 4) {
+                    const nextMonth = allMonths.find(m => !loadedMonths.has(m));
+                    if (nextMonth) loadMonth(nextMonth);
+                }
+            });
+
+            // Backup update
+            pageFlip.on("update", () => {
+                const currentIndex = pageFlip.getCurrentPageIndex();
+                const activeMonth = monthMap.get(currentIndex);
+                if (activeMonth) updateRekap(activeMonth);
+            });
+
+            // Inisialisasi
+            if ('{{ $firstMonth }}') {
+                updateRekap('{{ $firstMonth }}');
             }
 
-            // Lazy load
-            const total = pageFlip.getPageCount();
-            if (currentIndex >= total - 4) {
-                const nextMonth = allMonths.find(m => !loadedMonths.has(m));
-                if (nextMonth) loadMonth(nextMonth);
-            }
+            setTimeout(() => {
+                pageFlip.update();
+                buildMonthMap();
+            }, 800);
         });
-
-        // Backup update
-        pageFlip.on("update", () => {
-            const currentIndex = pageFlip.getCurrentPageIndex();
-            const activeMonth = monthMap.get(currentIndex);
-            if (activeMonth) updateRekap(activeMonth);
-        });
-
-        // Inisialisasi
-        if ('{{ $firstMonth }}') {
-            updateRekap('{{ $firstMonth }}');
-        }
-
-        setTimeout(() => {
-            pageFlip.update();
-            buildMonthMap();
-        }, 800);
-    });
-</script>
+    </script>
 @endsection

@@ -46,10 +46,20 @@ class TransaksiController extends Controller
             ])
             ->orderByDesc('transaksi.id_transaksi');
 
+        // ==================== FILTER RANGE TANGGAL ====================
+        if ($request->filled('tanggal_awal') && $request->filled('tanggal_akhir')) {
+            $transaksi->whereBetween('transaksi.tanggal_transaksi', [
+                $request->tanggal_awal,
+                $request->tanggal_akhir
+            ]);
+        } elseif ($request->filled('tanggal_awal')) {
+            $transaksi->whereDate('transaksi.tanggal_transaksi', '>=', $request->tanggal_awal);
+        }
+
         return DataTables::of($transaksi)
 
             ->addIndexColumn()
- 
+
             ->addColumn('barang', function ($row) {
                 return $row->nama_barang . ' - ' . $row->kode_barang . ' - ' . ($row->seri ?? '-');
             })
@@ -120,7 +130,7 @@ class TransaksiController extends Controller
 
     public function store(Request $request)
     {
-        
+
         DB::beginTransaction();
 
         try {

@@ -9,15 +9,35 @@
     <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
         <h4 class="mb-5">Transaksi</h4>
         <div class="widget-content widget-content-area br-6">
-            <button type="button" class="btn btn-primary add-button" data-bs-toggle="modal" data-bs-target="#addTransaksi">
-                Tambah Transaksi
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="feather feather-plus">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-            </button>
+            <div class="row mb-4 align-items-end g-3">
+                <div class="col-md-5">
+                    <label class="form-label">Periode Tanggal Transaksi</label>
+                    <input type="text" id="tanggal_range" class="form-control" placeholder="Pilih rentang tanggal..."
+                        readonly>
+                </div>
+                <div class="col-md-auto">
+                    <button type="button" class="btn btn-success" id="btnProses">
+                        <i class="fas fa-search"></i> Proses
+                    </button>
+                </div>
+                <div class="col-md-auto">
+                    <button type="button" class="btn btn-info" id="btnTampilkanSemua">
+                        Tampilkan Semua
+                    </button>
+                </div>
+                <div class="col-md-auto ms-auto">
+                    <button type="button" class="btn btn-primary add-button" data-bs-toggle="modal"
+                        data-bs-target="#addTransaksi">
+                        Tambah Transaksi
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="feather feather-plus">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
 
             <div class="table-responsive mb-4 mt-4">
                 <table id="transaksi-table" class="table table-hover" style="width:100%">
@@ -242,80 +262,95 @@
                 width: '100%'
             });
 
+            // ==================== FLATPICKR ====================
+            let fp;
+            fp = flatpickr("#tanggal_range", {
+                mode: "range",
+                locale: "id",
+                dateFormat: "Y-m-d",
+                defaultDate: [new Date().setDate(new Date().getDate() - 30),
+            new Date()], // nilai default tetap 30 hari terakhir
+                separator: " to ",
+                onOpen: function(selectedDates, dateStr, instance) {
+                    // Saat kalender terbuka, fokus ke hari ini
+                    instance.jumpToDate(new Date());
+                },
+                onChange: function(selectedDates, dateStr) {
+                    // Optional: reload otomatis saat range diubah
+                    table.ajax.reload();
+                }
+            });
+
             // DataTable
-            $('#transaksi-table').DataTable({
+            const table = $('#transaksi-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('transaksi.data') }}",
+                ajax: {
+                    url: "{{ route('transaksi.data') }}",
+                    data: function(d) {
+                        const dateStr = $('#tanggal_range').val().trim();
+                        if (dateStr) {
+                            const dates = dateStr.includes(' to ') ? dateStr.split(' to ') : dateStr
+                                .split(' - ');
+                            d.tanggal_awal = dates[0];
+                            d.tanggal_akhir = dates[1] || dates[0];
+                        }
+                    }
+                },
                 order: [
-                    [0, 'desc']
+                    [1, 'desc']
                 ],
-                columnDefs: [{
-                    targets: '_all',
-                    className: 'fw-semibold'
-                }],
-
                 columns: [{
                         data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
                         orderable: false,
                         searchable: false,
                         className: 'text-center'
                     },
                     {
-                        data: 'tanggal_transaksi',
-                        name: 'transaksi.tanggal_transaksi'
+                        data: 'tanggal_transaksi'
                     },
                     {
-                        data: 'barang',
-                        name: 'barang.nama_barang'
+                        data: 'barang'
                     },
                     {
-                        data: 'keterangan_transaksi',
-                        name: 'transaksi.keterangan_transaksi'
+                        data: 'keterangan_transaksi'
                     },
                     {
-                        data: 'diberikan_oleh',
-                        name: 'transaksi.diberikan_oleh'
+                        data: 'diberikan_oleh'
                     },
                     {
-                        data: 'keperluan_transaksi',
-                        name: 'transaksi.keperluan_transaksi'
+                        data: 'keperluan_transaksi'
                     },
                     {
                         data: 'keluar',
-                        name: 'transaksi.jumlah_barang',
                         className: 'text-danger fw-bold text-center'
                     },
                     {
                         data: 'masuk',
-                        name: 'transaksi.jumlah_barang',
                         className: 'text-success fw-bold text-center'
                     },
                     {
                         data: 'harga_satuan',
-                        name: 'transaksi.harga_satuan',
-                        render: function(data) {
-                            return new Intl.NumberFormat('id-ID').format(data);
-                        }
+                        render: data => new Intl.NumberFormat('id-ID').format(data || 0)
                     },
                     {
                         data: 'jumlah_satuan',
-                        name: 'transaksi.jumlah_satuan',
-                        render: function(data) {
-                            return new Intl.NumberFormat('id-ID').format(data);
-                        }
+                        render: data => new Intl.NumberFormat('id-ID').format(data || 0)
                     },
-
-
                     {
                         data: 'action',
-                        name: 'action',
                         orderable: false,
                         searchable: false,
                         className: 'text-center'
                     }
                 ]
+            });
+
+            $('#btnProses').on('click', () => table.ajax.reload());
+            //onchange tanggal range
+            $('#btnTampilkanSemua').on('click', () => {
+                $('#tanggal_range').val('');
+                table.ajax.reload();
             });
 
             function hitungJumlahSatuan() {

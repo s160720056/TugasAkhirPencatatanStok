@@ -5,7 +5,6 @@
 @extends($layout, ['menu' => 'barang'])
 
 @section('content')
-
     <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
         <h4 class="mb-4">Data Barang</h4>
 
@@ -13,42 +12,34 @@
 
 
             <!-- Filter -->
-            <div class="row mb-4 align-items-end g-2">
-
-                <!-- Tambah Barang -->
-                <div class="col-md-auto">
-                    <button type="button" class="btn btn-primary d-inline-flex align-items-center gap-2 add-button"
-                        data-bs-toggle="modal" data-bs-target="#addBarang">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        <span>Tambah Barang</span>
-                    </button>
-                </div>
-
-                <!-- Range Tanggal -->
+            <div class="row mb-4 align-items-end g-3">
                 <div class="col-md-5">
-                    <label class="form-label mb-1">Filter Periode Tanggal Input</label>
+                    <label class="form-label">Periode Tanggal Input</label>
                     <input type="text" id="tanggal_range" class="form-control" placeholder="Pilih rentang tanggal..."
                         readonly>
                 </div>
-
-                <!-- Tombol -->
                 <div class="col-md-auto">
                     <button type="button" class="btn btn-success" id="btnProses">
                         <i class="fas fa-search"></i> Proses
                     </button>
                 </div>
-
                 <div class="col-md-auto">
                     <button type="button" class="btn btn-info" id="btnTampilkanSemua">
                         Tampilkan Semua
                     </button>
                 </div>
-
+                <div class="col-md-auto ms-auto">
+                    <button type="button" class="btn btn-primary add-button" data-bs-toggle="modal"
+                        data-bs-target="#addTransaksi">
+                        Tambah Barang
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="feather feather-plus">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
             </div>
 
             <div class="table-responsive mb-4 mt-4">
@@ -267,99 +258,116 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.10.5"></script>
-<script>
-$(document).ready(function() {
+    <script>
+        $(document).ready(function() {
 
-    let fp;
 
-    // ==================== FLATPICKR RANGE ====================
-    fp = flatpickr("#tanggal_range", {
-        mode: "range",
-        locale: "id",
-        dateFormat: "Y-m-d",
-        defaultDate: [new Date().setDate(new Date().getDate() - 30), new Date()],
-        separator: " to ",
-        onChange: function(selectedDates, dateStr) {
-            // Optional: auto reload saat range diubah
-            // table.ajax.reload();
-        }
-    });
 
-    // ==================== INIT MASK ====================
-    const numericOptions = {
-        digitGroupSeparator: '.',
-        decimalCharacter: ',',
-        decimalPlaces: 0,
-        unformatOnSubmit: true,
-        modifyValueOnWheel: false
-    };
+            let fp;
 
-    function initMask() {
-        $('.currency-mask').each(function() {
-            if (!AutoNumeric.getAutoNumericElement(this)) {
-                new AutoNumeric(this, numericOptions);
-            }
-        });
-    }
-
-    initMask();
-
-    // ==================== DATATABLE ====================
-    const table = $('#barang-table').DataTable({
-        destroy: true,
-        processing: true,
-        serverSide: true,
-        pageLength: 25,
-        lengthMenu: [
-            [10, 25, 50, 100, 500, 1000],
-            [10, 25, 50, 100, 500, 1000]
-        ],
-        ajax: {
-            url: '{{ route('barang.data') }}',
-            data: function(d) {
-                const dateStr = $('#tanggal_range').val().trim();
-                if (dateStr) {
-                    const dates = dateStr.includes(' to ')
-                        ? dateStr.split(' to ')
-                        : dateStr.split(' - ');
-                    d.tanggal_awal = dates[0];
-                    d.tanggal_akhir = dates[1] || dates[0];
+            // ==================== FLATPICKR RANGE ====================
+            // ==================== FLATPICKR RANGE ====================
+            fp = flatpickr("#tanggal_range", {
+                mode: "range",
+                locale: "id",
+                dateFormat: "Y-m-d",
+                defaultDate: [new Date().setDate(new Date().getDate() - 30),
+            new Date()], // nilai default tetap 30 hari terakhir
+                separator: " to ",
+                onOpen: function(selectedDates, dateStr, instance) {
+                    // Saat kalender terbuka, fokus ke hari ini
+                    instance.jumpToDate(new Date());
+                },
+                onChange: function(selectedDates, dateStr) {
+                    // Optional: reload otomatis saat range diubah
+                    table.ajax.reload();
                 }
+            });
+
+            // ==================== INIT MASK ====================
+            const numericOptions = {
+                digitGroupSeparator: '.',
+                decimalCharacter: ',',
+                decimalPlaces: 0,
+                unformatOnSubmit: true,
+                modifyValueOnWheel: false
+            };
+
+            function initMask() {
+                $('.currency-mask').each(function() {
+                    if (!AutoNumeric.getAutoNumericElement(this)) {
+                        new AutoNumeric(this, numericOptions);
+                    }
+                });
             }
-        },
-        columns: [
-            { data: 'DT_RowIndex', orderable: false, searchable: false },
-            { data: 'kode_barang' },
-            { data: 'nama_barang' },
-            { data: 'seri' },
-            {
-                data: 'stok_awal',
-                className: 'text-center',
-                render: data => Number(data || 0).toLocaleString('id-ID')
-            },
-            {
-                data: 'harga_satuan',
-                className: 'text-center',
-                render: data => `Rp ${data}`
-            },
-            {
-                data: 'tanggal_input',
-                className: 'text-center',
-            },
-            {
-                data: 'STATUS_BARANG',
-                render: function(data) {
-                    if (data == 0) return `<span class="badge badge-primary">BARU</span>`;
-                    if (data == 1) return `<span class="badge badge-success">AKTIF</span>`;
-                    return `<span class="badge badge-danger">NON-AKTIF</span>`;
-                }
-            },
-            {
-                data: 'id_barang',
-                orderable: false,
-                searchable: false,
-                render: function(data) {
-                    return `
+
+            initMask();
+
+            // ==================== DATATABLE ====================
+            const table = $('#barang-table').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                pageLength: 25,
+                lengthMenu: [
+                    [10, 25, 50, 100, 500, 1000],
+                    [10, 25, 50, 100, 500, 1000]
+                ],
+                ajax: {
+                    url: '{{ route('barang.data') }}',
+                    data: function(d) {
+                        const dateStr = $('#tanggal_range').val().trim();
+                        if (dateStr) {
+                            const dates = dateStr.includes(' to ') ?
+                                dateStr.split(' to ') :
+                                dateStr.split(' - ');
+                            d.tanggal_awal = dates[0];
+                            d.tanggal_akhir = dates[1] || dates[0];
+                        }
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'kode_barang'
+                    },
+                    {
+                        data: 'nama_barang'
+                    },
+                    {
+                        data: 'seri'
+                    },
+                    {
+                        data: 'stok_awal',
+                        className: 'text-center',
+                        render: data => Number(data || 0).toLocaleString('id-ID')
+                    },
+                    {
+                        data: 'harga_satuan',
+                        className: 'text-center',
+                        render: data => `Rp ${data}`
+                    },
+                    {
+                        data: 'tanggal_input',
+                        className: 'text-center',
+                    },
+                    {
+                        data: 'STATUS_BARANG',
+                        render: function(data) {
+                            if (data == 0) return `<span class="badge badge-primary">BARU</span>`;
+                            if (data == 1) return `<span class="badge badge-success">AKTIF</span>`;
+                            return `<span class="badge badge-danger">NON-AKTIF</span>`;
+                        }
+                    },
+                    {
+                        data: 'id_barang',
+                        orderable: false,
+                        searchable: false,
+                        render: function(data) {
+                            return `
                         <button class="btn btn-primary btn-sm me-1" onclick="editBarang(${data})" title="Edit">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
@@ -373,51 +381,62 @@ $(document).ready(function() {
                                 <line x1="14" y1="11" x2="14" y2="17"></line>
                             </svg>
                         </button>`;
-                }
-            }
-        ],
-        order: [[1, 'asc']]
-    });
+                        }
+                    }
+                ],
+                order: [
+                    [1, 'asc']
+                ]
+            });
 
-    // ==================== BUTTON FILTER ====================
-    $('#btnProses').on('click', function() {
-        table.ajax.reload();
-    });
+            // ==================== BUTTON FILTER ====================
+            $('#btnProses').on('click', function() {
+                table.ajax.reload();
+            });
 
-    $('#btnTampilkanSemua').on('click', function() {
-        $('#tanggal_range').val('');
-        table.ajax.reload();
-    });
+            $('#btnTampilkanSemua').on('click', function() {
+                $('#tanggal_range').val('');
+                table.ajax.reload();
+            });
 
-    // ===================== ADD =====================
-    $('.add-button').on('click', function() {
-        $('#addBarang').modal('show');
-        $('#kode_barang_new').focus();
-        $('#addBarang').find('input[type=text]').val('');
-        $('.currency-mask').each(function() {
-            const an = AutoNumeric.getAutoNumericElement(this);
-            if (an) an.set(0);
-        });
-    });
+            // ===================== ADD =====================
+            $('.add-button').on('click', function() {
+                $('#addBarang').modal('show');
+                $('#kode_barang_new').focus();
+                $('#addBarang').find('input[type=text]').val('');
+                $('.currency-mask').each(function() {
+                    const an = AutoNumeric.getAutoNumericElement(this);
+                    if (an) an.set(0);
+                });
+            });
 
-    $('#doneAdd').on('click', function() {
-        axiosPost('/barang', {
-            kode_barang: $('#kode_barang_new').val(),
-            nama_barang: $('#nama_barang_new').val(),
-            seri: $('#seri_new').val(),
-            stok_awal: AutoNumeric.getNumber('#stok_awal_new'),
-            harga_satuan: AutoNumeric.getNumber('#harga_satuan_new'),
-            STATUS_BARANG: $('#status_barang_new').val()
-        })
-        .then(() => {
-            Swal.fire({ title: "Berhasil!", text: "Barang berhasil ditambahkan", icon: "success", timer: 1500 });
-            $('#addBarang').modal('hide');
-            table.ajax.reload(null, false);
-        })
-        .catch(err => {
-            Swal.fire({ title: "Gagal", text: err.response?.data?.message || "Terjadi kesalahan", icon: "error" });
-        });
-    });
+            $('#doneAdd').on('click', function() {
+                axiosPost('/barang', {
+                        kode_barang: $('#kode_barang_new').val(),
+                        nama_barang: $('#nama_barang_new').val(),
+                        seri: $('#seri_new').val(),
+                        stok_awal: AutoNumeric.getNumber('#stok_awal_new'),
+                        harga_satuan: AutoNumeric.getNumber('#harga_satuan_new'),
+                        STATUS_BARANG: $('#status_barang_new').val()
+                    })
+                    .then(() => {
+                        Swal.fire({
+                            title: "Berhasil!",
+                            text: "Barang berhasil ditambahkan",
+                            icon: "success",
+                            timer: 1500
+                        });
+                        $('#addBarang').modal('hide');
+                        table.ajax.reload(null, false);
+                    })
+                    .catch(err => {
+                        Swal.fire({
+                            title: "Gagal",
+                            text: err.response?.data?.message || "Terjadi kesalahan",
+                            icon: "error"
+                        });
+                    });
+            });
             // ===================== EDIT =====================
             window.editBarang = function(id) {
                 axiosGet(`/barang/getBarangDetail/${id}`)
