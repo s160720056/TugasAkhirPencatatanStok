@@ -65,14 +65,13 @@ class HakAksesController extends Controller
         $menuArray = $hakAksesMenu->pluck('url', 'nama_menu_opsional')->toArray();
         if (array_key_exists('pengaturan', $menuArray)) {
             $menuArray['pengaturanToko'] = '/pengaturanToko';
-            $menuArray['pengaturanStruk'] = '/pengaturanStruk';
+            // $menuArray['pengaturanStruk'] = '/pengaturanStruk';
             // $menuArray['pengaturanAbsensi'] = "/pengaturanAbsensi";
             // $menuArray['pengaturanPoin'] = "/pengaturanPoin";
         }
         $dataCategories = [
             'home' => ['home'],
             'master' => ['barang', 'transaksi', 'bukuStok','rekapStokBarang', 'user', 'hakAkses'],
-            'laporan' => ['laporanTimbangan'],
             'pengaturan' => ['pengaturan'],
         ];
         $isi = '';
@@ -154,9 +153,9 @@ class HakAksesController extends Controller
 
                         if ($hakAksesMenus) {
                             if ($category == 'pengaturan') {
-                                $additionalMenus = ['pengaturanToko', 'pengaturanStruk', 'pengaturanTimbangan'];
-                                $urls = ['/pengaturanToko', '/pengaturanStruk', '/pengaturanTimbangan'];
-                                $icons = ['store', 'receipt', 'scale'];
+                                $additionalMenus = ['pengaturanToko'];
+                                $urls = ['/pengaturanToko'];
+                                $icons = ['store'];
                                 foreach ($additionalMenus as $index => $additionalMenu) {
                                     $activeClass = ($menu == $additionalMenu) ? 'active' : '';
                                     $backgroundColor = ($activeClass == 'active') ? 'background: #166534; color: white;' : 'background-color: white;';
