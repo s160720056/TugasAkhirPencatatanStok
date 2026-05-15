@@ -460,15 +460,12 @@
                             if (row.activationPin != null) {
                                 return '<span class="shadow-none badge badge-warning text-white">Menunggu Konfirmasi Email</span>';
                             }
-
                             if (data == 0) {
                                 return '<span class="shadow-none badge badge-primary text-white">BARU</span>';
                             }
-
                             if (data == 1) {
                                 return '<span class="shadow-none badge badge-success text-white">AKTIF</span>';
                             }
-
                             return '<span class="shadow-none badge badge-danger text-white">NON-AKTIF</span>';
                         }
                     },
