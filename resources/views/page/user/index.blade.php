@@ -46,453 +46,365 @@
         </div>
     </div>
 
-{{-- ==================== MODAL EDIT USER ==================== --}}
-<div class="modal fade"
-    id="editUser"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="editUserLabel"
-    aria-hidden="true">
+    {{-- ==================== MODAL EDIT USER ==================== --}}
+    <div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="editUserLabel" aria-hidden="true">
 
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable"
-        role="document">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
 
-        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-content border-0 shadow-lg">
 
-            {{-- HEADER --}}
-            <div class="modal-header bg-light">
+                {{-- HEADER --}}
+                <div class="modal-header bg-light">
 
-                <h5 class="modal-title fw-semibold" id="editUserLabel">
-                    Edit User
-                </h5>
+                    <h5 class="modal-title fw-semibold" id="editUserLabel">
+                        Edit User
+                    </h5>
 
-                <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
-            </div>
+                </div>
 
-            {{-- BODY --}}
-            <div class="modal-body">
+                {{-- BODY --}}
+                <div class="modal-body">
 
-                <div class="row g-4">
+                    <div class="row g-4">
 
-                    {{-- ========================= --}}
-                    {{-- KOLOM KIRI --}}
-                    {{-- ========================= --}}
-                    <div class="col-lg-6">
+                        {{-- ========================= --}}
+                        {{-- KOLOM KIRI --}}
+                        {{-- ========================= --}}
+                        <div class="col-lg-6">
 
-                        <div class="card border-0 bg-light h-100">
-                            <div class="card-body">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
 
-                                <h6 class="fw-bold text-primary mb-4">
-                                    Informasi Akun
-                                </h6>
+                                    <h6 class="fw-bold text-primary mb-4">
+                                        Informasi Akun
+                                    </h6>
 
-                                {{-- ID USER --}}
-                                <div class="mb-3">
-                                    <label for="id_user"
-                                        class="form-label fw-semibold">
-                                        ID User
-                                    </label>
+                                    {{-- ID USER --}}
+                                    <div class="mb-3">
+                                        <label for="id_user" class="form-label fw-semibold">
+                                            ID User
+                                        </label>
 
-                                    <input type="text"
-                                        class="form-control"
-                                        id="id_user"
-                                        readonly>
+                                        <input type="text" class="form-control" id="id_user" readonly>
+                                    </div>
+
+                                    {{-- NAMA --}}
+                                    <div class="mb-3">
+                                        <label for="nama_user" class="form-label fw-semibold">
+                                            Nama User
+                                        </label>
+
+                                        <input type="text" class="form-control" id="nama_user" required>
+                                    </div>
+
+                                    {{-- USERNAME --}}
+                                    <div class="mb-3">
+                                        <label for="username" class="form-label fw-semibold">
+                                            Username
+                                        </label>
+
+                                        <input type="text" class="form-control" id="username" required>
+                                    </div>
+
+                                    {{-- PASSWORD --}}
+                                    <div class="mb-0">
+                                        <label for="password" class="form-label fw-semibold">
+                                            Password
+                                        </label>
+
+                                        <input type="password" class="form-control" id="password"
+                                            placeholder="Kosongkan jika tidak diubah">
+                                    </div>
+
                                 </div>
-
-                                {{-- NAMA --}}
-                                <div class="mb-3">
-                                    <label for="nama_user"
-                                        class="form-label fw-semibold">
-                                        Nama User
-                                    </label>
-
-                                    <input type="text"
-                                        class="form-control"
-                                        id="nama_user"
-                                        required>
-                                </div>
-
-                                {{-- USERNAME --}}
-                                <div class="mb-3">
-                                    <label for="username"
-                                        class="form-label fw-semibold">
-                                        Username
-                                    </label>
-
-                                    <input type="text"
-                                        class="form-control"
-                                        id="username"
-                                        required>
-                                </div>
-
-                                {{-- PASSWORD --}}
-                                <div class="mb-0">
-                                    <label for="password"
-                                        class="form-label fw-semibold">
-                                        Password
-                                    </label>
-
-                                    <input type="password"
-                                        class="form-control"
-                                        id="password"
-                                        placeholder="Kosongkan jika tidak diubah">
-                                </div>
-
                             </div>
+
                         </div>
 
-                    </div>
+                        {{-- ========================= --}}
+                        {{-- KOLOM KANAN --}}
+                        {{-- ========================= --}}
+                        <div class="col-lg-6">
 
-                    {{-- ========================= --}}
-                    {{-- KOLOM KANAN --}}
-                    {{-- ========================= --}}
-                    <div class="col-lg-6">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
 
-                        <div class="card border-0 bg-light h-100">
-                            <div class="card-body">
+                                    <h6 class="fw-bold text-success mb-4">
+                                        Informasi Tambahan
+                                    </h6>
 
-                                <h6 class="fw-bold text-success mb-4">
-                                    Informasi Tambahan
-                                </h6>
-
-                                {{-- ALAMAT --}}
-                                <div class="mb-3">
-                                    <label for="alamat_user"
-                                        class="form-label fw-semibold">
-                                        Alamat
-                                    </label>
-
-                                    <textarea class="form-control"
-                                        id="alamat_user"
-                                        rows="3"
-                                        required></textarea>
-                                </div>
-
-                                {{-- TELEPON --}}
-                                <div class="mb-3">
-                                    <label for="telepon"
-                                        class="form-label fw-semibold">
-                                        Telepon
-                                    </label>
-
-                                    <input type="text"
-                                        class="form-control"
-                                        id="telepon"
-                                        required>
-                                </div>
-
-                                {{-- EMAIL --}}
-                                <div class="mb-3">
-                                    <label for="email"
-                                        class="form-label fw-semibold">
-                                        Email
-                                    </label>
-
-                                    <input type="email"
-                                        class="form-control"
-                                        id="email"
-                                        required>
-                                </div>
-
-                                <div class="row">
-
-                                    {{-- HAK AKSES --}}
-                                    <div class="col-md-6 mb-3">
-                                        <label for="hak_akses"
-                                            class="form-label fw-semibold">
-                                            Hak Akses
+                                    {{-- ALAMAT --}}
+                                    <div class="mb-3">
+                                        <label for="alamat_user" class="form-label fw-semibold">
+                                            Alamat
                                         </label>
 
-                                        <select class="form-control"
-                                            id="hak_akses"
-                                            required>
-
-                                            @foreach ($hakAkses as $i)
-                                                <option value="{{ $i->id_hak_akses }}">
-                                                    {{ $i->nama_hak_akses }}
-                                                </option>
-                                            @endforeach
-
-                                        </select>
+                                        <textarea class="form-control" id="alamat_user" rows="3" required></textarea>
                                     </div>
 
-                                    {{-- STATUS --}}
-                                    <div class="col-md-6 mb-3">
-                                        <label for="status_user"
-                                            class="form-label fw-semibold">
-                                            Status User
+                                    {{-- TELEPON --}}
+                                    <div class="mb-3">
+                                        <label for="telepon" class="form-label fw-semibold">
+                                            Telepon
                                         </label>
 
-                                        <select class="form-control"
-                                            id="status_user"
-                                            required>
+                                        <input type="text" class="form-control" id="telepon" required>
+                                    </div>
 
-                                            <option value="0">BARU</option>
-                                            <option value="1">AKTIF</option>
-                                            <option value="2">NON-AKTIF</option>
+                                    {{-- EMAIL --}}
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label fw-semibold">
+                                            Email
+                                        </label>
 
-                                        </select>
+                                        <input type="email" class="form-control" id="email" required>
+                                    </div>
+
+                                    <div class="row">
+
+                                        {{-- HAK AKSES --}}
+                                        <div class="col-md-6 mb-3">
+                                            <label for="hak_akses" class="form-label fw-semibold">
+                                                Hak Akses
+                                            </label>
+
+                                            <select class="form-control" id="hak_akses" required>
+
+                                                @foreach ($hakAkses as $i)
+                                                    <option value="{{ $i->id_hak_akses }}">
+                                                        {{ $i->nama_hak_akses }}
+                                                    </option>
+                                                @endforeach
+
+                                            </select>
+                                        </div>
+
+                                        {{-- STATUS --}}
+                                        <div class="col-md-6 mb-3">
+                                            <label for="status_user" class="form-label fw-semibold">
+                                                Status User
+                                            </label>
+
+                                            <select class="form-control" id="status_user" required>
+
+                                                <option value="0">BARU</option>
+                                                <option value="1">AKTIF</option>
+                                                <option value="2">NON-AKTIF</option>
+
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="alert alert-light border small mb-0">
+                                        Password hanya diubah jika field password diisi.
                                     </div>
 
                                 </div>
-
-                                <div class="alert alert-light border small mb-0">
-                                    Password hanya diubah jika field password diisi.
-                                </div>
-
                             </div>
+
                         </div>
 
                     </div>
 
                 </div>
 
-            </div>
+                {{-- FOOTER --}}
+                <div class="modal-footer bg-light">
 
-            {{-- FOOTER --}}
-            <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Batal
+                    </button>
 
-                <button type="button"
-                    class="btn btn-outline-secondary"
-                    data-bs-dismiss="modal">
-                    Batal
-                </button>
+                    <button type="button" id="doneEdit" class="btn btn-primary px-4">
+                        Simpan
+                    </button>
 
-                <button type="button"
-                    id="doneEdit"
-                    class="btn btn-primary px-4">
-                    Simpan
-                </button>
+                </div>
 
             </div>
-
         </div>
     </div>
-</div>
 
 
 
 
 
 
-{{-- ==================== MODAL TAMBAH USER ==================== --}}
-<div class="modal fade"
-    id="addUser"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="addUserLabel"
-    aria-hidden="true">
+    {{-- ==================== MODAL TAMBAH USER ==================== --}}
+    <div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="addUserLabel"
+        aria-hidden="true">
 
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable"
-        role="document">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
 
-        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-content border-0 shadow-lg">
 
-            {{-- HEADER --}}
-            <div class="modal-header bg-light">
+                {{-- HEADER --}}
+                <div class="modal-header bg-light">
 
-                <h5 class="modal-title fw-semibold" id="addUserLabel">
-                    Tambah User
-                </h5>
+                    <h5 class="modal-title fw-semibold" id="addUserLabel">
+                        Tambah User
+                    </h5>
 
-                <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
-            </div>
+                </div>
 
-            {{-- BODY --}}
-            <div class="modal-body">
+                {{-- BODY --}}
+                <div class="modal-body">
 
-                <div class="row g-4">
+                    <div class="row g-4">
 
-                    {{-- ========================= --}}
-                    {{-- KOLOM KIRI --}}
-                    {{-- ========================= --}}
-                    <div class="col-lg-6">
+                        {{-- ========================= --}}
+                        {{-- KOLOM KIRI --}}
+                        {{-- ========================= --}}
+                        <div class="col-lg-6">
 
-                        <div class="card border-0 bg-light h-100">
-                            <div class="card-body">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
 
-                                <h6 class="fw-bold text-primary mb-4">
-                                    Informasi Akun
-                                </h6>
+                                    <h6 class="fw-bold text-primary mb-4">
+                                        Informasi Akun
+                                    </h6>
 
-                                {{-- NAMA --}}
-                                <div class="mb-3">
-                                    <label for="nama_user_new"
-                                        class="form-label fw-semibold">
-                                        Nama User
-                                    </label>
+                                    {{-- NAMA --}}
+                                    <div class="mb-3">
+                                        <label for="nama_user_new" class="form-label fw-semibold">
+                                            Nama User
+                                        </label>
 
-                                    <input type="text"
-                                        class="form-control"
-                                        id="nama_user_new"
-                                        required>
+                                        <input type="text" class="form-control" id="nama_user_new" required>
+                                    </div>
+
+                                    {{-- USERNAME --}}
+                                    <div class="mb-3">
+                                        <label for="username_new" class="form-label fw-semibold">
+                                            Username
+                                        </label>
+
+                                        <input type="text" class="form-control" id="username_new" required>
+                                    </div>
+
+                                    {{-- PASSWORD --}}
+                                    <div class="mb-0">
+                                        <label for="password_new" class="form-label fw-semibold">
+                                            Password
+                                        </label>
+
+                                        <input type="password" class="form-control" id="password_new" required>
+                                    </div>
+
                                 </div>
-
-                                {{-- USERNAME --}}
-                                <div class="mb-3">
-                                    <label for="username_new"
-                                        class="form-label fw-semibold">
-                                        Username
-                                    </label>
-
-                                    <input type="text"
-                                        class="form-control"
-                                        id="username_new"
-                                        required>
-                                </div>
-
-                                {{-- PASSWORD --}}
-                                <div class="mb-0">
-                                    <label for="password_new"
-                                        class="form-label fw-semibold">
-                                        Password
-                                    </label>
-
-                                    <input type="password"
-                                        class="form-control"
-                                        id="password_new"
-                                        required>
-                                </div>
-
                             </div>
+
                         </div>
 
-                    </div>
+                        {{-- ========================= --}}
+                        {{-- KOLOM KANAN --}}
+                        {{-- ========================= --}}
+                        <div class="col-lg-6">
 
-                    {{-- ========================= --}}
-                    {{-- KOLOM KANAN --}}
-                    {{-- ========================= --}}
-                    <div class="col-lg-6">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
 
-                        <div class="card border-0 bg-light h-100">
-                            <div class="card-body">
+                                    <h6 class="fw-bold text-success mb-4">
+                                        Informasi Tambahan
+                                    </h6>
 
-                                <h6 class="fw-bold text-success mb-4">
-                                    Informasi Tambahan
-                                </h6>
-
-                                {{-- ALAMAT --}}
-                                <div class="mb-3">
-                                    <label for="alamat_user_new"
-                                        class="form-label fw-semibold">
-                                        Alamat
-                                    </label>
-
-                                    <textarea class="form-control"
-                                        id="alamat_user_new"
-                                        rows="3"
-                                        required></textarea>
-                                </div>
-
-                                {{-- TELEPON --}}
-                                <div class="mb-3">
-                                    <label for="telepon_new"
-                                        class="form-label fw-semibold">
-                                        Telepon
-                                    </label>
-
-                                    <input type="text"
-                                        class="form-control"
-                                        id="telepon_new"
-                                        required>
-                                </div>
-
-                                {{-- EMAIL --}}
-                                <div class="mb-3">
-                                    <label for="email_new"
-                                        class="form-label fw-semibold">
-                                        Email
-                                    </label>
-
-                                    <input type="email"
-                                        class="form-control"
-                                        id="email_new"
-                                        required>
-                                </div>
-
-                                <div class="row">
-
-                                    {{-- HAK AKSES --}}
-                                    <div class="col-md-6 mb-3">
-                                        <label for="hak_akses_new"
-                                            class="form-label fw-semibold">
-                                            Hak Akses
+                                    {{-- ALAMAT --}}
+                                    <div class="mb-3">
+                                        <label for="alamat_user_new" class="form-label fw-semibold">
+                                            Alamat
                                         </label>
 
-                                        <select class="form-control"
-                                            id="hak_akses_new"
-                                            required>
-
-                                            @foreach ($hakAkses as $hakAkses)
-                                                <option value="{{ $hakAkses->id_hak_akses }}">
-                                                    {{ $hakAkses->nama_hak_akses }}
-                                                </option>
-                                            @endforeach
-
-                                        </select>
+                                        <textarea class="form-control" id="alamat_user_new" rows="3" required></textarea>
                                     </div>
 
-                                    {{-- STATUS --}}
-                                    <div class="col-md-6 mb-3">
-                                        <label for="status_user_new"
-                                            class="form-label fw-semibold">
-                                            Status User
+                                    {{-- TELEPON --}}
+                                    <div class="mb-3">
+                                        <label for="telepon_new" class="form-label fw-semibold">
+                                            Telepon
                                         </label>
 
-                                        <select class="form-control"
-                                            id="status_user_new"
-                                            required>
+                                        <input type="text" class="form-control" id="telepon_new" required>
+                                    </div>
 
-                                            <option value="0">BARU</option>
-                                            <option value="1">AKTIF</option>
-                                            <option value="2">NON-AKTIF</option>
+                                    {{-- EMAIL --}}
+                                    <div class="mb-3">
+                                        <label for="email_new" class="form-label fw-semibold">
+                                            Email
+                                        </label>
 
-                                        </select>
+                                        <input type="email" class="form-control" id="email_new" required>
+                                    </div>
+
+                                    <div class="row">
+
+                                        {{-- HAK AKSES --}}
+                                        <div class="col-md-6 mb-3">
+                                            <label for="hak_akses_new" class="form-label fw-semibold">
+                                                Hak Akses
+                                            </label>
+
+                                            <select class="form-control" id="hak_akses_new" required>
+
+                                                @foreach ($hakAkses as $hakAkses)
+                                                    <option value="{{ $hakAkses->id_hak_akses }}">
+                                                        {{ $hakAkses->nama_hak_akses }}
+                                                    </option>
+                                                @endforeach
+
+                                            </select>
+                                        </div>
+
+                                        {{-- STATUS --}}
+                                        <div class="col-md-6 mb-3">
+                                            <label for="status_user_new" class="form-label fw-semibold">
+                                                Status User
+                                            </label>
+
+                                            <select class="form-control" id="status_user_new" required>
+
+                                                <option value="0">BARU</option>
+                                                <option value="1">AKTIF</option>
+                                                <option value="2">NON-AKTIF</option>
+
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="alert alert-light border small mb-0">
+                                        Gunakan password yang kuat untuk keamanan akun.
                                     </div>
 
                                 </div>
-
-                                <div class="alert alert-light border small mb-0">
-                                    Gunakan password yang kuat untuk keamanan akun.
-                                </div>
-
                             </div>
+
                         </div>
 
                     </div>
 
                 </div>
 
-            </div>
+                {{-- FOOTER --}}
+                <div class="modal-footer bg-light">
 
-            {{-- FOOTER --}}
-            <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Batal
+                    </button>
 
-                <button type="button"
-                    class="btn btn-outline-secondary"
-                    data-bs-dismiss="modal">
-                    Batal
-                </button>
+                    <button type="button" id="doneAdd" class="btn btn-primary px-4">
+                        Simpan
+                    </button>
 
-                <button type="button"
-                    id="doneAdd"
-                    class="btn btn-primary px-4">
-                    Simpan
-                </button>
+                </div>
 
             </div>
-
         </div>
     </div>
-</div>
 
     {{-- Modal Setup 2FA --}}
     <div class="modal fade" id="setup2FAModal" tabindex="-1" role="dialog" aria-labelledby="setup2FALabel"
@@ -515,45 +427,67 @@
     </div>
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             var table = $('#user-table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('user.data') }}",
-                columns: [
-                    { data: 'DT_RowIndex', orderable: false, searchable: false },
-                    { data: 'nama_user', name: 'nama_user' },
-                    { data: 'username', name: 'username' },
-                    { data: 'telepon', name: 'telepon' },
-                    { data: 'email', name: 'email' },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'nama_user',
+                        name: 'nama_user'
+                    },
+                    {
+                        data: 'username',
+                        name: 'username'
+                    },
+                    {
+                        data: 'telepon',
+                        name: 'telepon'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
                     {
                         data: 'STATUS_USER',
                         name: 'STATUS_USER',
-                        render: function (data, type, row) {
+                        render: function(data, type, row) {
                             if (row.activationPin != null) {
-                                return '<span class="shadow-none badge badge-warning">Menunggu Konfirmasi Email</span>';
+                                return '<span class="shadow-none badge badge-warning text-white">Menunggu Konfirmasi Email</span>';
                             }
-                            if (data == 0) return '<span class="shadow-none badge badge-primary">BARU</span>';
-                            if (data == 1) return '<span class="shadow-none badge badge-success">AKTIF</span>';
-                            return '<span class="shadow-none badge badge-danger">NON-AKTIF</span>';
+
+                            if (data == 0) {
+                                return '<span class="shadow-none badge badge-primary text-white">BARU</span>';
+                            }
+
+                            if (data == 1) {
+                                return '<span class="shadow-none badge badge-success text-white">AKTIF</span>';
+                            }
+
+                            return '<span class="shadow-none badge badge-danger text-white">NON-AKTIF</span>';
                         }
                     },
                     {
                         data: 'two_factor_enabled',
                         name: 'two_factor_enabled',
                         className: 'text-center',
-                        render: function (data) {
+                        render: function(data) {
                             if (data == 1) {
-                                return '<span class="badge badge-success">✓ Aktif</span>';
+                                return '<span class="badge badge-success text-white">✓ Aktif</span>';
                             }
-                            return '<span class="badge badge-secondary">✗ Belum Aktif</span>';
+                            return '<span class="badge badge-secondary text-white">✗ Belum Aktif</span>';
                         }
                     },
                     {
                         data: 'action',
                         orderable: false,
                         searchable: false,
-                        render: function (data, type, row) {
+                        render: function(data, type, row) {
                             let btn2FA = '';
 
                             if (row.two_factor_enabled == 1) {
@@ -566,8 +500,7 @@
                             </svg>
                             Disable 2FA
                         </button>`;
-                            }
-                            else {
+                            } else {
                                 btn2FA = `
                                      <button type="button" class="btn btn-info btn-sm" onclick="setup2FA('${row.id_user}', '${row.username}')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -597,22 +530,25 @@
             });
 
             // ====================== SETUP 2FA ======================
-            window.setup2FA = function (id, username) {
+            window.setup2FA = function(id, username) {
                 $('#setup2FAModal').modal('show');
-                $('#2fa-content').html('<div class="text-center py-5"><div class="spinner-border"></div><br>Memuat QR Code...</div>');
+                $('#2fa-content').html(
+                    '<div class="text-center py-5"><div class="spinner-border"></div><br>Memuat QR Code...</div>'
+                    );
 
                 axiosGet(`/2fa/setup/${id}`)
-                    .then(function (response) {
+                    .then(function(response) {
                         $('#2fa-content').html(response.data.html);
 
                     })
-                    .catch(function () {
-                        $('#2fa-content').html('<div class="alert alert-danger">Gagal memuat QR Code</div>');
+                    .catch(function() {
+                        $('#2fa-content').html(
+                        '<div class="alert alert-danger">Gagal memuat QR Code</div>');
                     });
             };
 
             // ====================== DISABLE 2FA ======================
-            window.disable2FA = function (id, username) {
+            window.disable2FA = function(id, username) {
                 Swal.fire({
                     title: `Nonaktifkan 2FA untuk ${username}?`,
                     text: "User ini tidak akan lagi diminta kode 2FA saat login.",
@@ -624,36 +560,41 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         axiosPost(`/2fa/disable/${id}`)
-                            .then(function (response) {
+                            .then(function(response) {
                                 Swal.fire('Berhasil!', '2FA telah dinonaktifkan.', 'success')
                                     .then(() => {
                                         $('#user-table').DataTable().ajax.reload(null, false);
                                     });
                             })
-                            .catch(function () {
-                                Swal.fire('Gagal!', 'Terjadi kesalahan saat menonaktifkan 2FA.', 'error');
+                            .catch(function() {
+                                Swal.fire('Gagal!', 'Terjadi kesalahan saat menonaktifkan 2FA.',
+                                    'error');
                             });
                     }
                 });
             };
 
             // ====================== TAMBAH USER ======================
-            $('#doneAdd').on('click', function () {
+            $('#doneAdd').on('click', function() {
                 $('#doneAdd').prop('disabled', true);
 
                 axiosPost('/user/add', {
-                    nama_user: $('#nama_user_new').val(),
-                    username: $('#username_new').val(),
-                    password: $('#password_new').val(),
-                    alamat_user: $('#alamat_user_new').val(),
-                    telepon: $('#telepon_new').val(),
-                    email: $('#email_new').val(),
-                    hak_akses: $('#hak_akses_new').val(),
-                    STATUS_USER: $('#status_user_new').val()
-                })
-                    .then(function (response) {
+                        nama_user: $('#nama_user_new').val(),
+                        username: $('#username_new').val(),
+                        password: $('#password_new').val(),
+                        alamat_user: $('#alamat_user_new').val(),
+                        telepon: $('#telepon_new').val(),
+                        email: $('#email_new').val(),
+                        hak_akses: $('#hak_akses_new').val(),
+                        STATUS_USER: $('#status_user_new').val()
+                    })
+                    .then(function(response) {
                         if (response.data.status === "success") {
-                            Swal.fire({ title: "Success!", text: "Data Berhasil Ditambahkan", icon: "success" })
+                            Swal.fire({
+                                    title: "Success!",
+                                    text: "Data Berhasil Ditambahkan",
+                                    icon: "success"
+                                })
                                 .then(() => {
                                     $('#user-table').DataTable().ajax.reload(null, false);
                                     $('#addUser').modal('hide');
@@ -670,9 +611,9 @@
             });
 
             // ====================== EDIT USER ======================
-            window.editUser = function (id) {
+            window.editUser = function(id) {
                 axiosGet('/user/detail/' + id)
-                    .then(function (response) {
+                    .then(function(response) {
                         const data = response.data.data;
 
                         $('#id_user').val(data.id_user);
@@ -691,23 +632,27 @@
                     .catch(console.error);
             };
 
-            $('#doneEdit').on('click', function () {
+            $('#doneEdit').on('click', function() {
                 $('#doneEdit').prop('disabled', true);
                 const id_user = $('#id_user').val();
 
                 axiosPut('/user/' + id_user, {
-                    nama_user: $('#nama_user').val(),
-                    username: $('#username').val(),
-                    password: $('#password').val(),
-                    alamat_user: $('#alamat_user').val(),
-                    telepon: $('#telepon').val(),
-                    email: $('#email').val(),
-                    hak_akses: $('#hak_akses').val(),
-                    STATUS_USER: $('#status_user').val()
-                })
-                    .then(function (response) {
+                        nama_user: $('#nama_user').val(),
+                        username: $('#username').val(),
+                        password: $('#password').val(),
+                        alamat_user: $('#alamat_user').val(),
+                        telepon: $('#telepon').val(),
+                        email: $('#email').val(),
+                        hak_akses: $('#hak_akses').val(),
+                        STATUS_USER: $('#status_user').val()
+                    })
+                    .then(function(response) {
                         if (response.data.status === "success") {
-                            Swal.fire({ title: "Success!", text: "Data Berhasil Diubah", icon: "success" })
+                            Swal.fire({
+                                    title: "Success!",
+                                    text: "Data Berhasil Diubah",
+                                    icon: "success"
+                                })
                                 .then(() => {
                                     $('#user-table').DataTable().ajax.reload(null, false);
                                     $('#editUser').modal('hide');
@@ -724,7 +669,7 @@
             });
 
             // ====================== DELETE USER ======================
-            window.deleteUser = function (id, status_user) {
+            window.deleteUser = function(id, status_user) {
                 const isPermanent = status_user == 2;
                 Swal.fire({
                     title: isPermanent ? 'HAPUS PERMANEN?' : 'Apakah anda yakin?',
@@ -739,8 +684,13 @@
                         const url = isPermanent ? '/user/deletePermanent/' : '/user/';
                         axiosDelete(url + id)
                             .then(() => {
-                                Swal.fire({ title: "Success!", text: "Data Berhasil Dihapus", icon: "success" })
-                                    .then(() => $('#user-table').DataTable().ajax.reload(null, false));
+                                Swal.fire({
+                                        title: "Success!",
+                                        text: "Data Berhasil Dihapus",
+                                        icon: "success"
+                                    })
+                                    .then(() => $('#user-table').DataTable().ajax.reload(null,
+                                        false));
                             })
                             .catch(() => Swal.fire('Gagal!', 'Data gagal dihapus.', 'error'));
                     }
@@ -748,7 +698,7 @@
             };
 
             // Reset form saat modal tambah dibuka
-            $('#tambahUser').on('click', function () {
+            $('#tambahUser').on('click', function() {
                 $('#doneAdd').prop('disabled', false);
             });
         });
