@@ -80,344 +80,314 @@
         </div>
     </div>
 
-{{-- ==================== MODAL ADD ==================== --}}
-<div class="modal fade" id="addBarang" tabindex="-1" aria-hidden="true">
+    {{-- ==================== MODAL ADD ==================== --}}
+    <div class="modal fade" id="addBarang" tabindex="-1" aria-hidden="true">
 
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content border-0 shadow-lg">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg">
 
-            {{-- HEADER --}}
-            <div class="modal-header bg-light">
-                <h5 class="modal-title fw-semibold">
-                    Tambah Barang Baru
-                </h5>
+                {{-- HEADER --}}
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-semibold">
+                        Tambah Barang Baru
+                    </h5>
 
-                <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"></button>
-            </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
 
-            {{-- BODY --}}
-            <div class="modal-body">
+                {{-- BODY --}}
+                <div class="modal-body">
 
-                <div class="row g-4">
+                    <div class="row g-4">
 
-                    {{-- ========================= --}}
-                    {{-- KOLOM KIRI --}}
-                    {{-- ========================= --}}
-                    <div class="col-lg-6">
+                        {{-- ========================= --}}
+                        {{-- KOLOM KIRI --}}
+                        {{-- ========================= --}}
+                        <div class="col-lg-6">
 
-                        <div class="card border-0 bg-light h-100">
-                            <div class="card-body">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
 
-                                <h6 class="fw-bold text-primary mb-4">
-                                    Informasi Barang
-                                </h6>
+                                    <h6 class="fw-bold text-primary mb-4">
+                                        Informasi Barang
+                                    </h6>
 
-                                {{-- Kode Barang --}}
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold">
-                                        Kode Barang
-                                        <span class="text-danger">*</span>
-                                    </label>
+                                    {{-- Kode Barang --}}
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">
+                                            Kode Barang
+                                            <span class="text-danger">*</span>
+                                        </label>
 
-                                    <input type="text"
-                                        class="form-control"
-                                        id="kode_barang_new"
-                                        placeholder="Contoh: BRG001">
+                                        <input type="text" class="form-control" id="kode_barang_new"
+                                            placeholder="Contoh: BRG001">
+                                    </div>
+
+                                    {{-- Nama Barang --}}
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">
+                                            Nama Barang
+                                            <span class="text-danger">*</span>
+                                        </label>
+
+                                        <input type="text" class="form-control" id="nama_barang_new">
+                                    </div>
+
+                                    {{-- Seri --}}
+                                    <div class="mb-0">
+                                        <label class="form-label fw-semibold">
+                                            Seri / Tipe
+                                        </label>
+
+                                        <input type="text" class="form-control" id="seri_new">
+                                    </div>
+
                                 </div>
-
-                                {{-- Nama Barang --}}
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold">
-                                        Nama Barang
-                                        <span class="text-danger">*</span>
-                                    </label>
-
-                                    <input type="text"
-                                        class="form-control"
-                                        id="nama_barang_new">
-                                </div>
-
-                                {{-- Seri --}}
-                                <div class="mb-0">
-                                    <label class="form-label fw-semibold">
-                                        Seri / Tipe
-                                    </label>
-
-                                    <input type="text"
-                                        class="form-control"
-                                        id="seri_new">
-                                </div>
-
                             </div>
+
                         </div>
 
-                    </div>
+                        {{-- ========================= --}}
+                        {{-- KOLOM KANAN --}}
+                        {{-- ========================= --}}
+                        <div class="col-lg-6">
 
-                    {{-- ========================= --}}
-                    {{-- KOLOM KANAN --}}
-                    {{-- ========================= --}}
-                    <div class="col-lg-6">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
 
-                        <div class="card border-0 bg-light h-100">
-                            <div class="card-body">
+                                    <h6 class="fw-bold text-success mb-4">
+                                        Detail Stok & Harga
+                                    </h6>
 
-                                <h6 class="fw-bold text-success mb-4">
-                                    Detail Stok & Harga
-                                </h6>
-
-                                {{-- Status --}}
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold">
-                                        Status Barang
-                                    </label>
-
-                                    <select class="form-select"
-                                        id="status_barang_new">
-
-                                        <option value="1">AKTIF</option>
-                                        <option value="0">BARU</option>
-                                        <option value="2">NON-AKTIF</option>
-
-                                    </select>
-                                </div>
-
-                                <div class="row">
-
-                                    {{-- Stok --}}
-                                    <div class="col-md-6 mb-3">
+                                    {{-- Status --}}
+                                    <div class="mb-3">
                                         <label class="form-label fw-semibold">
-                                            Stok Awal
+                                            Status Barang
                                         </label>
 
-                                        <input type="text"
-                                            class="form-control text-end currency-mask"
-                                            id="stok_awal_new"
-                                            value="0">
+                                        <select class="form-select" id="status_barang_new">
+
+                                            <option value="1">AKTIF</option>
+                                            <option value="0">BARU</option>
+                                            <option value="2">NON-AKTIF</option>
+
+                                        </select>
                                     </div>
 
-                                    {{-- Harga --}}
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label fw-semibold">
-                                            Harga Satuan
-                                        </label>
+                                    <div class="row">
 
-                                        <input type="text"
-                                            class="form-control text-end currency-mask"
-                                            id="harga_satuan_new"
-                                            value="0">
+                                        {{-- Stok --}}
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-semibold">
+                                                Stok Awal
+                                            </label>
+
+                                            <input type="text" class="form-control text-end currency-mask"
+                                                id="stok_awal_new" value="0">
+                                        </div>
+
+                                        {{-- Harga --}}
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-semibold">
+                                                Harga Satuan
+                                            </label>
+
+                                            <input type="text" class="form-control text-end currency-mask"
+                                                id="harga_satuan_new" value="0">
+                                        </div>
+
+                                    </div>
+
+                                    {{-- INFO --}}
+                                    <div class="alert alert-light border small mb-0">
+                                        Pastikan data tidak duplikat dan
+                                        harga satuan sesuai nilai aktual barang.
                                     </div>
 
                                 </div>
-
-                                {{-- INFO --}}
-                                <div class="alert alert-light border small mb-0">
-                                    Pastikan data tidak duplikat dan
-                                    harga satuan sesuai nilai aktual barang.
-                                </div>
-
                             </div>
+
                         </div>
 
                     </div>
 
                 </div>
 
-            </div>
+                {{-- FOOTER --}}
+                <div class="modal-footer bg-light">
 
-            {{-- FOOTER --}}
-            <div class="modal-footer bg-light">
+                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Batal
+                    </button>
 
-                <button class="btn btn-outline-secondary"
-                    data-bs-dismiss="modal">
-                    Batal
-                </button>
+                    <button class="btn btn-primary px-4" id="doneAdd">
+                        Simpan
+                    </button>
 
-                <button class="btn btn-primary px-4"
-                    id="doneAdd">
-                    Simpan
-                </button>
+                </div>
 
             </div>
-
         </div>
+
     </div>
 
-</div>
 
 
 
 
+    {{-- ==================== MODAL EDIT ==================== --}}
+    <div class="modal fade" id="editBarang" tabindex="-1" aria-hidden="true">
 
-{{-- ==================== MODAL EDIT ==================== --}}
-<div class="modal fade" id="editBarang" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg">
 
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content border-0 shadow-lg">
+                {{-- HEADER --}}
+                <div class="modal-header bg-light">
 
-            {{-- HEADER --}}
-            <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-semibold">
+                        Edit Barang
+                    </h5>
 
-                <h5 class="modal-title fw-semibold">
-                    Edit Barang
-                </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 
-                <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"></button>
+                </div>
 
-            </div>
+                {{-- BODY --}}
+                <div class="modal-body">
 
-            {{-- BODY --}}
-            <div class="modal-body">
+                    <input type="hidden" id="id_barang">
 
-                <input type="hidden" id="id_barang">
+                    <div class="row g-4">
 
-                <div class="row g-4">
+                        {{-- ========================= --}}
+                        {{-- KOLOM KIRI --}}
+                        {{-- ========================= --}}
+                        <div class="col-lg-6">
 
-                    {{-- ========================= --}}
-                    {{-- KOLOM KIRI --}}
-                    {{-- ========================= --}}
-                    <div class="col-lg-6">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
 
-                        <div class="card border-0 bg-light h-100">
-                            <div class="card-body">
+                                    <h6 class="fw-bold text-primary mb-4">
+                                        Informasi Barang
+                                    </h6>
 
-                                <h6 class="fw-bold text-primary mb-4">
-                                    Informasi Barang
-                                </h6>
+                                    {{-- Kode Barang --}}
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">
+                                            Kode Barang
+                                            <span class="text-danger">*</span>
+                                        </label>
 
-                                {{-- Kode Barang --}}
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold">
-                                        Kode Barang
-                                        <span class="text-danger">*</span>
-                                    </label>
+                                        <input type="text" class="form-control" id="kode_barang">
+                                    </div>
 
-                                    <input type="text"
-                                        class="form-control"
-                                        id="kode_barang">
+                                    {{-- Nama Barang --}}
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">
+                                            Nama Barang
+                                            <span class="text-danger">*</span>
+                                        </label>
+
+                                        <input type="text" class="form-control" id="nama_barang">
+                                    </div>
+
+                                    {{-- Seri --}}
+                                    <div class="mb-0">
+                                        <label class="form-label fw-semibold">
+                                            Seri / Tipe
+                                        </label>
+
+                                        <input type="text" class="form-control" id="seri">
+                                    </div>
+
                                 </div>
-
-                                {{-- Nama Barang --}}
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold">
-                                        Nama Barang
-                                        <span class="text-danger">*</span>
-                                    </label>
-
-                                    <input type="text"
-                                        class="form-control"
-                                        id="nama_barang">
-                                </div>
-
-                                {{-- Seri --}}
-                                <div class="mb-0">
-                                    <label class="form-label fw-semibold">
-                                        Seri / Tipe
-                                    </label>
-
-                                    <input type="text"
-                                        class="form-control"
-                                        id="seri">
-                                </div>
-
                             </div>
+
                         </div>
 
-                    </div>
+                        {{-- ========================= --}}
+                        {{-- KOLOM KANAN --}}
+                        {{-- ========================= --}}
+                        <div class="col-lg-6">
 
-                    {{-- ========================= --}}
-                    {{-- KOLOM KANAN --}}
-                    {{-- ========================= --}}
-                    <div class="col-lg-6">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
 
-                        <div class="card border-0 bg-light h-100">
-                            <div class="card-body">
+                                    <h6 class="fw-bold text-success mb-4">
+                                        Detail Stok & Harga
+                                    </h6>
 
-                                <h6 class="fw-bold text-success mb-4">
-                                    Detail Stok & Harga
-                                </h6>
-
-                                {{-- Status --}}
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold">
-                                        Status Barang
-                                    </label>
-
-                                    <select class="form-select"
-                                        id="status_barang">
-
-                                        <option value="0">BARU</option>
-                                        <option value="1">AKTIF</option>
-                                        <option value="2">NON-AKTIF</option>
-
-                                    </select>
-                                </div>
-
-                                <div class="row">
-
-                                    {{-- Stok --}}
-                                    <div class="col-md-6 mb-3">
+                                    {{-- Status --}}
+                                    <div class="mb-3">
                                         <label class="form-label fw-semibold">
-                                            Stok Awal
+                                            Status Barang
                                         </label>
 
-                                        <input type="text"
-                                            class="form-control text-end currency-mask"
-                                            id="stok_awal"
-                                            value="0">
+                                        <select class="form-select" id="status_barang">
+
+                                            <option value="0">BARU</option>
+                                            <option value="1">AKTIF</option>
+                                            <option value="2">NON-AKTIF</option>
+
+                                        </select>
                                     </div>
 
-                                    {{-- Harga --}}
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label fw-semibold">
-                                            Harga Satuan
-                                        </label>
+                                    <div class="row">
 
-                                        <input type="text"
-                                            class="form-control text-end currency-mask"
-                                            id="harga_satuan"
-                                            value="0">
+                                        {{-- Stok --}}
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-semibold">
+                                                Stok Awal
+                                            </label>
+
+                                            <input type="text" class="form-control text-end currency-mask"
+                                                id="stok_awal" value="0">
+                                        </div>
+
+                                        {{-- Harga --}}
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-semibold">
+                                                Harga Satuan
+                                            </label>
+
+                                            <input type="text" class="form-control text-end currency-mask"
+                                                id="harga_satuan" value="0">
+                                        </div>
+
+                                    </div>
+
+                                    {{-- INFO --}}
+                                    <div class="alert alert-light border small mb-0">
+                                        Perubahan data barang akan mempengaruhi
+                                        transaksi dan laporan inventaris.
                                     </div>
 
                                 </div>
-
-                                {{-- INFO --}}
-                                <div class="alert alert-light border small mb-0">
-                                    Perubahan data barang akan mempengaruhi
-                                    transaksi dan laporan inventaris.
-                                </div>
-
                             </div>
+
                         </div>
 
                     </div>
 
                 </div>
 
-            </div>
+                {{-- FOOTER --}}
+                <div class="modal-footer bg-light">
 
-            {{-- FOOTER --}}
-            <div class="modal-footer bg-light">
+                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Batal
+                    </button>
 
-                <button class="btn btn-outline-secondary"
-                    data-bs-dismiss="modal">
-                    Batal
-                </button>
+                    <button class="btn btn-primary px-4" id="doneEdit">
+                        Simpan Perubahan
+                    </button>
 
-                <button class="btn btn-primary px-4"
-                    id="doneEdit">
-                    Simpan Perubahan
-                </button>
+                </div>
 
             </div>
-
         </div>
-    </div>
 
-</div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.10.5"></script>
@@ -434,7 +404,7 @@
                 mode: "range",
                 locale: "id",
                 dateFormat: "Y-m-d",
-                defaultDate:"",
+                defaultDate: "",
                 separator: " to ",
                 onOpen: function(selectedDates, dateStr, instance) {
                     // Saat kalender terbuka, fokus ke hari ini
@@ -504,13 +474,13 @@
                     },
                     {
                         data: 'stok_awal',
-                        className: 'text-center',
+                        className: 'text-end',
                         render: data => Number(data || 0).toLocaleString('id-ID')
                     },
                     {
                         data: 'harga_satuan',
-                        className: 'text-center',
-                        render: data => `Rp ${data}`
+                        className: 'text-end',
+                        render: data => `Rp ${Number(data || 0).toLocaleString('id-ID')}`
                     },
                     {
                         data: 'tanggal_input',

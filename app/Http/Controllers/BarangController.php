@@ -19,7 +19,7 @@ class BarangController extends Controller
         if (empty(config('database.connections.dynamic.database'))) {
             return redirect('/home');
         }
-        
+
         return view('page.barang.index');
     }
 
@@ -33,41 +33,41 @@ class BarangController extends Controller
     }
 
     // DataTable
-public function getDataTable(Request $request)
-{
-    $barang = Barang::select([
-        'id_barang',
-        'kode_barang',
-        'nama_barang',
-        'seri',
-        'stok_awal',
-        'tanggal_input',
-        'STATUS_BARANG',
-        'harga_satuan',
-    ])
-    ->where('STATUS_BARANG', '!=', '2');
+    public function getDataTable(Request $request)
+    {
+        $barang = Barang::select([
+            'id_barang',
+            'kode_barang',
+            'nama_barang',
+            'seri',
+            'stok_awal',
+            'tanggal_input',
+            'STATUS_BARANG',
+            'harga_satuan',
+        ])
+            ->where('STATUS_BARANG', '!=', '2');
 
-    // ================= FILTER RANGE TANGGAL =================
-    if ($request->filled('tanggal_awal') && $request->filled('tanggal_akhir')) {
-        $barang->whereBetween('tanggal_input', [
-            $request->tanggal_awal,
-            $request->tanggal_akhir
-        ]);
-    }
-    // Jika hanya tanggal_awal (fallback)
-    elseif ($request->filled('tanggal_awal')) {
-        $barang->whereDate('tanggal_input', '>=', $request->tanggal_awal);
-    }
+        // ================= FILTER RANGE TANGGAL =================
+        if ($request->filled('tanggal_awal') && $request->filled('tanggal_akhir')) {
+            $barang->whereBetween('tanggal_input', [
+                $request->tanggal_awal,
+                $request->tanggal_akhir
+            ]);
+        }
+        // Jika hanya tanggal_awal (fallback)
+        elseif ($request->filled('tanggal_awal')) {
+            $barang->whereDate('tanggal_input', '>=', $request->tanggal_awal);
+        }
 
-    return DataTables::of($barang)
-        ->addIndexColumn()
-        ->editColumn('stok_awal', fn($row) => number_format($row->stok_awal ?? 0))
-        ->editColumn('harga_satuan', fn($row) => number_format($row->harga_satuan ?? 0))
-        ->editColumn('tanggal_input', fn($row) => $row->tanggal_input
-            ? \Carbon\Carbon::parse($row->tanggal_input)->format('d/m/Y')
-            : '-')
-        ->make(true);
-}
+        return DataTables::of($barang)
+            ->addIndexColumn()
+            ->editColumn('stok_awal', fn($row) => $row->stok_awal ?? 0)
+            ->editColumn('harga_satuan', fn($row) => $row->harga_satuan ?? 0)
+            ->editColumn('tanggal_input', fn($row) => $row->tanggal_input
+                ? \Carbon\Carbon::parse($row->tanggal_input)->format('d/m/Y')
+                : '-')
+            ->make(true);
+    }
 
     public function getData()
     {
@@ -256,7 +256,7 @@ public function getDataTable(Request $request)
 
             $barang = Barang::findOrFail($id);
 
-        /*
+            /*
         |--------------------------------------------------------------------------
         | VALIDASI STOK HARUS 0
         |--------------------------------------------------------------------------
@@ -264,7 +264,7 @@ public function getDataTable(Request $request)
 
 
 
-        /*
+            /*
         |--------------------------------------------------------------------------
         | CEK TOTAL TRANSAKSI
         |--------------------------------------------------------------------------
