@@ -1,45 +1,46 @@
-<div class="page" data-month="{{ $bulan }}" style="font-size: 13px;">
-    <h3 style="text-align:center;">
-        {{ \Carbon\Carbon::parse($bulan . '-01')->translatedFormat('F Y') }} 
+<div class="page" data-month="{{ $bulan }}" style="font-size: 13px; max-height: 90vh; overflow-y: auto; padding: 10px;">
+    <h3 style="text-align:center; position: sticky; top: 0; background: white; padding: 10px 0; z-index: 10;">
+        {{ \Carbon\Carbon::parse($bulan . '-01')->translatedFormat('F Y') }}
         <br> Barang Masuk
     </h3>
 
     @if ($masukItems->isEmpty())
         <p style="text-align:center; margin-top: 50px; font-size: 13px;">Tidak ada transaksi barang masuk pada bulan ini.</p>
     @else
-        <table border="1" width="100%" style="margin-top: 10px; font-size: 13px;">
-            <thead>
-                <tr>
-                    <th>Tanggal</th>
-                    <th>Kode Barang</th>
-                    <th>Nama Barang</th>
-                    <th>Seri</th>
-                    <th>Jumlah</th>
-                    {{-- <th>Keterangan</th> --}}
-                    <th>Diberikan Oleh</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($masukItems as $trx)
+        <div style="max-height: 90%; overflow-y: auto; border: 1px solid #ccc;">
+            <table border="1" width="100%" style="font-size: 13px; border-collapse: collapse;">
+                <thead style="position: sticky; top: 0; background: #f8f9fa; z-index: 5;">
                     <tr>
-                        <td>{{ \Carbon\Carbon::parse($trx->tanggal_transaksi)->format('d-m-Y') }}</td>
-                        <td>{{ $trx->kode_barang ?? '-' }}</td>
-                        <td>{{ $trx->nama_barang ?? '-' }}</td>
-                        <td>{{ $trx->seri ?? '-' }}</td>
-                        <td style="text-align: right; font-weight: bold;">
-                            {{ number_format($trx->jumlah_barang, 0, ',', '.') }}
-                        </td>
-                        {{-- <td>{{ $trx->keterangan_transaksi ?? '-' }}</td> --}}
-                        <td>{{ $trx->diberikan_oleh ?? '-' }}</td>
+                        <th>Tanggal</th>
+                        <th>Kode Barang</th>
+                        <th>Nama Barang</th>
+                        <th>Seri</th>
+                        <th>Jumlah</th>
+                        <th>Diberikan Oleh</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($masukItems as $trx)
+                        <tr>
+                            <td>{{ \Carbon\Carbon::parse($trx->tanggal_transaksi)->format('d-m-Y') }}</td>
+                            <td>{{ $trx->kode_barang ?? '-' }}</td>
+                            <td>{{ $trx->nama_barang ?? '-' }}</td>
+                            <td>{{ $trx->seri ?? '-' }}</td>
+                            <td style="text-align: right; font-weight: bold;">
+                                {{ number_format($trx->jumlah_barang, 0, ',', '.') }}
+                            </td>
+                            <td>{{ $trx->diberikan_oleh ?? '-' }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     @endif
 
-    <table border="1" width="100%" style="margin-top: 15px; font-size: 13px;">
+    <!-- Total -->
+    <table border="1" width="100%" style="margin-top: 10px; font-size: 13px;">
         <tr>
-            <td colspan="6" style="text-align: right; font-weight: bold;">Total Barang Masuk</td>
+            <td colspan="5" style="text-align: right; font-weight: bold;">Total Barang Masuk</td>
             <td style="text-align: right; font-weight: bold; color: green;">
                 {{ number_format($summary['masuk'] ?? 0, 0, ',', '.') }} Unit
             </td>
@@ -47,47 +48,50 @@
     </table>
 </div>
 
-<!-- Halaman 2: Barang Keluar & Rekap Stok -->
-<div class="page" data-month="{{ $bulan }}" style="font-size: 13px;">
-    <h3 style="text-align:center; ">
-        {{ \Carbon\Carbon::parse($bulan . '-01')->translatedFormat('F Y') }} 
+<!-- Halaman 2 -->
+<div class="page" data-month="{{ $bulan }}" style="font-size: 13px; max-height: 90vh; overflow-y: auto; padding: 10px; margin-top: 20px;">
+    <h3 style="text-align:center; position: sticky; top: 0; background: white; padding: 10px 0; z-index: 10;">
+        {{ \Carbon\Carbon::parse($bulan . '-01')->translatedFormat('F Y') }}
         <br> Barang Keluar & Rekap Stok
     </h3>
 
     @if ($keluarItems->isEmpty())
         <p style="text-align:center; margin-top: 50px; font-size: 13px;">Tidak ada transaksi barang keluar pada bulan ini.</p>
     @else
-        <table border="1" width="100%" style="margin-top: 10px; font-size: 13px;">
-            <thead>
-                <tr>
-                    <th>Tanggal</th>
-                    <th>Kode Barang</th>
-                    <th>Nama Barang</th>
-                    <th>Seri</th>
-                    <th>Jumlah</th>
-                    <th>Keperluan</th>
-                    <th>Diberikan Oleh</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($keluarItems as $trx)
+        <div style="max-height: 90%; overflow-y: auto; border: 1px solid #ccc;">
+            <table border="1" width="100%" style="font-size: 13px; border-collapse: collapse;">
+                <thead style="position: sticky; top: 0; background: #f8f9fa; z-index: 5;">
                     <tr>
-                        <td>{{ \Carbon\Carbon::parse($trx->tanggal_transaksi)->format('d-m-Y') }}</td>
-                        <td>{{ $trx->kode_barang ?? '-' }}</td>
-                        <td>{{ $trx->nama_barang ?? '-' }}</td>
-                        <td>{{ $trx->seri ?? '-' }}</td>
-                        <td style="text-align: right; font-weight: bold;">
-                            {{ number_format($trx->jumlah_barang, 0, ',', '.') }}
-                        </td>
-                        <td>{{ $trx->keperluan_transaksi ?? '-' }}</td>
-                        <td>{{ $trx->diberikan_oleh ?? '-' }}</td>
+                        <th>Tanggal</th>
+                        <th>Kode Barang</th>
+                        <th>Nama Barang</th>
+                        <th>Seri</th>
+                        <th>Jumlah</th>
+                        <th>Keperluan</th>
+                        <th>Diberikan Oleh</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($keluarItems as $trx)
+                        <tr>
+                            <td>{{ \Carbon\Carbon::parse($trx->tanggal_transaksi)->format('d-m-Y') }}</td>
+                            <td>{{ $trx->kode_barang ?? '-' }}</td>
+                            <td>{{ $trx->nama_barang ?? '-' }}</td>
+                            <td>{{ $trx->seri ?? '-' }}</td>
+                            <td style="text-align: right; font-weight: bold;">
+                                {{ number_format($trx->jumlah_barang, 0, ',', '.') }}
+                            </td>
+                            <td>{{ $trx->keperluan_transaksi ?? '-' }}</td>
+                            <td>{{ $trx->diberikan_oleh ?? '-' }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     @endif
- 
-    <table border="1" width="100%" style="margin-top: 15px; font-size: 13px;">
+
+    <!-- Total Keluar -->
+    <table border="1" width="100%" style="margin-top: 10px; font-size: 13px;">
         <tr>
             <td colspan="6" style="text-align: right; font-weight: bold;">Total Barang Keluar</td>
             <td style="text-align: right; font-weight: bold; color: red;">
@@ -95,5 +99,4 @@
             </td>
         </tr>
     </table>
-
 </div>
