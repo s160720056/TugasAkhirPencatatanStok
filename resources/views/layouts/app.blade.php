@@ -23,15 +23,19 @@
     <link rel="stylesheet" href="plugins/table/datatable/dt-global_style.css">
     <link rel="stylesheet" href="plugins/sweetalerts/sweetalert2.css">
     <link rel="stylesheet" href="plugins/tempus-dominus/tempus-dominus.min.css">
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/page-flip/dist/css/page-flip.css"> --}}
 
     <!-- Font -->
-    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,600,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="{{ asset('assets/font/fontquicksand.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/font/materialsymbol.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('assets/npm/flatpickr/flatpickr.js')}}">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
+    <link rel="stylesheet" href="{{asset('assets/npm/flatpickr/flatpickr.min.css')}}">
+    <script src="{{asset('assets/npm/flatpickr/flatpickr.js')}}"></script>
+    <script src="{{asset('assets/npm/flatpickr/id.js')}}"></script>
+
+
+    <script src="{{ asset('assets/npm/autonumeric@4.10.5.js') }}"></script>
     {{-- <script src="{{ asset('assets/js/loader.js') }}"></script> --}}
     <!-- Loader CSS (jika critical) -->
     {{-- <link href="{{ asset('assets/css/loader.css') }}" rel="stylesheet"> --}}
@@ -657,7 +661,7 @@
     <script src="plugins/sweetalerts/sweetalert2.all.js"></script>
     <script src="plugins/sweetalerts/custom-sweetalert.js"></script> {{-- tambahkan ini --}}
     <script src="plugins/table/datatable/datatables.js"></script>
-    <script src="https://cdn.datatables.net/searchpanes/2.3.2/js/dataTables.searchPanes.js"></script>
+    <script src="{{ asset('assets/js/searchpanes/dataTables.searchPanes.js')}}"></script>
 
     <!-- 5. Custom & Page Specific -->
     <script src="{{ asset('assets/js/custom.js') }}"></script>
@@ -665,7 +669,6 @@
     <script src="{{ asset('assets/js/scrollspyNav.js') }}"></script>
     <script src="{{ asset('plugins/input-mask/jquery.inputmask.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/qrCodeScanner/qrcodescan.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script>
     <script>
         $.extend(true, $.fn.dataTable.defaults, {
             processing: true,
@@ -1072,7 +1075,7 @@
     </script>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/disable-devtool@latest"></script>
+    <script src="{{ asset('assets/npm/disable-devtool.js') }}"></script>
     <script>
         // alert(DisableDevtool.md5("0000wkid"));
         DisableDevtool({

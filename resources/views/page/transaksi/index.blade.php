@@ -531,7 +531,6 @@
     </div>
 
 </div>
-    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.10.5"></script>
     <script>
         $(document).ready(function() {
             const hargaSatuanMask = new AutoNumeric('#harga_satuan_new', {

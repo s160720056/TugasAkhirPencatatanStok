@@ -6,7 +6,7 @@
         Carbon::setLocale('id');
     @endphp
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/page-flip/dist/css/page-flip.css">
+
 
     <style>
         .highlight-mutasi {

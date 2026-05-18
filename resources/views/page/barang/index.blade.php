@@ -389,8 +389,6 @@
 
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.10.5"></script>
     <script>
         $(document).ready(function() {
 
