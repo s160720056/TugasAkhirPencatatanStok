@@ -456,12 +456,11 @@
                 </div>
             </div>
             <script>
-                //when submit button clicked, disable the button to prevent double submission
-                // document.getElementById('submitTokoBaru').addEventListener('click', function() {
-                //     this.setAttribute('disabled', 'disabled');
-                //     this.innerHTML = 'Loading...';
-                // });
-
+                // Disable the submit button after click to prevent duplicate submissions
+                document.getElementById('submitTokoBaru').addEventListener('click', function() {
+                    this.setAttribute('disabled', 'disabled');
+                    this.innerHTML = 'Loading...';
+                });
 
 
                 // Preview Logo

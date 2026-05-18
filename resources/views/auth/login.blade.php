@@ -51,7 +51,7 @@ body {
         }
 
         /* Loading Screen */
-        .loading-overlay {
+        /* .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -83,7 +83,7 @@ body {
             to {
                 transform: rotate(360deg);
             }
-        }
+        } */
 
         /* Navbar Styles */
         .navbar-modern {
@@ -672,9 +672,9 @@ body {
 <body>
 
     <!-- LOADING SCREEN -->
-    <div class="loading-overlay" id="loadingOverlay">
+    {{-- <div class="loading-overlay" id="loadingOverlay">
         <div class="loader"></div>
-    </div>
+    </div> --}}
 
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-modern fixed-top">
@@ -734,12 +734,12 @@ body {
                         @csrf
 
                         <div class="form-floating-modern mb-3">
-                            <input id="username" type="text" name="username" 
+                            <input id="username" type="text" name="username"
                                 class="form-control-modern @error('username') is-invalid @enderror"
                                 value="{{ old('username') }}" required autofocus placeholder=" ">
                             <label for="username" class="form-label-modern">Username / Email</label>
                         </div>
-                        
+
 
                         <div class="form-floating-modern mb-3">
                             <input id="password" type="password" name="password"
@@ -799,8 +799,8 @@ body {
                         </ul>
 
                         <div class="mt-5">
-                            <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600" 
-                                 alt="Gudang" class="img-fluid rounded-3 shadow" 
+                            <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600"
+                                 alt="Gudang" class="img-fluid rounded-3 shadow"
                                  style="max-width: 320px; opacity: 0.95;">
                         </div>
                     </div>
@@ -821,11 +821,11 @@ body {
         });
 
         // Loading Screen
-        window.addEventListener('load', function () {
-            setTimeout(() => {
-                document.getElementById('loadingOverlay').classList.add('hidden');
-            }, 500);
-        });
+        // window.addEventListener('load', function () {
+        //     setTimeout(() => {
+        //         document.getElementById('loadingOverlay').classList.add('hidden');
+        //     }, 500);
+        // });
 
         // Password Toggle
         const togglePassword = document.getElementById('togglePassword');
