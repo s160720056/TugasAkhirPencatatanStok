@@ -1,4 +1,3 @@
-
 @extends('layouts.app', ['menu' => 'barang'])
 
 @section('content')
@@ -546,13 +545,14 @@
                         harga_satuan: AutoNumeric.getNumber('#harga_satuan_new'),
                         STATUS_BARANG: $('#status_barang_new').val()
                     })
-                    .then(() => {
+                    .then((res) => {
                         Swal.fire({
                             title: "Berhasil!",
-                            text: "Barang berhasil ditambahkan",
+                            text: res.data.message || "Barang berhasil diproses",
                             icon: "success",
                             timer: 1500
                         });
+
                         $('#addBarang').modal('hide');
                         table.ajax.reload(null, false);
                     })

@@ -107,7 +107,7 @@
                     {{-- ========================= --}}
                     {{-- KOLOM KIRI --}}
                     {{-- ========================= --}}
-                    <div class="col-lg-6">
+                    <div class="col-lg-8">
 
                         <div class="card border-0 bg-light h-100">
                             <div class="card-body">
@@ -141,16 +141,24 @@
                                         style="width:100%"
                                         disabled>
 
-                                        @foreach ($barang as $item)
-                                            <option value="{{ $item->id_barang }}">
-                                                {{ $item->nama_barang }}
-                                                -
+                                         @foreach ($barang as $item)
+                                            <option value="{{ $item->id_barang }}"
+                                                data-harga="{{ $item->harga_satuan }}">
+
                                                 {{ $item->kode_barang }}
                                                 -
+                                                {{ $item->nama_barang }}
+                                                -
                                                 {{ $item->seri }}
+                                                @if($item->stok_awal > 0)
+                                                    (📦 {{ $item->stok_awal }})
+                                                @else
+                                                    [HABIS]
+                                                @endif
+                                                -
+                                                Rp.{{number_format($item->harga_satuan, 0, ',', '.') }}
                                             </option>
                                         @endforeach
-
                                     </select>
 
                                     <input type="hidden" id="id_barang_hidden">
@@ -198,7 +206,7 @@
                     {{-- ========================= --}}
                     {{-- KOLOM KANAN --}}
                     {{-- ========================= --}}
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
 
                         <div class="card border-0 bg-light h-100">
                             <div class="card-body">
@@ -340,7 +348,7 @@
                     {{-- ========================= --}}
                     {{-- KOLOM KIRI --}}
                     {{-- ========================= --}}
-                    <div class="col-lg-6">
+                    <div class="col-lg-8">
 
                         <div class="card border-0 bg-light h-100">
                             <div class="card-body">
@@ -382,6 +390,14 @@
                                                 {{ $item->nama_barang }}
                                                 -
                                                 {{ $item->seri }}
+                                                @if($item->stok_awal > 0)
+                                                    (📦 {{ $item->stok_awal }})
+                                                @else
+                                                    [HABIS]
+                                                @endif
+                                                -
+                                                Rp.{{number_format($item->harga_satuan, 0, ',', '.') }}
+
 
                                             </option>
                                         @endforeach
@@ -427,7 +443,7 @@
                     {{-- ========================= --}}
                     {{-- KOLOM KANAN --}}
                     {{-- ========================= --}}
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
 
                         <div class="card border-0 bg-light h-100">
                             <div class="card-body">
