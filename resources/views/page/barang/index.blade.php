@@ -537,6 +537,7 @@
             });
 
             $('#doneAdd').on('click', function() {
+
                 axiosPost('/barang', {
                         kode_barang: $('#kode_barang_new').val(),
                         nama_barang: $('#nama_barang_new').val(),
@@ -546,23 +547,53 @@
                         STATUS_BARANG: $('#status_barang_new').val()
                     })
                     .then((res) => {
-                        Swal.fire({
-                            title: "Berhasil!",
-                            text: res.data.message || "Barang berhasil diproses",
-                            icon: "success",
-                            timer: 1500
-                        });
+
+                        const data = res.data;
+
+                        if (data.status === 'barang_baru') {
+
+                            Swal.fire({
+                                title: "Barang Baru",
+                                text: data.message,
+                                icon: "success",
+                                timer: 1500
+                            });
+
+                        } else if (data.status === 'tambah_stok') {
+
+                            Swal.fire({
+                                title: "Tambah Stok",
+                                text: data.message,
+                                icon: "info",
+                                timer: 1500
+                            });
+
+                        } else {
+
+                            Swal.fire({
+                                title: "Berhasil",
+                                text: data.message || "Proses berhasil",
+                                icon: "success",
+                                timer: 1500
+                            });
+
+                        }
 
                         $('#addBarang').modal('hide');
+
                         table.ajax.reload(null, false);
+
                     })
                     .catch(err => {
+
                         Swal.fire({
                             title: "Gagal",
                             text: err.response?.data?.message || "Terjadi kesalahan",
                             icon: "error"
                         });
+
                     });
+
             });
             // ===================== EDIT =====================
             window.editBarang = function(id) {
