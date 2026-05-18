@@ -1,8 +1,5 @@
-@php
-    $layout = isset($webView) && $webView ? 'layouts.appWebView' : 'layouts.app';
-@endphp
 
-@extends($layout, ['menu' => 'barang'])
+@extends('layouts.app', ['menu' => 'barang'])
 
 @section('content')
     <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">

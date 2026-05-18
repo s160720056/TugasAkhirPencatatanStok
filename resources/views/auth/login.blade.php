@@ -676,29 +676,6 @@ body {
         <div class="loader"></div>
     </div> --}}
 
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-modern fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="{{ route('home.index') }}">
-                <i class="bi bi-box-seam me-2"></i>GudangPro
-            </a>
-            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarMain">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarMain">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link" href="#">Fitur</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Laporan</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Bantuan</a></li>
-                    <li class="nav-item ms-3">
-                        <a href="/" class="btn btn-outline-success rounded-3">
-                            <i class="bi bi-arrow-left"></i> Beranda
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
     <!-- LOGIN SECTION -->
     <div class="login-wrapper">
