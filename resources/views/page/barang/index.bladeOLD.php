@@ -195,23 +195,9 @@
                                     </div>
 
                                     {{-- INFO --}}
-                                    <div id="aiAnalysisBox"
-                                        class="alert alert-light border small mb-0 d-flex align-items-start gap-2">
-                                        <div>
-                                           <span class="material-symbols-outlined">
-network_intel_node
-</span>
-                                        </div>
-
-                                        <div>
-                                            <div class="fw-semibold mb-1">
-                                                Analisa Barang
-                                            </div>
-                                            <div id="aiAnalysisText">
-                                                Isi nama barang, seri, dan harga satuan. Sistem akan menganalisa apakah ini
-                                                barang baru atau tambah stok.
-                                            </div>
-                                        </div>
+                                    <div class="alert alert-light border small mb-0">
+                                        Pastikan data tidak duplikat dan
+                                        harga satuan sesuai nilai aktual barang.
                                     </div>
 
 
@@ -220,40 +206,32 @@ network_intel_node
                             </div>
 
                         </div>
-                        <div id="duplicateBarangWrapper" class="mt-3 d-none">
+                         <div id="duplicateBarangWrapper" class="mt-3 d-none">
 
-                            <div class="alert alert-warning border small mb-3 d-flex align-items-start gap-2">
-                                <div>
-                                   <span class="material-symbols-outlined">
-network_intel_node
-</span>
-                                </div>
+                                        <div class="alert alert-warning border small mb-3">
+                                            <strong>Barang sudah ada.</strong><br>
+                                            Data yang kamu input cocok dengan barang di database.
+                                            Jika disimpan, sistem akan <strong>menambahkan stok ke barang ini</strong>,
+                                            bukan membuat barang baru.
+                                        </div>
 
-                                <div>
-                                    <strong>AI mendeteksi barang sudah ada.</strong><br>
-                                    Data yang kamu input cocok dengan barang di database.
-                                    Jika disimpan, sistem akan <strong>menambahkan stok ke barang ini</strong>,
-                                    bukan membuat barang baru.
-                                </div>
-                            </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-bordered mb-0">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Kode Barang</th>
+                                                        <th>Nama Barang</th>
+                                                        <th>Seri</th>
+                                                        <th class="text-end">Stok Saat Ini</th>
+                                                        <th class="text-end">Harga Satuan</th>
+                                                        <th>Tanggal Input</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="duplicateBarangBody"></tbody>
+                                            </table>
+                                        </div>
 
-                            <div class="table-responsive">
-                                <table class="table table-sm table-bordered mb-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Kode Barang</th>
-                                            <th>Nama Barang</th>
-                                            <th>Seri</th>
-                                            <th class="text-end">Stok Saat Ini</th>
-                                            <th class="text-end">Harga Satuan</th>
-                                            <th>Tanggal Input</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="duplicateBarangBody"></tbody>
-                                </table>
-                            </div>
-
-                        </div>
+                                    </div>
 
                     </div>
 
@@ -450,56 +428,12 @@ network_intel_node
                 return Number(value || 0).toLocaleString('id-ID');
             }
 
-            function hideDuplicateBarangInfo(resetAI = true) {
+            function hideDuplicateBarangInfo() {
                 duplicateBarangExists = false;
                 duplicateBarangData = null;
 
                 $('#duplicateBarangWrapper').addClass('d-none');
                 $('#duplicateBarangBody').html('');
-
-                if (resetAI) {
-                    setAIAnalysisIdle();
-                }
-            }
-
-            function setAIAnalysisIdle() {
-                $('#aiAnalysisBox')
-                    .removeClass('alert-info alert-warning alert-success')
-                    .addClass('alert-light');
-
-                $('#aiAnalysisText').html(
-                    'Isi nama barang, seri, dan harga satuan. Sistem akan menganalisa apakah ini barang baru atau tambah stok.'
-                );
-            }
-
-            function setAIAnalysisLoading() {
-                $('#aiAnalysisBox')
-                    .removeClass('alert-light alert-warning alert-success')
-                    .addClass('alert-info');
-
-                $('#aiAnalysisText').html(
-                    '<i class="fas fa-spinner fa-spin"></i> AI sedang menganalisa data barang...'
-                );
-            }
-
-            function setAIAnalysisDuplicate() {
-                $('#aiAnalysisBox')
-                    .removeClass('alert-light alert-info alert-success')
-                    .addClass('alert-warning');
-
-                $('#aiAnalysisText').html(
-                    'AI menemukan barang yang sama di database. Jika disimpan, sistem akan <strong>menambahkan stok</strong>, bukan membuat barang baru.'
-                );
-            }
-
-            function setAIAnalysisNewItem() {
-                $('#aiAnalysisBox')
-                    .removeClass('alert-light alert-info alert-warning')
-                    .addClass('alert-success');
-
-                $('#aiAnalysisText').html(
-                    'AI tidak menemukan barang yang sama. Jika disimpan, sistem akan membuat <strong>barang baru</strong>.'
-                );
             }
 
             function showDuplicateBarangInfo(barang) {
@@ -518,8 +452,6 @@ network_intel_node
     `);
 
                 $('#duplicateBarangWrapper').removeClass('d-none');
-
-                setAIAnalysisDuplicate();
             }
 
             function checkDuplicateBarang() {
@@ -528,11 +460,9 @@ network_intel_node
                 const hargaSatuan = AutoNumeric.getNumber('#harga_satuan_new') || 0;
 
                 if (!namaBarang) {
-                    hideDuplicateBarangInfo(true);
+                    hideDuplicateBarangInfo();
                     return;
                 }
-
-                setAIAnalysisLoading();
 
                 axios.post('/barang/check-duplicate', {
                         nama_barang: namaBarang,
@@ -543,20 +473,11 @@ network_intel_node
                         if (res.data.exists) {
                             showDuplicateBarangInfo(res.data.data);
                         } else {
-                            hideDuplicateBarangInfo(false);
-                            setAIAnalysisNewItem();
+                            hideDuplicateBarangInfo();
                         }
                     })
                     .catch(() => {
-                        hideDuplicateBarangInfo(false);
-
-                        $('#aiAnalysisBox')
-                            .removeClass('alert-light alert-info alert-success')
-                            .addClass('alert-warning');
-
-                        $('#aiAnalysisText').html(
-                            'AI belum bisa menganalisa data saat ini. Silakan coba lagi atau simpan jika data sudah benar.'
-                        );
+                        hideDuplicateBarangInfo();
                     });
             }
 
@@ -717,7 +638,6 @@ network_intel_node
 
             // ===================== ADD =====================
             $('.add-button').on('click', function() {
-                setAIAnalysisIdle();
                 $('#addBarang').modal('show');
                 $('#kode_barang_new').focus();
 
