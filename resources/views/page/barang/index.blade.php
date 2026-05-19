@@ -200,10 +200,38 @@
                                         harga satuan sesuai nilai aktual barang.
                                     </div>
 
+
+
                                 </div>
                             </div>
 
                         </div>
+                         <div id="duplicateBarangWrapper" class="mt-3 d-none">
+
+                                        <div class="alert alert-warning border small mb-3">
+                                            <strong>Barang sudah ada.</strong><br>
+                                            Data yang kamu input cocok dengan barang di database.
+                                            Jika disimpan, sistem akan <strong>menambahkan stok ke barang ini</strong>,
+                                            bukan membuat barang baru.
+                                        </div>
+
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-bordered mb-0">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Kode Barang</th>
+                                                        <th>Nama Barang</th>
+                                                        <th>Seri</th>
+                                                        <th class="text-end">Stok Saat Ini</th>
+                                                        <th class="text-end">Harga Satuan</th>
+                                                        <th>Tanggal Input</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="duplicateBarangBody"></tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
 
                     </div>
 
@@ -387,8 +415,91 @@
 
     <script>
         $(document).ready(function() {
+            // ==================== CHECK DUPPLICATE ====================
+            let duplicateCheckTimer = null;
+            let duplicateBarangExists = false;
+            let duplicateBarangData = null;
+
+            function formatRupiah(value) {
+                return `Rp ${Number(value || 0).toLocaleString('id-ID')}`;
+            }
+
+            function formatAngka(value) {
+                return Number(value || 0).toLocaleString('id-ID');
+            }
+
+            function hideDuplicateBarangInfo() {
+                duplicateBarangExists = false;
+                duplicateBarangData = null;
+
+                $('#duplicateBarangWrapper').addClass('d-none');
+                $('#duplicateBarangBody').html('');
+            }
+
+            function showDuplicateBarangInfo(barang) {
+                duplicateBarangExists = true;
+                duplicateBarangData = barang;
+
+                $('#duplicateBarangBody').html(`
+        <tr>
+            <td>${barang.kode_barang ?? '-'}</td>
+            <td>${barang.nama_barang ?? '-'}</td>
+            <td>${barang.seri ?? '-'}</td>
+            <td class="text-end">${formatAngka(barang.stok_awal)}</td>
+            <td class="text-end">${formatRupiah(barang.harga_satuan)}</td>
+            <td>${barang.tanggal_input ?? '-'}</td>
+        </tr>
+    `);
+
+                $('#duplicateBarangWrapper').removeClass('d-none');
+            }
+
+            function checkDuplicateBarang() {
+                const namaBarang = $('#nama_barang_new').val().trim();
+                const seri = $('#seri_new').val().trim();
+                const hargaSatuan = AutoNumeric.getNumber('#harga_satuan_new') || 0;
+
+                if (!namaBarang) {
+                    hideDuplicateBarangInfo();
+                    return;
+                }
+
+                axios.post('/barang/check-duplicate', {
+                        nama_barang: namaBarang,
+                        seri: seri,
+                        harga_satuan: hargaSatuan
+                    })
+                    .then((res) => {
+                        if (res.data.exists) {
+                            showDuplicateBarangInfo(res.data.data);
+                        } else {
+                            hideDuplicateBarangInfo();
+                        }
+                    })
+                    .catch(() => {
+                        hideDuplicateBarangInfo();
+                    });
+            }
+
+            function debounceCheckDuplicateBarang() {
+                clearTimeout(duplicateCheckTimer);
+
+                duplicateCheckTimer = setTimeout(function() {
+                    checkDuplicateBarang();
+                }, 500);
+            }
+
+            $('#nama_barang_new, #seri_new, #harga_satuan_new').on('input keyup change', function() {
+                debounceCheckDuplicateBarang();
+            });
 
 
+
+
+
+
+
+            // ==================== END CHECK DUPPLICATE ====================
 
             let fp;
 
@@ -529,11 +640,17 @@
             $('.add-button').on('click', function() {
                 $('#addBarang').modal('show');
                 $('#kode_barang_new').focus();
-                $('#addBarang').find('input[type=text]').val('');
-                $('.currency-mask').each(function() {
-                    const an = AutoNumeric.getAutoNumericElement(this);
-                    if (an) an.set(0);
-                });
+
+                $('#kode_barang_new').val('');
+                $('#nama_barang_new').val('');
+                $('#seri_new').val('');
+
+                AutoNumeric.getAutoNumericElement('#stok_awal_new').set(0);
+                AutoNumeric.getAutoNumericElement('#harga_satuan_new').set(0);
+
+                $('#status_barang_new').val('1');
+
+                hideDuplicateBarangInfo();
             });
 
             $('#doneAdd').on('click', function() {
@@ -562,10 +679,10 @@
                         } else if (data.status === 'tambah_stok') {
 
                             Swal.fire({
-                                title: "Tambah Stok",
-                                text: data.message,
+                                title: "Stok Ditambahkan",
+                                text: "Barang sudah ada. Stok berhasil ditambahkan ke barang lama.",
                                 icon: "info",
-                                timer: 1500
+                                timer: 1800
                             });
 
                         } else {
@@ -580,7 +697,7 @@
                         }
 
                         $('#addBarang').modal('hide');
-
+                        hideDuplicateBarangInfo();
                         table.ajax.reload(null, false);
 
                     })

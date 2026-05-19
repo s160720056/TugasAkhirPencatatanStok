@@ -283,6 +283,46 @@ class BarangController extends Controller
         }
     }
 
+    public function checkDuplicate(Request $request)
+{
+    $request->validate([
+        'nama_barang'  => 'required|string|max:255',
+        'seri'         => 'nullable|string',
+        'harga_satuan' => 'nullable|integer|min:0',
+    ]);
+
+    $hargaSatuan = $request->harga_satuan ?? 0;
+
+    $barang = Barang::where('nama_barang', $request->nama_barang)
+        ->where('seri', $request->seri)
+        ->where('harga_satuan', $hargaSatuan)
+        ->where('STATUS_BARANG', '1')
+        ->first();
+
+    if (! $barang) {
+        return response()->json([
+            'exists' => false,
+            'message' => 'Barang belum ada, akan dibuat sebagai barang baru.',
+            'data' => null,
+        ]);
+    }
+
+    return response()->json([
+        'exists' => true,
+        'message' => 'Barang sudah ada. Input ini akan menambahkan stok barang, bukan membuat barang baru.',
+        'data' => [
+            'id_barang'    => $barang->id_barang,
+            'kode_barang'  => $barang->kode_barang,
+            'nama_barang'  => $barang->nama_barang,
+            'seri'         => $barang->seri,
+            'stok_awal'    => $barang->stok_awal,
+            'harga_satuan' => $barang->harga_satuan,
+            'tanggal_input'=> $barang->tanggal_input,
+            'STATUS_BARANG'=> $barang->STATUS_BARANG,
+        ],
+    ]);
+}
+
     public function destroy(string $id)
     {
         DB::beginTransaction();

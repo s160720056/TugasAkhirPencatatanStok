@@ -95,6 +95,7 @@ Route::middleware([SetDynamicDatabase::class, 'auth:user', 'throttle:user-area']
     Route::get('/barang/getKodeBarang', [BarangController::class, 'getKodeBarang'])->name('getKodeBarang');
     Route::get('/barang/getBarangDetail/{id}', [BarangController::class, 'getBarangDetail'])->name('getBarangDetail');
     Route::get('/barang/get-data', [BarangController::class, 'getData'])->name('barang.getData');
+    Route::post('/barang/check-duplicate', [BarangController::class, 'checkDuplicate'])->name('barang.checkDuplicate');
     Route::resource('barang', BarangController::class);
 
     // Buku Stok
