@@ -385,12 +385,12 @@ class BarangController extends Controller
             }
 
             if (($barang->stok_awal ?? 0) > 0) {
-    DB::rollBack();
+                DB::rollBack();
 
-    return response()->json([
-        'message' => 'Barang tidak dapat dihapus karena stok masih ada',
-    ], 400);
-}
+                return response()->json([
+                    'message' => 'Barang tidak dapat dihapus karena stok masih ada',
+                ], 400);
+            }
 
             /*
         |--------------------------------------------------------------------------
