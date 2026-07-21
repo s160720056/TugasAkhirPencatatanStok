@@ -33,7 +33,7 @@ class BarangController extends Controller
     }
 
     // DataTable
-    public function getDataTable(Request $request)
+public function getDataTable(Request $request)
     {
         $barang = Barang::select([
             'id_barang',
@@ -61,11 +61,53 @@ class BarangController extends Controller
 
         return DataTables::of($barang)
             ->addIndexColumn()
+
+            // Format kolom-kolom tertentu
             ->editColumn('stok_awal', fn ($row) => $row->stok_awal ?? 0)
             ->editColumn('harga_satuan', fn ($row) => $row->harga_satuan ?? 0)
+            ->editColumn('seri', fn ($row) => $row->seri ?? '-')
             ->editColumn('tanggal_input', fn ($row) => $row->tanggal_input
                 ? Carbon::parse($row->tanggal_input)->format('d/m/Y')
                 : '-')
+
+            /*
+        |--------------------------------------------------------------------------
+        | CUSTOM SEARCH DINAMIS (BEBAS URUTAN KATA)
+        |--------------------------------------------------------------------------
+        */
+            ->filterColumn('nama_barang', function ($query, $keyword) {
+                $keywords = explode(' ', $keyword);
+                $query->where(function ($q) use ($keywords) {
+                    foreach ($keywords as $word) {
+                        if (!empty($word)) {
+                            $q->where('nama_barang', 'like', "%{$word}%");
+                        }
+                    }
+                });
+            })
+
+            ->filterColumn('kode_barang', function ($query, $keyword) {
+                $keywords = explode(' ', $keyword);
+                $query->where(function ($q) use ($keywords) {
+                    foreach ($keywords as $word) {
+                        if (!empty($word)) {
+                            $q->where('kode_barang', 'like', "%{$word}%");
+                        }
+                    }
+                });
+            })
+
+            ->filterColumn('seri', function ($query, $keyword) {
+                $keywords = explode(' ', $keyword);
+                $query->where(function ($q) use ($keywords) {
+                    foreach ($keywords as $word) {
+                        if (!empty($word)) {
+                            $q->where('seri', 'like', "%{$word}%");
+                        }
+                    }
+                });
+            })
+
             ->make(true);
     }
 

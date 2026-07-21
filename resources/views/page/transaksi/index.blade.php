@@ -522,7 +522,6 @@
                 // Contoh: "ASUS KODE01" menjadi ["asus", "kode01"]
                 let searchTerms = params.term.toLowerCase().split(' ');
                 let itemText = data.text.toLowerCase();
-
                 // Lakukan pengecekan, apakah SEMUA kata kunci pencarian ada di dalam teks opsi
                 let isMatch = true;
                 for (let i = 0; i < searchTerms.length; i++) {
@@ -532,16 +531,13 @@
                         break;
                     }
                 }
-
                 // Jika semua kata kunci (acak maupun berurutan) ditemukan, tampilkan item
                 if (isMatch) {
                     return data;
                 }
-
                 // Jika tidak cocok, jangan tampilkan
                 return null;
             }
-
             // 2. Terapkan fungsi matcher khusus untuk dropdown Barang
             $('#barang_new').select2({
                 dropdownParent: $('#addTransaksi'),

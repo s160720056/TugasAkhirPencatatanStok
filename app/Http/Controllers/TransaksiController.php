@@ -25,7 +25,7 @@ class TransaksiController extends Controller
         return view('page.transaksi.index', compact('barang'));
     }
 
-    public function getDataTable(Request $request)
+public function getDataTable(Request $request)
     {
         $transaksi = Transaksi::query()
             ->leftJoin('barang', 'transaksi.id_barang', '=', 'barang.id_barang')
@@ -78,35 +78,66 @@ class TransaksiController extends Controller
 
             /*
         |--------------------------------------------------------------------------
-        | CUSTOM SEARCH
+        | CUSTOM SEARCH (DINAMIS / BEBAS URUTAN KATA)
         |--------------------------------------------------------------------------
         */
 
             ->filterColumn('barang', function ($query, $keyword) {
-                $query->where('barang.nama_barang', 'like', "%{$keyword}%");
+                $keywords = explode(' ', $keyword);
+                $query->where(function ($q) use ($keywords) {
+                    foreach ($keywords as $word) {
+                        if (!empty($word)) {
+                            $q->where(function ($sub) use ($word) {
+                                $sub->where('barang.nama_barang', 'like', "%{$word}%")
+                                    ->orWhere('barang.kode_barang', 'like', "%{$word}%")
+                                    ->orWhere('barang.seri', 'like', "%{$word}%");
+                            });
+                        }
+                    }
+                });
             })
 
             ->filterColumn('keterangan_transaksi', function ($query, $keyword) {
-                $query->where('transaksi.keterangan_transaksi', 'like', "%{$keyword}%");
+                $keywords = explode(' ', $keyword);
+                $query->where(function ($q) use ($keywords) {
+                    foreach ($keywords as $word) {
+                        if (!empty($word)) {
+                            $q->where('transaksi.keterangan_transaksi', 'like', "%{$word}%");
+                        }
+                    }
+                });
             })
 
             ->filterColumn('diberikan_oleh', function ($query, $keyword) {
-                $query->where('transaksi.diberikan_oleh', 'like', "%{$keyword}%");
+                $keywords = explode(' ', $keyword);
+                $query->where(function ($q) use ($keywords) {
+                    foreach ($keywords as $word) {
+                        if (!empty($word)) {
+                            $q->where('transaksi.diberikan_oleh', 'like', "%{$word}%");
+                        }
+                    }
+                });
             })
 
             ->filterColumn('keperluan_transaksi', function ($query, $keyword) {
-                $query->where('transaksi.keperluan_transaksi', 'like', "%{$keyword}%");
+                $keywords = explode(' ', $keyword);
+                $query->where(function ($q) use ($keywords) {
+                    foreach ($keywords as $word) {
+                        if (!empty($word)) {
+                            $q->where('transaksi.keperluan_transaksi', 'like', "%{$word}%");
+                        }
+                    }
+                });
             })
 
             ->filterColumn('tanggal_transaksi', function ($query, $keyword) {
                 $query->whereDate('transaksi.tanggal_transaksi', $keyword);
             })
 
-
-
             ->orderColumn('barang', function ($query, $order) {
                 $query->orderBy('barang.nama_barang', $order);
             })
+
             /*
         |--------------------------------------------------------------------------
         | ACTION
@@ -127,6 +158,9 @@ class TransaksiController extends Controller
             ->rawColumns(['action'])
             ->make(true);
     }
+
+   
+
 
     public function store(Request $request)
     {
@@ -163,11 +197,7 @@ class TransaksiController extends Controller
                     'message' => 'Barang tidak ditemukan'
                 ]);
             }
-            /*
-|--------------------------------------------------------------------------
-| BOUNDARY TANGGAL BARANG
-|--------------------------------------------------------------------------
-*/
+
             $tanggalTransaksi = Carbon::parse($request->tanggal_transaksi)->startOfDay();
             $tanggalBarangDibuat = Carbon::parse($barang->tanggal_input)->startOfDay();
 
